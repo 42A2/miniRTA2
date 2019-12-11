@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   h_minirt.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yvanat <yvanat@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mbrunel <mbrunel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/02 12:51:50 by mbrunel           #+#    #+#             */
-/*   Updated: 2019/12/11 08:26:24 by yvanat           ###   ########.fr       */
+/*   Updated: 2019/12/11 22:17:40 by mbrunel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,13 @@
 # define H_MINIRT_H
 
 
-#define RES_X 800 
-#define RES_Y 800
-#define VP_D 1
+#define RES_X 600 
+#define RES_Y 600
+#define MEDIUM (RES_X + RES_Y) / 2
+#define VP_D 1.0
 #define VP_H 1.0
 #define VP_W 1.0
-#define NB_OBJ 4
+#define NB_OBJ 5
 #define SPHERE 0
 #define PLANE 1
 #define BACKGROUND_COLOR 0xffffff
