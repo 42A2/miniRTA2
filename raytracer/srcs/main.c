@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yvanat <yvanat@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mbrunel <mbrunel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/07 05:55:14 by mbrunel           #+#    #+#             */
-/*   Updated: 2019/12/12 02:10:29 by yvanat           ###   ########.fr       */
+/*   Updated: 2019/12/12 07:59:46 by mbrunel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,24 +34,32 @@ void get_p(t_p *p)
 	sp1->o.y = -1.0;
 	sp1->o.z = 3.0;
 	sp1->color = 0xff0000;
+	sp1->spec = 500;
+	sp1->reflect = 0.2;
 
 	sp2->r = 1.0;
 	sp2->o.x = 2.0; // sphere 2
 	sp2->o.y = 0.0;
 	sp2->o.z = 4.0;
 	sp2->color = 0xff;
+	sp2->spec = 500;
+	sp2->reflect = 0.3;
 	
 	sp3->r = 1.0;
 	sp3->o.x = -2.0; // sphere 3
 	sp3->o.y = 0.0;
 	sp3->o.z = 4.0;
 	sp3->color = 0x00ff00;
+	sp3->spec = 10;
+	sp3->reflect = 0.4;
 
 	sp4->r = 5000;
 	sp4->o.x = 0.0; // sphere 
 	sp4->o.y = -5001.0;
 	sp4->o.z = 0.0;
 	sp4->color = 0xffff00;
+	sp4->spec = 1000;
+	sp4->reflect = 0.5;
 
 	pl1->a = 0;
 	pl1->b = 1;
@@ -107,10 +115,15 @@ void get_p(t_p *p)
 	p->lights[2].type = POINT;
 	p->lights[2].pos.x = 1;
 	p->lights[2].pos.y = 4;
-	p->lights[2].pos.z = 4;
+	p->lights[2].pos.z = 7;
 }
 
-t_inter	interpl(t_ray ray, void *ptr)
+t_vec	retray(t_vec r, t_vec n)
+{
+	return (sub_vec(mult_vec_d(mult_vec_d(n, prod_scal(r, n)), 2), r));
+}
+
+t_inter	interpl(t_ray ray, void *ptr, double start, double max)
 {
 	t_pl pl;
 	t_inter rt;
@@ -119,10 +132,12 @@ t_inter	interpl(t_ray ray, void *ptr)
 	rt.inter = (pl.a * pl.p.x + pl.b * pl.p.y + pl.c * pl.p.z) / (pl.a * ray.dir.x + pl.b * ray.dir.y + pl.c * ray.dir.z);
 	rt.color = pl.color;
 	rt.o = pl.p;
+	if (rt.inter < start || rt.inter > max)
+		rt.inter = 0;
 	return (rt);
 }
 
-t_inter intersp(t_ray ray, void *ptr)
+t_inter intersp(t_ray ray, void *ptr, double start, double max)
 {
 	double t1;
 	double t2;
@@ -152,84 +167,146 @@ t_inter intersp(t_ray ray, void *ptr)
 		rt.inter = 0;
 	rt.color = sp.color;
 	rt.o = sp.o;
+	rt.spec = sp.spec;
+	rt.reflect = sp.reflect;
+	if (rt.inter < start || rt.inter > max)
+		rt.inter = 0;
 	return (rt);
-}
-
-double	light_intensity(t_vec ipoint, t_vec normal, t_light light)
-{
-	double	i;
-	double	p_scal;
-	t_vec	l;
-
-	i = 0.0;
-	l = sub_vec(light.pos, ipoint);
-	p_scal = prod_scal(normal, l);
-	if (p_scal > 0)
-		i = light.intensity * p_scal / (norm_vec(normal) * norm_vec(l));
-	return (i);
 }
 
 int		get_color(int objcol, double i)
 {
 	int rt;
-	int r;
-	int g;
-	int b;
 
-	r = (objcol & 0xFF0000) >> 16;
-	g = (objcol & 0x00FF00) >> 8;
-	b = (objcol & 0x0000FF);
 	rt = 0;
-	rt |= (int)(r * i) << 16;
-	rt |= (int)(g * i) << 8;
-	rt |= (int)(b * i);
+	rt |= (int)(((objcol & 0xFF0000) >> 16) * i) << 16;
+	rt |= (int)(((objcol & 0x00FF00) >> 8) * i) << 8;
+	rt |= (int)((objcol & 0x0000FF) * i);
 	return (rt);
+}
+
+int		add_color(int col1, int col2)
+{
+	int rt;
+
+	rt = 0;
+	rt |= ((((col1 & 0xFF0000) >> 16) + ((col2 & 0xFF0000) >> 16))) << 16;
+	rt |= ((((col1 & 0x00FF00) >> 8) + ((col2 & 0x00FF00) >> 8))) << 8;
+	rt |= ((col1 & 0x0000FF) + (col2 & 0x0000FF));
+	return (rt);
+}
+
+t_inter	min_inter(t_ray ray, t_p p, double start, double max)
+{
+	t_inter min;
+	t_inter inter;
+	int j;
+
+	j = -1;
+
+	min.color = BACKGROUND_COLOR;
+	min.inter = max;
+	while (p.objs[++j].o)
+	{
+		inter = (get_inter[p.objs[j].type])(ray, p.objs[j].o, start, max);
+		if (inter.inter < min.inter && inter.inter > start)
+			min = inter;
+	}
+	min.inter = (min.inter == max ? 0 : min.inter);
+	return (min);
+}
+
+double	light_intensity(t_vec ipoint, t_vec normal, t_light light, t_p p, double spec, t_vec invray)
+{
+	double	i;
+	double	p_scal;
+	t_vec	l;
+	t_inter closest;
+	t_ray shadow;
+
+	i = 0.0;
+	l = sub_vec(light.pos, ipoint);
+	shadow.o = ipoint;
+	shadow.dir = l;
+	closest = min_inter(shadow, p, 0.0000001, norm_vec(l));
+	if (closest.inter)
+		return (0);
+	p_scal = prod_scal(normal, l);
+	if (p_scal > 0)
+		i = light.intensity * p_scal / (norm_vec(normal) * norm_vec(l));
+	if (spec != -1)
+	{
+		l = sub_vec(mult_vec_d(mult_vec_d(normal, prod_scal(normal, l)), 2), l); 
+		if ((p_scal = prod_scal(l, invray)) > 0)
+			i += light.intensity * pow(p_scal / (norm_vec(l) * norm_vec(invray)), spec);
+	}
+	return (i);
+}
+
+int		find_pix_color(t_ray ray, t_p p, int depth)
+{
+	double intensity;
+	t_vec ipoint;
+	t_inter min;
+	t_vec normal;
+	int i;
+	int color;
+
+	i = -1;
+	intensity = 0.0;
+	min = min_inter(ray, p, 0.000000000001, __DBL_MAX__);
+	if (!min.inter)
+		return (BACKGROUND_COLOR);
+	ipoint = add_vec(ray.o, mult_vec_d(ray.dir, min.inter));
+	normal = normalize(sub_vec(ipoint, min.o));
+	while (++i < NB_LIGHT)
+		intensity += ((p.lights[i].type == POINT) ? light_intensity(ipoint, normal, p.lights[i], p, min.spec, mult_vec_d(ray.dir, -1)) : p.lights[i].intensity);
+	color = get_color(min.color, intensity > 1 ? 1 : intensity);
+	if (!depth || min.reflect <= 0)
+		return (color);
+	ray.dir = retray(mult_vec_d(ray.dir, -1), normal);
+	ray.o = ipoint;
+	return (add_color(get_color(color, 1 - min.reflect), get_color(find_pix_color(ray, p, depth - 1), min.reflect)));
+}
+
+t_vec	c_to_vp(int i, int j)
+{
+	t_vec dir;
+
+	dir.x = (j - RES_X / 2.0) * (VP_W / MEDIUM);
+	dir.y = (RES_Y / 2.0 - i) * (VP_H / MEDIUM);
+	dir.z = VP_D;
+	return (dir);
+}
+
+t_vec cam_rot()
+{
+	t_vec rotate;
+
+	rotate.x = 1;
+	rotate.y = 1;
+	rotate.z = 1; 
+	return(rotate);
 }
 
 void	fill_img(int *img, t_info info, t_p p)
 {
 	int i;
 	int j;
-	int k;
 	t_ray ray;
-	t_inter inter;
-	t_inter min;
-	double intensity;
-	t_vec ipoint;
-	t_vec normal;
-	int len = info.l / 4;
-
+	int len;
+	 
+	len = info.l / 4;
 	i = -1;
 	ray.o = p.cam.o;
-	ray.dir.z = VP_D;
+	
 	while (++i < RES_Y)
 	{
-		k = -1;
-		while (++k < RES_X)
+		j = -1;
+		while (++j < RES_X)
 		{
-			ray.dir.x = (k - RES_X / 2.0) * (VP_W / MEDIUM);
-			ray.dir.y = (RES_Y / 2.0 - i) * (VP_H / MEDIUM);
-			j = -1;
-			min.color = BACKGROUND_COLOR;
-			min.inter = __DBL_MAX__;
-			while (p.objs[++j].o)
-			{
-				inter = (get_inter[p.objs[j].type])(ray, p.objs[j].o);
-				if (inter.inter < min.inter && inter.inter >= 1)
-					min = inter;
-			}
-			if (min.inter != __DBL_MAX__)
-			{
-				ipoint = add_vec(ray.o, mult_vec_d(ray.dir, min.inter));
-				normal = normalize(sub_vec(ipoint, min.o));
-				j = -1;
-				intensity = 0.0;
-				while (++j < NB_LIGHT)
-					intensity += ((p.lights[j].type == POINT) ? light_intensity(ipoint, normal, p.lights[j]) : p.lights[j].intensity);
-				img[i * len + k] = get_color(min.color, intensity > 1 ? 1 : intensity);
-			}
-			else
-				img[i * len + k] = BACKGROUND_COLOR;
+			ray.dir = mult_vec(c_to_vp(i, j), cam_rot());
+			img[i * len + j] = find_pix_color(ray, p, RECURS_DEPTH);
 		}
 	}
 }
