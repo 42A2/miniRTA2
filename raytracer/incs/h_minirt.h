@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   h_minirt.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mbrunel <mbrunel@student.42.fr>            +#+  +:+       +#+        */
+/*   By: yvanat <yvanat@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/02 12:51:50 by mbrunel           #+#    #+#             */
-/*   Updated: 2019/12/11 22:17:40 by mbrunel          ###   ########.fr       */
+/*   Updated: 2019/12/12 01:05:35 by yvanat           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,9 @@
 # define H_MINIRT_H
 
 
-#define RES_X 600 
+#define RES_X 600
 #define RES_Y 600
-#define MEDIUM (RES_X + RES_Y) / 2
+#define MEDIUM (RES_X < RES_Y ? RES_X : RES_Y)
 #define VP_D 1.0
 #define VP_H 1.0
 #define VP_W 1.0

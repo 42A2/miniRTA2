@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mbrunel <mbrunel@student.42.fr>            +#+  +:+       +#+        */
+/*   By: yvanat <yvanat@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/07 05:55:14 by mbrunel           #+#    #+#             */
-/*   Updated: 2019/12/11 22:22:20 by mbrunel          ###   ########.fr       */
+/*   Updated: 2019/12/12 02:10:29 by yvanat           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ void get_p(t_p *p)
 	pl1->c = 0;
 	pl1->d = 0; 	// plan1
 	pl1->p.x = 0;
-	pl1->p.y = 1;
+	pl1->p.y = -10;
 	pl1->p.z = 0;
 	pl1->color = 0xff00ff;/*
 
@@ -116,7 +116,7 @@ t_inter	interpl(t_ray ray, void *ptr)
 	t_inter rt;
 
 	pl = *(t_pl*)ptr;
-	rt.inter = -1 * ((pl.a * pl.p.x + pl.b * pl.p.y + pl.c * pl.p.z) / (pl.a * ray.dir.x + pl.b * ray.dir.y + pl.c * ray.dir.z));
+	rt.inter = (pl.a * pl.p.x + pl.b * pl.p.y + pl.c * pl.p.z) / (pl.a * ray.dir.x + pl.b * ray.dir.y + pl.c * ray.dir.z);
 	rt.color = pl.color;
 	rt.o = pl.p;
 	return (rt);
@@ -135,7 +135,6 @@ t_inter intersp(t_ray ray, void *ptr)
 	t_vec oc;
 	
 	sp = *(t_sp*)ptr;
-	mult_vec_d(ray.dir, -1);
 	oc = sub_vec(ray.o, sp.o);
 	a = prod_scal(ray.dir, ray.dir);
 	b = 2 * prod_scal(oc, ray.dir);
@@ -202,14 +201,14 @@ void	fill_img(int *img, t_info info, t_p p)
 
 	i = -1;
 	ray.o = p.cam.o;
-	ray.dir.z = VP_D / 4;
+	ray.dir.z = VP_D;
 	while (++i < RES_Y)
 	{
 		k = -1;
-		while (++k < len)
+		while (++k < RES_X)
 		{
-			ray.dir.x = (k - len / 2.0) * (VP_W / MEDIUM);
-			ray.dir.y = -1 * (i - RES_Y / 2.0) * (VP_H / MEDIUM);
+			ray.dir.x = (k - RES_X / 2.0) * (VP_W / MEDIUM);
+			ray.dir.y = (RES_Y / 2.0 - i) * (VP_H / MEDIUM);
 			j = -1;
 			min.color = BACKGROUND_COLOR;
 			min.inter = __DBL_MAX__;
