@@ -6,7 +6,7 @@
 /*   By: mbrunel <mbrunel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/07 05:55:14 by mbrunel           #+#    #+#             */
-/*   Updated: 2019/12/12 10:52:38 by mbrunel          ###   ########.fr       */
+/*   Updated: 2019/12/12 11:19:20 by mbrunel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,17 +33,17 @@ void get_p(t_p *p)
 	sp1->o.x = 0.0; //sphere 1
 	sp1->o.y = -1.0;
 	sp1->o.z = 3.0;
-	sp1->color = 0x7f7f7f;
-	sp1->spec = 500;
-	sp1->reflect = 0.2;
+	sp1->color = 0xffffff;
+	sp1->spec = 10;
+	sp1->reflect = 0.05;
 
 	sp2->r = 1.0;
 	sp2->o.x = 2.0; // sphere 2
 	sp2->o.y = 0.0;
 	sp2->o.z = 4.0;
-	sp2->color = 0xffff;
-	sp2->spec = 500;
-	sp2->reflect = 0.3;
+	sp2->color = 0xffffff;
+	sp2->spec = 20;
+	sp2->reflect = 0.1;
 	
 	sp3->r = 1.0;
 	sp3->o.x = -2.0; // sphere 3
@@ -51,15 +51,15 @@ void get_p(t_p *p)
 	sp3->o.z = 4.0;
 	sp3->color = 0xffffff;
 	sp3->spec = 10;
-	sp3->reflect = 0.4;
+	sp3->reflect = 0.15;
 
 	sp4->r = 5000;
 	sp4->o.x = 0.0; // sphere 
 	sp4->o.y = -5001.0;
 	sp4->o.z = 0.0;
-	sp4->color = 0xff00ff;
+	sp4->color = 0xffffff;
 	sp4->spec = 1000;
-	sp4->reflect = 0.5;
+	sp4->reflect = 0.2;
 
 	pl1->a = 0;
 	pl1->b = 1;
@@ -68,7 +68,7 @@ void get_p(t_p *p)
 	pl1->p.x = 0;
 	pl1->p.y = -10;
 	pl1->p.z = 0;
-	pl1->color = 0xff00ff;/*
+	pl1->color = 0xffffff;/*
 
 	pl2->a = 0;
 	pl2->b = 1;
@@ -106,19 +106,26 @@ void get_p(t_p *p)
 	p->lights[0].type = AMBIENT;
 	p->lights[0].rgb = create_vec(127, 0, 127);
 
-	p->lights[1].intensity = 0.6;
+	p->lights[1].intensity = 0.2;
 	p->lights[1].type = POINT;
 	p->lights[1].pos.x = 2;
-	p->lights[1].pos.y = 1;
+	p->lights[1].pos.y = 4;
 	p->lights[1].pos.z = 0;
-	p->lights[1].rgb = create_vec(0, 255, 255);
+	p->lights[1].rgb = create_vec(0, 0, 255);
 
 	p->lights[2].intensity = 0.2;
 	p->lights[2].type = POINT;
-	p->lights[2].pos.x = 1;
-	p->lights[2].pos.y = 4;
-	p->lights[2].pos.z = 4;
-	p->lights[2].rgb = create_vec(0,255, 255);
+	p->lights[2].pos.x = 2;
+	p->lights[2].pos.y = 1;
+	p->lights[2].pos.z = 0;
+	p->lights[2].rgb = create_vec(0,255, 0);
+
+	p->lights[3].intensity = 0.3;
+	p->lights[3].type = POINT;
+	p->lights[3].pos.x = -2;
+	p->lights[3].pos.y = 1;
+	p->lights[3].pos.z = 1;
+	p->lights[3].rgb = create_vec(255 ,0, 0);
 }
 
 t_vec	retray(t_vec r, t_vec n)
@@ -281,7 +288,9 @@ int		find_pix_color(t_ray ray, t_p p, int depth)
 	ipoint = add_vec(ray.o, mult_vec_d(ray.dir, min.inter));
 	normal = normalize(sub_vec(ipoint, min.o));
 	while (++i < NB_LIGHT)
+	{
 		intensity = add_vec(intensity, ((p.lights[i].type == POINT) ? light_intensity(ipoint, normal, p.lights[i], p, min.spec, mult_vec_d(ray.dir, -1)) : mult_vec_d(div_vec(p.lights[i].rgb, create_vec(255, 255, 255)), p.lights[i].intensity)));
+	}
 	color = prod_color_vec(min.color, intensity);
 	if (!depth || min.reflect <= 0)
 		return (color);

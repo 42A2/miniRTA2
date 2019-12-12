@@ -6,7 +6,7 @@
 /*   By: mbrunel <mbrunel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/02 12:51:50 by mbrunel           #+#    #+#             */
-/*   Updated: 2019/12/12 10:47:14 by mbrunel          ###   ########.fr       */
+/*   Updated: 2019/12/12 11:17:22 by mbrunel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@
 #define NB_FORM 2
 #define AMBIENT 1
 #define POINT 2
-#define NB_LIGHT 3
+#define NB_LIGHT 4
 #define RECURS_DEPTH 1
 #define RENDER_MIN 1.0
 
