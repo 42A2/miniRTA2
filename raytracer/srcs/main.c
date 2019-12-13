@@ -6,129 +6,48 @@
 /*   By: mbrunel <mbrunel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/07 05:55:14 by mbrunel           #+#    #+#             */
-/*   Updated: 2019/12/12 11:19:20 by mbrunel          ###   ########.fr       */
+/*   Updated: 2019/12/13 02:04:07 by mbrunel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../incs/h_minirt.h"
 
-
-void get_p(t_p *p)
+int get_p(t_p *p, char *path)
 {
-	t_sp *sp1;
-	t_sp *sp2;
-	t_sp *sp3;
-	t_sp *sp4;
-	t_pl *pl1;/*
-	t_pl *pl2;*/
+	int fd;
+	int status;
+	int type;
+	int incs[7];
+	char *buf;
 
-	sp1 = malloc(sizeof(t_sp));
-	sp2 = malloc(sizeof(t_sp));
-	sp3 = malloc(sizeof(t_sp));
-	sp4 = malloc(sizeof(t_sp));
-	pl1 = malloc(sizeof(t_pl));
-	/*pl2 = malloc(sizeof(t_pl));*/
-
-	sp1->r = 1.0;
-	sp1->o.x = 0.0; //sphere 1
-	sp1->o.y = -1.0;
-	sp1->o.z = 3.0;
-	sp1->color = 0xffffff;
-	sp1->spec = 10;
-	sp1->reflect = 0.05;
-
-	sp2->r = 1.0;
-	sp2->o.x = 2.0; // sphere 2
-	sp2->o.y = 0.0;
-	sp2->o.z = 4.0;
-	sp2->color = 0xffffff;
-	sp2->spec = 20;
-	sp2->reflect = 0.1;
-	
-	sp3->r = 1.0;
-	sp3->o.x = -2.0; // sphere 3
-	sp3->o.y = 0.0;
-	sp3->o.z = 4.0;
-	sp3->color = 0xffffff;
-	sp3->spec = 10;
-	sp3->reflect = 0.15;
-
-	sp4->r = 5000;
-	sp4->o.x = 0.0; // sphere 
-	sp4->o.y = -5001.0;
-	sp4->o.z = 0.0;
-	sp4->color = 0xffffff;
-	sp4->spec = 1000;
-	sp4->reflect = 0.2;
-
-	pl1->a = 0;
-	pl1->b = 1;
-	pl1->c = 0;
-	pl1->d = 0; 	// plan1
-	pl1->p.x = 0;
-	pl1->p.y = -10;
-	pl1->p.z = 0;
-	pl1->color = 0xffffff;/*
-
-	pl2->a = 0;
-	pl2->b = 1;
-	pl2->c = 0;
-	pl2->d = 0; 	// plan2
-	pl2->p.x = 0;
-	pl2->p.y = -100;
-	pl2->p.z = 0;
-	pl2->color = 0xffff;*/
-
-	p->cam.o.x = 0;
-	p->cam.o.y = 0;  //cam1
-	p->cam.o.z = 0;
-
-	p->objs[0].o = sp1;
-	p->objs[0].type = SPHERE;
-
-	p->objs[1].o = sp2;
-	p->objs[1].type = SPHERE;
-
-	p->objs[2].o = sp3;
-	p->objs[2].type = SPHERE;
-
-	p->objs[3].o = sp4;
-	p->objs[3].type = SPHERE;
-	/*p->objs[4].o = pl1;
-	p->objs[4].type = PLANE;*/
-/*
-	p->objs[4].o = pl2;
-	p->objs[4].type = PLANE;*/
-
-	p->objs[4].o = NULL;
-
-	p->lights[0].intensity = 0.2;
-	p->lights[0].type = AMBIENT;
-	p->lights[0].rgb = create_vec(127, 0, 127);
-
-	p->lights[1].intensity = 0.2;
-	p->lights[1].type = POINT;
-	p->lights[1].pos.x = 2;
-	p->lights[1].pos.y = 4;
-	p->lights[1].pos.z = 0;
-	p->lights[1].rgb = create_vec(0, 0, 255);
-
-	p->lights[2].intensity = 0.2;
-	p->lights[2].type = POINT;
-	p->lights[2].pos.x = 2;
-	p->lights[2].pos.y = 1;
-	p->lights[2].pos.z = 0;
-	p->lights[2].rgb = create_vec(0,255, 0);
-
-	p->lights[3].intensity = 0.3;
-	p->lights[3].type = POINT;
-	p->lights[3].pos.x = -2;
-	p->lights[3].pos.y = 1;
-	p->lights[3].pos.z = 1;
-	p->lights[3].rgb = create_vec(255 ,0, 0);
+	if (!(fd = open(path, O_RDONLY)))
+		return error(NULL, "open_eror\n");
+	ft_memset(incs, 0, sizeof(int) * 6);
+	while ((status = get_next_line(fd, &buf)) > 0 && ++incs[LINES_OF_FILE] < MAX_LENGTHG_FILE)
+	{
+		if ((type = (chr("spRlAc", buf[0]))) == -1)
+			return (error(buf, "object not found in database\n"));
+		else if (type == RESOLUTION)
+			if (incs[RESOLUTION] || get_vp(buf, &(p->vp)) == -1)
+				return (error(buf, "the vp is badly registered\n"));
+		else if (type == AMBIANTE || type == LIGHT)
+			if (incs[AMBIANTE] || get_lights(buf, &(p->lights[incs[AMBIANTE] + incs[LIGHT]]), type) == -1)
+				return (error(buf, "light parameters are badly registered\n"));
+		else if (type == CAMERA)
+			if (get_cam(buf, &(p->cam[incs[CAMERA]])) == -1)
+				return (error(buf, "camera parameters are badly registered\n"));
+		else
+		{
+			if ((get_obj[type])(buf, &(p->objs[incs[type]].o)) == -1)
+				return (error(buf, "objs parameters are badly registered\n"));
+			p->objs[incs[type]].type = type;
+		}
+		incs[type]++;
+	}
+	return (0);
 }
 
-t_vec	retray(t_vec r, t_vec n)
+t_vec	normalray(t_vec r, t_vec n)
 {
 	return (sub_vec(mult_vec_d(mult_vec_d(n, prod_scal(r, n)), 2), r));
 }
@@ -181,28 +100,6 @@ t_inter intersp(t_ray ray, void *ptr, double start, double max)
 	rt.reflect = sp.reflect;
 	if (rt.inter < start || rt.inter > max)
 		rt.inter = 0;
-	return (rt);
-}
-
-int		prod_color_float(int objcol, double i)
-{
-	int rt;
-
-	rt = 0;
-	rt |= (int)(((objcol & 0xFF0000) >> 16) * i) << 16;
-	rt |= (int)(((objcol & 0x00FF00) >> 8) * i) << 8;
-	rt |= (int)((objcol & 0x0000FF) * i);
-	return (rt);
-}
-
-int		add_color_to_color(int col1, int col2)
-{
-	int rt;
-
-	rt = 0;
-	rt |= ((((col1 & 0xFF0000) >> 16) + ((col2 & 0xFF0000) >> 16))) << 16;
-	rt |= ((((col1 & 0x00FF00) >> 8) + ((col2 & 0x00FF00) >> 8))) << 8;
-	rt |= ((col1 & 0x0000FF) + (col2 & 0x0000FF));
 	return (rt);
 }
 
@@ -260,17 +157,6 @@ t_vec	light_intensity(t_vec ipoint, t_vec normal, t_light light, t_p p, double s
 	return (i);
 }
 
-int prod_color_vec(int objcol, t_vec i)
-{
-	int rt;
-
-	rt = 0;
-	rt |= (int)(((objcol & 0xFF0000) >> 16) * (i.x > 1 ? 1 : i.x)) << 16;
-	rt |= (int)(((objcol & 0x00FF00) >> 8) * (i.y > 1 ? 1 : i.y)) << 8;
-	rt |= (int)((objcol & 0x0000FF) * (i.z > 1 ? 1 : i.z));
-	return (rt);
-}
-
 int		find_pix_color(t_ray ray, t_p p, int depth)
 {
 	t_vec intensity;
@@ -294,7 +180,7 @@ int		find_pix_color(t_ray ray, t_p p, int depth)
 	color = prod_color_vec(min.color, intensity);
 	if (!depth || min.reflect <= 0)
 		return (color);
-	ray.dir = retray(mult_vec_d(ray.dir, -1), normal);
+	ray.dir = normalray(mult_vec_d(ray.dir, -1), normal);
 	ray.o = ipoint;
 	return (add_color_to_color(prod_color_float(color, 1 - min.reflect), prod_color_float(find_pix_color(ray, p, depth - 1), min.reflect)));
 }
@@ -328,7 +214,7 @@ void	fill_img(int *img, t_info info, t_p p)
 	 
 	len = info.l / 4;
 	i = -1;
-	ray.o = p.cam.o;
+	ray.o = p.cam[0].o;
 	
 	while (++i < RES_Y)
 	{
@@ -347,7 +233,7 @@ int quit(t_mlx *mlx)
 	exit(0);
 }
 
-int		main()
+int		main(int argc, char *argv[])
 {
 	t_mlx	mlx;
 	t_info	info;
@@ -355,7 +241,8 @@ int		main()
 	int 	*img;
 
 	mlx.ptr = mlx_init();
-	get_p(&p);
+	if (!(argv[1] && !get_p(&p, argv[1])))
+		exit (0);
 	if ((mlx.win = mlx_new_window(mlx.ptr, RES_X, RES_Y, "RT")))
 	{
 		if (!(mlx.img = mlx_new_image(mlx.ptr, RES_X, RES_Y)))
