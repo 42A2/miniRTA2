@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mbrunel <mbrunel@student.42.fr>            +#+  +:+       +#+        */
+/*   By: yvanat <yvanat@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/07 05:55:14 by mbrunel           #+#    #+#             */
-/*   Updated: 2019/12/12 11:19:20 by mbrunel          ###   ########.fr       */
+/*   Updated: 2019/12/13 10:22:16 by yvanat           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@ void get_p(t_p *p)
 	t_sp *sp2;
 	t_sp *sp3;
 	t_sp *sp4;
+	t_sp *sp5;
 	t_pl *pl1;/*
 	t_pl *pl2;*/
 
@@ -26,6 +27,7 @@ void get_p(t_p *p)
 	sp2 = malloc(sizeof(t_sp));
 	sp3 = malloc(sizeof(t_sp));
 	sp4 = malloc(sizeof(t_sp));
+	sp5 = malloc(sizeof(t_sp));
 	pl1 = malloc(sizeof(t_pl));
 	/*pl2 = malloc(sizeof(t_pl));*/
 
@@ -33,7 +35,7 @@ void get_p(t_p *p)
 	sp1->o.x = 0.0; //sphere 1
 	sp1->o.y = -1.0;
 	sp1->o.z = 3.0;
-	sp1->color = 0xffffff;
+	sp1->color = 0xda7010;
 	sp1->spec = 10;
 	sp1->reflect = 0.05;
 
@@ -41,7 +43,7 @@ void get_p(t_p *p)
 	sp2->o.x = 2.0; // sphere 2
 	sp2->o.y = 0.0;
 	sp2->o.z = 4.0;
-	sp2->color = 0xffffff;
+	sp2->color = 0xfff00f;
 	sp2->spec = 20;
 	sp2->reflect = 0.1;
 	
@@ -49,9 +51,9 @@ void get_p(t_p *p)
 	sp3->o.x = -2.0; // sphere 3
 	sp3->o.y = 0.0;
 	sp3->o.z = 4.0;
-	sp3->color = 0xffffff;
+	sp3->color = 0xf0f0ff;
 	sp3->spec = 10;
-	sp3->reflect = 0.15;
+	sp3->reflect = 0.05;
 
 	sp4->r = 5000;
 	sp4->o.x = 0.0; // sphere 
@@ -59,16 +61,22 @@ void get_p(t_p *p)
 	sp4->o.z = 0.0;
 	sp4->color = 0xffffff;
 	sp4->spec = 1000;
-	sp4->reflect = 0.2;
+	sp4->reflect = 0.15;
 
-	pl1->a = 0;
+	sp5->r = 5000;
+	sp5->o = create_vec(0,0,5250);
+	sp5->color = 0xff;
+	sp5->spec = 0;
+	sp5->reflect = 0; 
+
+	/*pl1->a = 0;
 	pl1->b = 1;
 	pl1->c = 0;
 	pl1->d = 0; 	// plan1
 	pl1->p.x = 0;
 	pl1->p.y = -10;
 	pl1->p.z = 0;
-	pl1->color = 0xffffff;/*
+	pl1->color = 0xffffff;
 
 	pl2->a = 0;
 	pl2->b = 1;
@@ -94,26 +102,26 @@ void get_p(t_p *p)
 
 	p->objs[3].o = sp4;
 	p->objs[3].type = SPHERE;
-	/*p->objs[4].o = pl1;
-	p->objs[4].type = PLANE;*/
+	p->objs[4].o = sp5;
+	p->objs[4].type = SPHERE;
 /*
 	p->objs[4].o = pl2;
 	p->objs[4].type = PLANE;*/
 
-	p->objs[4].o = NULL;
+	p->objs[5].o = NULL;
 
 	p->lights[0].intensity = 0.2;
 	p->lights[0].type = AMBIENT;
-	p->lights[0].rgb = create_vec(127, 0, 127);
+	p->lights[0].rgb = create_vec(255, 255, 255);
 
-	p->lights[1].intensity = 0.2;
+	p->lights[1].intensity = 0.0;
 	p->lights[1].type = POINT;
 	p->lights[1].pos.x = 2;
 	p->lights[1].pos.y = 4;
 	p->lights[1].pos.z = 0;
 	p->lights[1].rgb = create_vec(0, 0, 255);
 
-	p->lights[2].intensity = 0.2;
+	p->lights[2].intensity = 0.3;
 	p->lights[2].type = POINT;
 	p->lights[2].pos.x = 2;
 	p->lights[2].pos.y = 1;
@@ -126,6 +134,13 @@ void get_p(t_p *p)
 	p->lights[3].pos.y = 1;
 	p->lights[3].pos.z = 1;
 	p->lights[3].rgb = create_vec(255 ,0, 0);
+
+	p->lights[4].intensity = 0.2;
+	p->lights[4].type = DIRECTIONAL;
+	p->lights[4].pos.x = 0;
+	p->lights[4].pos.y = 8;
+	p->lights[4].pos.z = -1;
+	p->lights[4].rgb = create_vec(127,0,127);
 }
 
 t_vec	retray(t_vec r, t_vec n)
@@ -234,12 +249,14 @@ t_vec	light_intensity(t_vec ipoint, t_vec normal, t_light light, t_p p, double s
 	t_vec	l;
 	t_inter closest;
 	t_ray shadow;
+	double max;
 
 	i = create_vec(0, 0, 0);
-	l = sub_vec(light.pos, ipoint);
+	l = light.type == POINT ? sub_vec(light.pos, ipoint) : light.pos;
+	max = light.type == POINT ? norm_vec(l) : __DBL_MAX__;
 	shadow.o = ipoint;
 	shadow.dir = l;
-	closest = min_inter(shadow, p, 0.0000001, norm_vec(l));
+	closest = min_inter(shadow, p, 0.0000001, max);
 	if (closest.inter)
 		return (i);
 	p_scal = prod_scal(normal, l);
@@ -289,7 +306,7 @@ int		find_pix_color(t_ray ray, t_p p, int depth)
 	normal = normalize(sub_vec(ipoint, min.o));
 	while (++i < NB_LIGHT)
 	{
-		intensity = add_vec(intensity, ((p.lights[i].type == POINT) ? light_intensity(ipoint, normal, p.lights[i], p, min.spec, mult_vec_d(ray.dir, -1)) : mult_vec_d(div_vec(p.lights[i].rgb, create_vec(255, 255, 255)), p.lights[i].intensity)));
+		intensity = add_vec(intensity, ((p.lights[i].type != AMBIENT) ? light_intensity(ipoint, normal, p.lights[i], p, min.spec, mult_vec_d(ray.dir, -1)) : mult_vec_d(div_vec(p.lights[i].rgb, create_vec(255, 255, 255)), p.lights[i].intensity)));
 	}
 	color = prod_color_vec(min.color, intensity);
 	if (!depth || min.reflect <= 0)
@@ -299,7 +316,7 @@ int		find_pix_color(t_ray ray, t_p p, int depth)
 	return (add_color_to_color(prod_color_float(color, 1 - min.reflect), prod_color_float(find_pix_color(ray, p, depth - 1), min.reflect)));
 }
 
-t_vec	c_to_vp(int i, int j)
+t_vec	c_to_vp(double i, double j)
 {
 	t_vec dir;
 
@@ -319,6 +336,113 @@ t_vec cam_rot()
 	return(rotate);
 }
 
+int abs(int nb)
+{
+	return (nb >= 0 ? nb : -nb);
+}
+
+int		comp_cols(int col1, int col2)
+{
+	t_vec rgb;
+
+	rgb.x = abs(((col1 & 0xFF0000) >> 16) - ((col2 & 0xFF0000) >> 16));
+	rgb.y = abs(((col1 & 0x00FF00) >> 8) - ((col2 & 0x00FF00) >> 8));
+	rgb.z = abs(((col1 & 0x0000FF) - (col2 & 0x0000FF)));
+	if (norm_vec(rgb) > DELTA)
+		return (-1);
+	return (0);
+}
+
+int		check_diff(int i, int j, int *tab, int len)
+{
+	int k;
+	int m;
+
+	k = -2;
+	while (++k < 2)
+	{
+		m = -2;
+		while (++m < 2)
+			if (comp_cols(tab[(i - k) * len + (j - m)], tab[i * len + j]) == -1)
+				return (-1);
+	}
+	return (0);
+}
+
+int get_clr_int(int r, int g, int b)
+{
+	int rt;
+
+	rt = 0;
+	rt |= r << 16;
+	rt |= g << 8;
+	return (rt |= b);
+}
+
+int mid_color(int *color)
+{
+	int r;
+	int g;
+	int b;
+	int i;
+	int nb_ray;
+
+	nb_ray = ((COEFF_ALIASING * 2) - 1) * ((COEFF_ALIASING * 2) - 1);
+	r = 0;
+	g = 0;
+	b = 0;
+	i = -1;
+	while (++i < nb_ray)
+	{
+		r += (color[i] & 0xFF0000) >> 16;
+		g += (color[i] & 0x00FF00) >> 8;
+		b += color[i] & 0x0000FF;
+	}
+	return (get_clr_int(r / nb_ray, g / nb_ray, b / nb_ray));
+}
+
+int recalc_img(int i, int j, t_p p, int actualpix)
+{
+	int color[((COEFF_ALIASING * 2) - 1) * ((COEFF_ALIASING * 2) - 1)];
+	t_ray ray;
+	int k;
+	int m;
+	int n;
+
+	n = 0;
+	ray.o = p.cam.o;
+	k = -COEFF_ALIASING;
+	while (++k < COEFF_ALIASING)
+	{
+		m = -COEFF_ALIASING;
+		while (++m < COEFF_ALIASING)
+		{
+			if (k || m)
+			{
+				ray.dir = c_to_vp((double)(((double)k / (COEFF_ALIASING * 2)) + i), (double)(j + ((double)m / (COEFF_ALIASING * 2))));
+				color[n] = find_pix_color(ray, p, RECURS_DEPTH);
+			}
+			else
+				color[n] = actualpix;
+			n++;
+		}
+	}
+	return (mid_color(color));
+}
+
+void		aliasing(int *img, int len, t_p p)
+{
+	int i;
+	int j;
+	i = 0;
+	while (++i < RES_Y - 1)
+	{
+		j = 0;
+		while (++j < RES_X - 1)
+			if (check_diff(i, j, img, len) == -1)
+				img[i * len + j] = recalc_img(i, j, p, img[i * len + j]);
+	}
+}
 void	fill_img(int *img, t_info info, t_p p)
 {
 	int i;
@@ -329,16 +453,16 @@ void	fill_img(int *img, t_info info, t_p p)
 	len = info.l / 4;
 	i = -1;
 	ray.o = p.cam.o;
-	
 	while (++i < RES_Y)
 	{
 		j = -1;
 		while (++j < RES_X)
 		{
-			ray.dir = mult_vec(c_to_vp(i, j), cam_rot());
+			ray.dir = mult_vec(c_to_vp((double)i, (double)j), cam_rot());
 			img[i * len + j] = find_pix_color(ray, p, RECURS_DEPTH);
 		}
 	}
+	aliasing(img, len, p);
 }
 
 int quit(t_mlx *mlx)

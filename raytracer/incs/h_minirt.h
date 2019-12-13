@@ -6,7 +6,7 @@
 /*   By: yvanat <yvanat@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/02 12:51:50 by mbrunel           #+#    #+#             */
-/*   Updated: 2019/12/13 02:46:36 by yvanat           ###   ########.fr       */
+/*   Updated: 2019/12/13 10:14:36 by yvanat           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 # define H_MINIRT_H
 
 
-#define RES_X 2700
-#define RES_Y 1600
+#define RES_X 800
+#define RES_Y 800
 #define MEDIUM (RES_X < RES_Y ? RES_X : RES_Y)
 #define VP_D 0.4
 #define VP_H 1.0
@@ -23,13 +23,16 @@
 #define NB_OBJ 5
 #define SPHERE 0
 #define PLANE 1
-#define BACKGROUND_COLOR 0x0
+#define BACKGROUND_COLOR 0x303030
 #define NB_FORM 2
 #define AMBIENT 1
 #define POINT 2
-#define NB_LIGHT 4
+#define DIRECTIONAL 3
+#define NB_LIGHT 5
 #define RECURS_DEPTH 1
 #define RENDER_MIN 1.0
+#define DELTA 7
+#define COEFF_ALIASING 3
 
 # include <mlx.h>
 # include "../libs/libft/libft.h"
