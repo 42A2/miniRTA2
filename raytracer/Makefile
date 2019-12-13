@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: yvanat <yvanat@student.42.fr>              +#+  +:+       +#+         #
+#    By: mbrunel <mbrunel@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/11/06 03:24:21 by mbrunel           #+#    #+#              #
-#    Updated: 2019/12/11 02:05:16 by yvanat           ###   ########.fr        #
+#    Updated: 2019/12/12 08:57:10 by mbrunel          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,7 +16,7 @@ SRC_DIR = srcs
 OBJ_DIR = objs
 
 CC =		gcc
-CFLAGS =	-Wall -Werror -Wextra -I./$(INC_DIR)/h_minirt.h -I./$(INC_DIR)/get_next_line.h 
+CFLAGS =	-Wall -Werror -Wextra
 OFLAGS =	$(LIB_DIR)/$(LIBFT_DIR)/$(LIBFT) $(MLX) 
 NAME =		miniRT
 

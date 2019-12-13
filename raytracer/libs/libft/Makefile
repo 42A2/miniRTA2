@@ -38,7 +38,9 @@ SRC =	ft_atoi.c \
 			ft_toupper.c \
 			ft_strlcat.c \
 			ft_strlcpy.c \
-			ft_isspace.c
+			ft_isspace.c \
+			get_next_line.c \
+			get_next_line_utils.c
 
 SRC_BONUS = ft_lstnew_bonus.c \
 			ft_lstadd_front_bonus.c \
@@ -56,7 +58,7 @@ OBJ =		${SRC:%.c=%.o}
 
 OBJ_BONUS = ${SRC_BONUS:%.c=%.o}
 
-$(NAME):
+$(NAME):	${OBJ}
 			${CC} ${CFLAGS} -c ${SRC}
 			ar rc ${NAME} ${OBJ}
 			ranlib ${NAME}
