@@ -6,7 +6,7 @@
 #    By: mbrunel <mbrunel@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/11/06 03:24:21 by mbrunel           #+#    #+#              #
-#    Updated: 2019/12/14 01:05:25 by mbrunel          ###   ########.fr        #
+#    Updated: 2019/12/14 13:35:23 by mbrunel          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -23,7 +23,12 @@ NAME =		miniRT
 SRCS = 		main.c \
 			vec_utils1.c \
 			vec_utils2.c \
-			vec_utils3.c
+			vec_utils3.c \
+			colors_utils.c \
+			parser.c \
+			parse_gets.c \
+			parse_utils.c
+
 OBJS =		$(patsubst %.c, $(OBJ_DIR)/%.o, $(SRCS))
 MLX_DIR = mlx
 LIBFT_DIR = libft

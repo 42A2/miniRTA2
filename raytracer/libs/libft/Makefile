@@ -1,15 +1,12 @@
-CC =		gcc
-CFLAGS =	-Wall -Werror -Wextra
-NAME =		libft.a
-
 OTHER_DIR =	others_fcts
 FT_PRINTF_DIR = ft_printf
 LIBC_DIR = libc
 
-SRC = 		$(addprefix $(OTHER_DIR)/, \
-			get_next_line.c \
-			get_next_line_utils.c)
+CC =		gcc
+CFLAGS =	-Wall -Werror -Wextra -I./$(OTHER_DIR)
+NAME =		libft.a
 
+SRC = 		$(addprefix $(OTHER_DIR)/, get_next_line.c)
 OBJ =		$(SRC:%.c=%.o)
 
 $(NAME):	${OBJ}
