@@ -6,7 +6,7 @@
 /*   By: mbrunel <mbrunel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/14 05:14:16 by mbrunel           #+#    #+#             */
-/*   Updated: 2019/12/14 15:06:50 by mbrunel          ###   ########.fr       */
+/*   Updated: 2019/12/14 16:31:08 by mbrunel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,6 @@ int get_p(t_p *p, char *path)
 	ft_memset(incs, 0, sizeof(int) * 10);
 	while ((status = get_next_line(fd, &buf)) > 0 && ++incs[LINES_OF_FILE] < MAX_LENGTHG_FILE)
 	{
-		printf("a\n");
 		if ((type = (chr(shrs, buf[0]))) == -1)
 			return (error(buf, "object not found in database\n"));
 		else if (shrs[type] == '#' || shrs[type] == '\n')
