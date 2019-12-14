@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mbrunel <mbrunel@student.42.fr>            +#+  +:+       +#+        */
+/*   By: yvanat <yvanat@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/07 05:55:14 by mbrunel           #+#    #+#             */
-/*   Updated: 2019/12/14 16:17:36 by mbrunel          ###   ########.fr       */
+/*   Updated: 2019/12/14 23:18:33 by yvanat           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -164,14 +164,30 @@ t_vec	c_to_vp(double i, double j, t_p p)
 	return (normalize(dir));
 }
 
-t_vec cam_rot()
+t_vec cam_rot(t_vec dir)
 {
 	t_vec rotate;
+	t_vec cam;
+	double theta;
 
-	rotate.x = 1;
-	rotate.y = 1;
-	rotate.z = 1; 
-	return(rotate);
+	cam = create_vec(0, 0, 1);
+	/* ROTATION EN Z, FUN MAIS PAS DEMANDE, BONUS?
+	rotate.x = cos(theta) * dir.x - sin(theta) * dir.y;
+	rotate.y = sin(theta) * dir.x + cos(theta) * dir.y;
+	rotate.z = dir.z;*/
+	theta = acos(cam.z / sqrt(cam.x * cam.x + cam.z * cam.z));
+	if (cam.x < 0)
+		theta *= -1;
+	rotate.x = dir.x; //ROTATION EN X
+	rotate.y = cos(theta) * dir.y - sin(theta) * dir.z;
+	rotate.z = sin(theta * dir.y + cos(theta) * dir.z);
+	theta = acos(cam.z / sqrt(cam.y * cam.y + cam.z * cam.z));
+	if (cam.y < 0)
+		theta *= -1;
+	rotate.x += cos(theta) * dir.x + sin(theta) * dir.z; //ROTATION EN Y
+	rotate.y += dir.y;
+	rotate.z += cos(theta) * dir.z - sin(theta) * dir.x;
+	return(normalize(rotate));
 }
 
 int abs(int nb)
@@ -274,7 +290,7 @@ void	fill_img(int *img, t_info info, t_p p)
 		j = -1;
 		while (++j < p.vp.res_x)
 		{
-			ray.dir = mult_vec(c_to_vp((double)i, (double)j, p), cam_rot());
+			ray.dir = cam_rot(c_to_vp((double)i, (double)j, p));
 			img[i * len + j] = find_pix_color(ray, p, RECURS_DEPTH);
 		}
 	}

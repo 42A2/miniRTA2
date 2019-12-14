@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   h_minirt.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mbrunel <mbrunel@student.42.fr>            +#+  +:+       +#+        */
+/*   By: yvanat <yvanat@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/02 12:51:50 by mbrunel           #+#    #+#             */
-/*   Updated: 2019/12/14 15:34:37 by mbrunel          ###   ########.fr       */
+/*   Updated: 2019/12/14 21:38:53 by yvanat           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 
 #define RES_X_MAX 2300
 #define RES_Y_MAX 1900
-#define VP_D 0.4
+#define VP_D 1.0
 #define VP_H 1.0
 #define VP_W 1.0
 #define MAX_LENGTHG_FILE 300
@@ -31,10 +31,10 @@
 
 #define BACKGROUND_COLOR 0x0000ff
 #define NB_FORM 2
-#define RECURS_DEPTH 2
+#define RECURS_DEPTH 0
 #define RENDER_MIN 1.0
-#define DELTA 7
-#define COEFF_ALIASING 3
+#define DELTA 300
+#define COEFF_ALIASING 0
 
 # include "mlx.h"
 # include "libft.h"
