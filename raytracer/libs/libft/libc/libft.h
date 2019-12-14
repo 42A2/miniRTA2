@@ -6,7 +6,7 @@
 /*   By: mbrunel <mbrunel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/17 02:28:38 by mbrunel           #+#    #+#             */
-/*   Updated: 2019/12/14 00:48:24 by mbrunel          ###   ########.fr       */
+/*   Updated: 2019/10/26 02:42:55 by mbrunel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,6 @@ int					ft_memcmp(const void *s1, const void *s2, size_t n);
 size_t				ft_strlen(const char *s);
 int					ft_isalpha(int c);
 int					ft_isdigit(int c);
-int					ft_isspace(int c);
 int					ft_isalnum(int c);
 int					ft_isascii(int c);
 int					ft_isprint(int c);
@@ -72,7 +71,5 @@ void				ft_lstiter(t_list *lst, void (*f)(void *));
 t_list				*ft_lstmap(t_list *lst, void *(*f)(void*)\
 					, void (*del)(void*));
 t_list				*ft_lstcpy(t_list *lst);
-int					get_next_line(int fd, char **line);
-int					ft_printf(const char *str, ...);
 
 #endif

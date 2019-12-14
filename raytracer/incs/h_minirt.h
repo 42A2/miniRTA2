@@ -6,40 +6,36 @@
 /*   By: mbrunel <mbrunel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/02 12:51:50 by mbrunel           #+#    #+#             */
-/*   Updated: 2019/12/13 02:18:59 by mbrunel          ###   ########.fr       */
+/*   Updated: 2019/12/14 00:58:27 by mbrunel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef H_MINIRT_H
 # define H_MINIRT_H
 
-#define RES_X_MAX 2300
-#define RES_Y_MAX 1900
+
+#define RES_X 800
+#define RES_Y 800
 #define MEDIUM (RES_X < RES_Y ? RES_X : RES_Y)
 #define VP_D 0.4
 #define VP_H 1.0
 #define VP_W 1.0
 #define NB_OBJ 5
-#define MAX_LENGTHG_FILE 300
 #define SPHERE 0
 #define PLANE 1
-#define RESOLUTION 2
-#define LIGHT 3
-#define AMBIANTE 4
-#define CAMERA 5
-#define LINES_OF_FILE 6
-
-#define BACKGROUND_COLOR 0x370077
+#define BACKGROUND_COLOR 0x303030
 #define NB_FORM 2
 #define AMBIENT 1
 #define POINT 2
-#define NB_LIGHT 4
+#define DIRECTIONAL 3
+#define NB_LIGHT 5
 #define RECURS_DEPTH 1
 #define RENDER_MIN 1.0
+#define DELTA 7
+#define COEFF_ALIASING 3
 
-# include <mlx.h>
-# include "../libs/libft/libft.h"
-# include "../incs/get_next_line.h"
+# include "mlx.h"
+# include "libft.h"
 # include <math.h>
 
 typedef struct		s_mlx
@@ -63,20 +59,13 @@ typedef struct		s_info
 	int				l;
 }					t_info;
 
-typedef struct		s_vp
-{
-	int				res_x;
-	int				res_y;
-}					t_vp;
-
 typedef struct		s_cam
 {
-	double			right;
-	double			up;
-	double			dir;
+	t_vec			right;
+	t_vec			up;
+	t_vec			dir;
 	t_vec			o;
-	t_vec			vec_dir;
-	double			fov;
+	t_vec			upleft;
 }					t_cam;
 
 typedef struct		s_ray
@@ -121,10 +110,11 @@ typedef struct		s_objs
 
 typedef struct		s_p
 {
-	t_vp			vp;
-	t_cam			cam[MAX_LENGTHG_FILE];
-	t_objs			objs[MAX_LENGTHG_FILE];
-	t_light			lights[MAX_LENGTHG_FILE];
+	t_sp			sp;
+	t_pl			pl;
+	t_cam			cam;
+	t_objs			objs[NB_OBJ + 1];
+	t_light			lights[NB_LIGHT];
 }					t_p;
 
 typedef struct		s_inter
@@ -136,16 +126,7 @@ typedef struct		s_inter
 	double			reflect;
 }					t_inter;
 
-double	recupdbl(char *line, int *i, char type, char format);
-int		chr(const char *str, char c);
-int		check_chr(int param, char c);
-int		error(void *line, char *msg);
-int		get_vp(char *line, t_vp *vp);
-int		get_lights(char *line, t_light *light, int type);
-int		get_cam(char *line, t_cam *cam);
-int		get_sphere(char *line, void **ptr);
-int		get_plane(char *line, void **ptr);
-
+void 	fill_img(int *img, t_info info, t_p p);
 t_vec	add_vec(t_vec vec1, t_vec vec2);
 t_vec	add_vec_d(t_vec vec1, double val);
 t_vec	sub_vec(t_vec vec1, t_vec vec2);
@@ -158,20 +139,9 @@ t_vec 	create_vec(double x, double y, double z);
 double	norm_vec(t_vec vec);
 double	prod_scal(t_vec vec1, t_vec vec2);
 t_vec 	normalize(t_vec vec);
-
-int		prod_color_float(int objcol, double i);
-int		add_color_to_color(int col1, int col2);
-int		prod_color_vec(int objcol, t_vec i);
-int		get_color_integer(int r, int g, int b);
-
-void 	fill_img(int *img, t_info info, t_p p);
 t_inter intersp(t_ray ray, void *ptr, double start, double max);
 t_inter	interpl(t_ray ray, void *ptr, double start, double max);
 
-static int		(*get_obj[NB_FORM])(char *line, void **ptr) = {
-	get_sphere,
-	get_plane
-};
 
 static t_inter	(*get_inter[NB_FORM])(t_ray ray, void *ptr, double start, double max) = {
 	intersp,

@@ -1,84 +1,33 @@
 CC =		gcc
-
-CFLAGS =	-Wall -Werror -Wextra -I.
-
+CFLAGS =	-Wall -Werror -Wextra
 NAME =		libft.a
 
-SRC =	ft_atoi.c \
-			ft_bzero.c \
-			ft_calloc.c \
-			ft_isalnum.c \
-			ft_isalpha.c \
-			ft_isascii.c \
-			ft_isdigit.c \
-			ft_isprint.c \
-			ft_itoa.c \
-			ft_memccpy.c \
-			ft_memchr.c \
-			ft_memcmp.c \
-			ft_memcpy.c \
-			ft_memmove.c \
-			ft_memset.c \
-			ft_putchar_fd.c \
-			ft_putendl_fd.c \
-			ft_putnbr_fd.c \
-			ft_putstr_fd.c \
-			ft_split.c \
-			ft_strchr.c \
-			ft_strdup.c \
-			ft_strjoin.c \
-			ft_strlen.c \
-			ft_strmapi.c \
-			ft_strncmp.c \
-			ft_strnstr.c \
-			ft_strrchr.c \
-			ft_strtrim.c \
-			ft_substr.c \
-			ft_tolower.c \
-			ft_toupper.c \
-			ft_strlcat.c \
-			ft_strlcpy.c \
-			ft_isspace.c \
+OTHER_DIR =	others_fcts
+FT_PRINTF_DIR = ft_printf
+LIBC_DIR = libc
+
+SRC = 		$(addprefix $(OTHER_DIR)/, \
 			get_next_line.c \
-			get_next_line_utils.c
+			get_next_line_utils.c)
 
-SRC_BONUS = ft_lstnew_bonus.c \
-			ft_lstadd_front_bonus.c \
-			ft_lstsize_bonus.c \
-			ft_lstlast_bonus.c \
-			ft_lstadd_back_bonus.c \
-			ft_lstdelone_bonus.c \
-			ft_lstclear_bonus.c \
-			ft_lstiter_bonus.c \
-			ft_lstmap_bonus.c \
-			ft_lstcpy_bonus.c \
-
-
-OBJ =		${SRC:%.c=%.o}
-
-OBJ_BONUS = ${SRC_BONUS:%.c=%.o}
+OBJ =		$(SRC:%.c=%.o)
 
 $(NAME):	${OBJ}
-			${CC} ${CFLAGS} -c ${SRC}
-			ar rc ${NAME} ${OBJ}
-			ranlib ${NAME}
+			$(MAKE) -C $(LIBC_DIR)
+			$(MAKE) -C $(FT_PRINTF_DIR)
+			cp $(LIBC_DIR)/libc.a $@
+			ar rc $@ $< $(FT_PRINTF_DIR)/*.o
+			ranlib $@
 
 all:		${NAME}
 
-bonus :		
-			${CC} ${CFLAGS} -c ${SRC_BONUS} ${SRC}
-			ar rc ${NAME} ${OBJ_BONUS} ${OBJ}
-			ranlib ${NAME}
-
 clean:
-			rm -f ${OBJ} ${OBJ_BONUS}
+			rm -f ${OBJ} $(FT_PRINTF_DIR)/*.o $(LIBC_DIR)/*.o
 
 fclean:		clean
-			rm -f ${NAME} ${NAME_BONUS}
+			rm -f ${NAME} $(LIBC_DIR)/libc.a
 
 re:			fclean all
-
-re_bonus :	fclean bonus 
 
 .PHONY:		all clean fclean re
 
