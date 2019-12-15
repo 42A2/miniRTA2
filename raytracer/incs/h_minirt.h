@@ -3,38 +3,48 @@
 /*                                                        :::      ::::::::   */
 /*   h_minirt.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yvanat <yvanat@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mbrunel <mbrunel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/02 12:51:50 by mbrunel           #+#    #+#             */
-/*   Updated: 2019/12/14 21:38:53 by yvanat           ###   ########.fr       */
+/*   Updated: 2019/12/15 23:32:25 by mbrunel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef H_MINIRT_H
 # define H_MINIRT_H
 
+// restrictions
 #define RES_X_MAX 2300
 #define RES_Y_MAX 1900
+#define MAX_LENGTHG_FILE 300
+
+// a enlever un jour
 #define VP_D 1.0
 #define VP_H 1.0
 #define VP_W 1.0
-#define MAX_LENGTHG_FILE 300
+
+// formes
 #define SPHERE 0
 #define PLANE 1
+
+// tt augmenter de 1 lorsqu on rajoute un forme
+#define NB_FORM 2
 #define RESOLUTION 2
 #define POINT 3
 #define AMBIENT 4
 #define CAMERA 5
 #define LINES_OF_FILE 6
 #define PARALLEL 7
-#define CODE_ERROR -8.1358795487531548454548874
 
+//necessaires pour le code
+#define CODE_ERROR -8.1358795487531548454548874
+#define MIN_D 0.0000000000000001
+
+// customs
 #define BACKGROUND_COLOR 0x0000ff
-#define NB_FORM 2
-#define RECURS_DEPTH 0
-#define RENDER_MIN 1.0
-#define DELTA 300
+#define DELTA 3
 #define COEFF_ALIASING 0
+#define RECURS_DEPTH 0
 
 # include "mlx.h"
 # include "libft.h"
@@ -180,7 +190,7 @@ int		prod_color_vec(int objcol, t_vec i);
 int		get_color_integer(int r, int g, int b);
 int		comp_cols(int col1, int col2);
 
-void 	fill_img(int *img, t_info info, t_p p);
+void 	fill_img(int *img, t_info info, t_p p, int i_img);
 t_inter intersp(t_ray ray, void *ptr, double start, double max);
 t_inter	interpl(t_ray ray, void *ptr, double start, double max);
 

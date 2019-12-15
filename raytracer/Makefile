@@ -6,7 +6,7 @@
 #    By: mbrunel <mbrunel@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/11/06 03:24:21 by mbrunel           #+#    #+#              #
-#    Updated: 2019/12/14 16:11:27 by mbrunel          ###   ########.fr        #
+#    Updated: 2019/12/15 21:48:50 by mbrunel          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -61,5 +61,5 @@ clean2 :
 	rm -rf $(NAME)
 
 c : clean2 all
-	./$(NAME)
+	./$(NAME) file.rt
 

@@ -6,7 +6,7 @@
 /*   By: mbrunel <mbrunel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/07 03:28:23 by mbrunel           #+#    #+#             */
-/*   Updated: 2019/12/14 08:04:59 by mbrunel          ###   ########.fr       */
+/*   Updated: 2019/12/15 21:58:21 by mbrunel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,13 +17,18 @@ double	recupdbl(char *line, int *i, char type, char format)
 	double	nbr;
 	double	part2;
 	int		j;
+	int		negative;
 
+	negative = 1;
 	j = 0;
 	while (ft_isspace(line[*i]))
 		(*i)++;
-	nbr = ft_atoi(line + *i);
 	if (line[*i] == '-')
+	{
+		negative = -1;
 		(*i)++;
+	}
+	nbr = ft_atoi(line + *i);
 	while (ft_isdigit(line[*i]))
 		(*i)++;
 	if (line[*i] == '.' && type == 'f')
@@ -37,8 +42,8 @@ double	recupdbl(char *line, int *i, char type, char format)
 	while (ft_isspace(line[*i]))
 			(*i)++;
 	if (ft_isspace(line[*i - 1]) && format == ' ')
-		return (nbr);
-	return (line[(*i)++] == format ? nbr : CODE_ERROR);
+		return (nbr * negative);
+	return (line[(*i)++] == format ? nbr * negative : CODE_ERROR);
 }
 
 int		chr(const char *str, char c)
@@ -46,6 +51,8 @@ int		chr(const char *str, char c)
 	int i;
 
 	i = -1;
+	if (c == '\0')
+		return (0);
 	while (str[++i])
 		if (str[i] == c)
 			return (i);
