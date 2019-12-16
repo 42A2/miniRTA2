@@ -6,7 +6,7 @@
 /*   By: yvanat <yvanat@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/13 01:06:04 by mbrunel           #+#    #+#             */
-/*   Updated: 2019/12/16 02:23:26 by yvanat           ###   ########.fr       */
+/*   Updated: 2019/12/16 05:47:49 by yvanat           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ int		get_vp(char *line, t_vp *vp)
 	return (0);
 }
 
-int		get_lights(char *line, t_light *light, int type)
+int		get_lights(char *line, t_light *light, int type, int *bg_color)
 {
 	t_parse v;
 	int i;
@@ -49,6 +49,8 @@ int		get_lights(char *line, t_light *light, int type)
 	light->color = get_color_integer(v.i1, v.i2, v.i3);
 	if (line[1] == 'p')
 		light->type = PARALLEL;
+	if (type == AMBIENT)
+		*bg_color = light->color;
 	return (0);
 }
 
@@ -128,5 +130,52 @@ int		get_plane(char *line, void **ptr)
 		return (-1);
 	pl->color = get_color_integer(v.i1, v.i2, v.i3);
 	*ptr = pl;
+	return (0);
+}
+
+int		get_triangle(char *line, void **ptr)
+{
+	t_parse v;
+	int i;
+	t_tr *tr;
+
+	if (!(tr = malloc(sizeof(t_tr))))
+		return (-1);
+	i = 2;
+	if (wk(v.d1 = recupdbl(line, &i, 'f', ','), -__DBL_MAX__, __DBL_MAX__) == -1 ||\
+		wk(v.d2 = recupdbl(line, &i, 'f', ','), -__DBL_MAX__, __DBL_MAX__) == -1 ||\
+		wk(v.d3 = recupdbl(line, &i, 'f', ' '), -__DBL_MAX__, __DBL_MAX__) == -1)
+		return (-1);
+	tr->ang1 = create_vec(v.d1, v.d2, v.d3);
+		if (wk(v.d1 = recupdbl(line, &i, 'f', ','), -__DBL_MAX__, __DBL_MAX__) == -1 ||\
+		wk(v.d2 = recupdbl(line, &i, 'f', ','), -__DBL_MAX__, __DBL_MAX__) == -1 ||\
+		wk(v.d3 = recupdbl(line, &i, 'f', ' '), -__DBL_MAX__, __DBL_MAX__) == -1)
+		return (-1);
+	tr->ang2 = create_vec(v.d1, v.d2, v.d3);
+		if (wk(v.d1 = recupdbl(line, &i, 'f', ','), -__DBL_MAX__, __DBL_MAX__) == -1 ||\
+		wk(v.d2 = recupdbl(line, &i, 'f', ','), -__DBL_MAX__, __DBL_MAX__) == -1 ||\
+		wk(v.d3 = recupdbl(line, &i, 'f', ' '), -__DBL_MAX__, __DBL_MAX__) == -1)
+		return (-1);
+	tr->ang3 = create_vec(v.d1, v.d2, v.d3);
+	if (wk(v.i1 = (int)recupdbl(line, &i, 'd', ','), 0, 255) == -1 ||\
+		wk(v.i2 = (int)recupdbl(line, &i, 'd', ','), 0, 255) == -1 ||\
+		wk(v.i3 = (int)recupdbl(line, &i, 'd', '\0'), 0, 255) == -1)
+		return (-1);
+	tr->color = get_color_integer(v.i1, v.i2, v.i3);
+	*ptr = tr;
+	return (0);
+}
+
+int		get_bonus(char *line, t_bonus *bonus)
+{
+	int i;
+
+	i = 1;
+	if (wk(bonus->delta_aliasing = recupdbl(line, &i, 'f', ' '), 0.0, INT32_MAX) == -1)
+		return (-1);
+	if (wk(bonus->coeff_aliasing = recupdbl(line, &i, 'i', ' '), 0.0, INT32_MAX) == -1)
+		return (-1);
+	if (wk(bonus->recurse_reflect = recupdbl(line, &i, 'i', '\0'), 0.0, INT32_MAX) == -1)
+		return (-1);
 	return (0);
 }

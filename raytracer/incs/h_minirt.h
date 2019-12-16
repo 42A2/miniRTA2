@@ -6,7 +6,7 @@
 /*   By: yvanat <yvanat@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/02 12:51:50 by mbrunel           #+#    #+#             */
-/*   Updated: 2019/12/16 01:24:25 by yvanat           ###   ########.fr       */
+/*   Updated: 2019/12/16 05:58:40 by yvanat           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,33 +17,27 @@
 #define RES_X_MAX 2300
 #define RES_Y_MAX 1900
 #define MAX_LENGTHG_FILE 300
-
-// a enlever un jour
 #define VP_H 1.0
 #define VP_W 1.0
 
 // formes
 #define SPHERE 0
 #define PLANE 1
+#define TRIANGLE 2
 
 // tt augmenter de 1 lorsqu on rajoute un forme
-#define NB_FORM 2
-#define RESOLUTION 2
-#define POINT 3
-#define AMBIENT 4
-#define CAMERA 5
-#define LINES_OF_FILE 6
-#define PARALLEL 7
+#define NB_FORM 3
+#define RESOLUTION 4
+#define POINT 5
+#define AMBIENT 6
+#define CAMERA 7
+#define BONUS 8
+#define PARALLEL 9
+#define LINES_OF_FILE 10
 
 //necessaires pour le code
 #define CODE_ERROR -8.1358795487531548454548874
 #define MIN_D 0.0000000000000001
-
-// customs
-#define BACKGROUND_COLOR 0x0000ff
-#define DELTA 3
-#define COEFF_ALIASING 0
-#define RECURS_DEPTH 0
 
 # include "mlx.h"
 # include "libft.h"
@@ -81,6 +75,13 @@ typedef struct		s_parse
 	int				i3;
 }					t_parse;
 
+typedef struct		s_bonus
+{
+	double			delta_aliasing;
+	int				coeff_aliasing;
+	int				recurse_reflect;
+}					t_bonus;
+
 typedef struct		s_vp
 {
 	int				res_x;
@@ -109,6 +110,16 @@ typedef struct		s_light
 	int				color;
 	t_vec			rgb;
 }					t_light;
+
+typedef struct		s_tr
+{
+	t_vec			ang1;
+	t_vec			ang2;
+	t_vec			ang3;
+	t_vec			rgb;
+	int				color;
+}					t_tr;
+
 
 typedef struct		s_sp
 {
@@ -142,6 +153,8 @@ typedef struct		s_p
 	t_cam			cam[MAX_LENGTHG_FILE];
 	t_objs			objs[MAX_LENGTHG_FILE];
 	t_light			lights[MAX_LENGTHG_FILE];
+	t_bonus			bonus;
+	int				bg_color;
 	int				nb_lights;
 	int				nb_objs;
 	int				nb_cam;
@@ -151,9 +164,10 @@ typedef struct		s_inter
 {
 	int				color;
 	double			inter;
-	t_vec			o;
 	double			spec;
 	double			reflect;
+	t_vec			normal;
+	t_vec			ipoint;
 }					t_inter;
 
 int 	get_p(t_p *p, char *path);
@@ -163,10 +177,12 @@ int		check_chr(int param, char c);
 int		error(void *line, char *msg);
 int		wk(double arg, double min, double max);
 int		get_vp(char *line, t_vp *vp);
-int		get_lights(char *line, t_light *light, int type);
+int		get_lights(char *line, t_light *light, int type, int *bg_color);
 int		get_cam(char *line, t_cam *cam);
 int		get_sphere(char *line, void **ptr);
 int		get_plane(char *line, void **ptr);
+int		get_bonus(char *line, t_bonus *bonus);
+int 	get_triangle(char *line, void **ptr);
 
 t_vec	add_vec(t_vec vec1, t_vec vec2);
 t_vec	add_vec_d(t_vec vec1, double val);
@@ -185,20 +201,23 @@ int		prod_color_float(int objcol, double i);
 int		add_color_to_color(int col1, int col2);
 int		prod_color_vec(int objcol, t_vec i);
 int		get_color_integer(int r, int g, int b);
-int		comp_cols(int col1, int col2);
+int		comp_cols(int col1, int col2, double delta);
+int		mid_color(int *color, int nb);
 
 void 	fill_img(int *img, t_info info, t_p p, int i_img);
 t_inter intersp(t_ray ray, void *ptr, double start, double max);
 t_inter	interpl(t_ray ray, void *ptr, double start, double max);
-
+t_inter	intertr(t_ray ray, void *ptr, double start, double max);
 static int		(*get_obj[NB_FORM])(char *line, void **ptr) = {
 	get_sphere,
 	get_plane,
+	get_triangle
 };
 
 static t_inter	(*get_inter[NB_FORM])(t_ray ray, void *ptr, double start, double max) = {
 	intersp,
 	interpl,
+	intertr,
 };
 
 #endif

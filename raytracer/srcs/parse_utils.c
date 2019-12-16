@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mbrunel <mbrunel@student.42.fr>            +#+  +:+       +#+        */
+/*   By: yvanat <yvanat@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/07 03:28:23 by mbrunel           #+#    #+#             */
-/*   Updated: 2019/12/15 21:58:21 by mbrunel          ###   ########.fr       */
+/*   Updated: 2019/12/16 02:43:53 by yvanat           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ double	recupdbl(char *line, int *i, char type, char format)
 			(*i)++;
 	if (ft_isspace(line[*i - 1]) && format == ' ')
 		return (nbr * negative);
-	return (line[(*i)++] == format ? nbr * negative : CODE_ERROR);
+	return (line[(*i)++] == format || line[(*i - 1)] == '#' ? nbr * negative : CODE_ERROR);
 }
 
 int		chr(const char *str, char c)
