@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   h_minirt.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mbrunel <mbrunel@student.42.fr>            +#+  +:+       +#+        */
+/*   By: yvanat <yvanat@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/02 12:51:50 by mbrunel           #+#    #+#             */
-/*   Updated: 2019/12/15 23:32:25 by mbrunel          ###   ########.fr       */
+/*   Updated: 2019/12/16 01:24:25 by yvanat           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,6 @@
 #define MAX_LENGTHG_FILE 300
 
 // a enlever un jour
-#define VP_D 1.0
 #define VP_H 1.0
 #define VP_W 1.0
 
@@ -90,9 +89,7 @@ typedef struct		s_vp
 
 typedef struct		s_cam
 {
-	double			right;
-	double			up;
-	double			dir;
+	double			dist;
 	t_vec			o;
 	t_vec			vec_dir;
 	double			fov;

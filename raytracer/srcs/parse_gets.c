@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_gets.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mbrunel <mbrunel@student.42.fr>            +#+  +:+       +#+        */
+/*   By: yvanat <yvanat@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/13 01:06:04 by mbrunel           #+#    #+#             */
-/*   Updated: 2019/12/15 22:20:03 by mbrunel          ###   ########.fr       */
+/*   Updated: 2019/12/16 02:23:26 by yvanat           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,7 @@ int		get_cam(char *line, t_cam *cam)
 	cam->vec_dir = create_vec(v.d1, v.d2, v.d3);
 	if (wk(cam->fov = recupdbl(line, &i, 'f', '\0'), 0.0, 180.0) == -1)
 		return (-1);
+	cam->dist = VP_W / tan(cam->fov * (M_PI / 360));
 	return (0);
 }
 

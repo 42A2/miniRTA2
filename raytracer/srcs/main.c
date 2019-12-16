@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mbrunel <mbrunel@student.42.fr>            +#+  +:+       +#+        */
+/*   By: yvanat <yvanat@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/11/07 05:55:14 by mbrunel           #+#    #+#             */
-/*   Updated: 2019/12/15 23:31:43 by mbrunel          ###   ########.fr       */
+/*   Created: 2019/12/16 01:16:49 by yvanat            #+#    #+#             */
+/*   Updated: 2019/12/16 02:08:52 by yvanat           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -152,7 +152,7 @@ int		find_pix_color(t_ray ray, t_p p, int depth)
 	return (add_color_to_color(prod_color_float(color, 1 - min.reflect), prod_color_float(find_pix_color(ray, p, depth - 1), min.reflect)));
 }
 
-t_vec	c_to_vp(double i, double j, t_vp vp)
+t_vec	c_to_vp(double i, double j, t_vp vp, double dist)
 {
 	t_vec dir;
 	int mid;
@@ -160,7 +160,7 @@ t_vec	c_to_vp(double i, double j, t_vp vp)
 	mid = vp.res_x < vp.res_y ? vp.res_x : vp.res_y;
 	dir.x = (j - vp.res_x / 2.0) * (VP_W / mid);
 	dir.y = (vp.res_y / 2.0 - i) * (VP_H / mid);
-	dir.z = VP_D;
+	dir.z = dist;
 	return (normalize(dir));
 }
 
@@ -256,7 +256,7 @@ int recalc_img(int i, int j, t_p p, int actualpix, int i_img)
 		{
 			if (k || m)
 			{
-				ray.dir = c_to_vp((double)(((double)k / (COEFF_ALIASING * 2)) + i), (double)(j + ((double)m / (COEFF_ALIASING * 2))), p.vp);
+				ray.dir = c_to_vp((double)(((double)k / (COEFF_ALIASING * 2)) + i), (double)(j + ((double)m / (COEFF_ALIASING * 2))), p.vp, p.cam[i_img].dist);
 				color[n] = find_pix_color(ray, p, RECURS_DEPTH);
 			}
 			else
@@ -295,7 +295,7 @@ void	fill_img(int *img, t_info info, t_p p, int i_img)
 		j = -1;
 		while (++j < p.vp.res_x)
 		{
-			ray.dir = cam_rot(c_to_vp((double)i, (double)j, p.vp), p.cam[i_img].vec_dir);
+			ray.dir = cam_rot(c_to_vp((double)i, (double)j, p.vp, p.cam[i_img].dist), p.cam[i_img].vec_dir);
 			img[i * len + j] = find_pix_color(ray, p, RECURS_DEPTH);
 		}
 	}
