@@ -6,7 +6,7 @@
 /*   By: mbrunel <mbrunel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/22 07:49:31 by mbrunel           #+#    #+#             */
-/*   Updated: 2019/12/14 00:26:52 by mbrunel          ###   ########.fr       */
+/*   Updated: 2019/12/19 00:06:25 by mbrunel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,12 +29,12 @@ typedef struct		s_param
 	int				aim;
 }					t_param;
 
-int					ft_printf(const char *str, ...);
-int					matrix(const char *str, va_list ap, t_incs *sizes);
+int					ft_fprintf(int fd, const char *str, ...);
+int					matrix(const char *str, va_list ap, t_incs *sizes, int fd);
 t_param				*srch_flags(const char *src, int len, va_list ap);
-int					printpercent(char *str, t_param *p, int len);
-int					print_str(char *new, t_param *p, int len);
-int					print_dig(char *new, t_param *p, int len);
+int					printpercent(char *str, t_param *p, int len, int fd);
+int					print_str(char *new, t_param *p, int len, int fd);
+int					print_dig(char *new, t_param *p, int len, int fd);
 char				*add(char *str, int fix, char att, char c);
 char				*del(char *str, int size);
 void				checkzero(char *str, t_param *p);

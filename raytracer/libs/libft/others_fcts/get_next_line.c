@@ -6,7 +6,7 @@
 /*   By: mbrunel <mbrunel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/05 18:50:13 by mbrunel           #+#    #+#             */
-/*   Updated: 2019/12/14 13:46:10 by mbrunel          ###   ########.fr       */
+/*   Updated: 2019/12/14 16:57:25 by mbrunel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ int					check(const char *buf)
 	return (-1);
 }
 
-char	*ft_strjoi(char *s1, char const *s2)
+char				*ft_strjoi(char *s1, char const *s2)
 {
 	int		i;
 	int		j;

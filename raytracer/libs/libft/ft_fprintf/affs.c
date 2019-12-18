@@ -6,7 +6,7 @@
 /*   By: mbrunel <mbrunel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/25 01:07:17 by mbrunel           #+#    #+#             */
-/*   Updated: 2019/12/13 23:44:22 by mbrunel          ###   ########.fr       */
+/*   Updated: 2019/12/19 00:01:28 by mbrunel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ static void			replace(char *str)
 	}
 }
 
-int					printpercent(char *str, t_param *p, int len)
+int					printpercent(char *str, t_param *p, int len, int fd)
 {
 	int boo;
 
@@ -47,11 +47,11 @@ int					printpercent(char *str, t_param *p, int len)
 	if (p->arr > 1)
 		if (!(str = add(str, p->arr - 1, p->att, p->att)))
 			return (endclean(str, p, -1));
-	write(1, str, len = ft_strlen(str) + boo);
+	write(fd, str, len = ft_strlen(str) + boo);
 	return (endclean(str, p, len));
 }
 
-int					print_str(char *str, t_param *p, int len)
+int					print_str(char *str, t_param *p, int len, int fd)
 {
 	int boo;
 
@@ -70,16 +70,16 @@ int					print_str(char *str, t_param *p, int len)
 	if (len > 0)
 		if (!(str = add(str, len, p->att, ' ')))
 			return (endclean(str, p, -1));
-	write(1, str, len = ft_strlen(str));
+	write(fd, str, len = ft_strlen(str));
 	if (boo && p->arr >= 0)
 	{
 		len++;
-		write(1, " ", 1);
+		write(fd, " ", 1);
 	}
 	return (endclean(str, p, len));
 }
 
-int					print_dig(char *str, t_param *p, int len)
+int					print_dig(char *str, t_param *p, int len, int fd)
 {
 	int i;
 
@@ -101,6 +101,6 @@ int					print_dig(char *str, t_param *p, int len)
 		if (!(str = add(str, len, p->att, p->att)))
 			return (endclean(str, p, -1));
 	replace(str);
-	write(1, str, len = ft_strlen(str));
+	write(fd, str, len = ft_strlen(str));
 	return (endclean(str, p, len));
 }

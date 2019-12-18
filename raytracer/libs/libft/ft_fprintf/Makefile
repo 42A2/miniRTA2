@@ -4,7 +4,7 @@ CFLAGS =	-Wall -Werror -Wextra -I./libftprintf.h -I../libft/libft.h
 
 NAME =		ft_printf.a
 
-SRC =	printf.c \
+SRC =	fprintf.c \
 		matrix.c \
 		flags.c \
 		numconvs.c \

@@ -6,7 +6,7 @@
 /*   By: mbrunel <mbrunel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/17 02:28:38 by mbrunel           #+#    #+#             */
-/*   Updated: 2019/12/14 00:48:24 by mbrunel          ###   ########.fr       */
+/*   Updated: 2019/12/18 23:59:11 by mbrunel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,6 @@ t_list				*ft_lstmap(t_list *lst, void *(*f)(void*)\
 					, void (*del)(void*));
 t_list				*ft_lstcpy(t_list *lst);
 int					get_next_line(int fd, char **line);
-int					ft_printf(const char *str, ...);
+int					ft_fprintf(int fd, const char *str, ...);
 
 #endif

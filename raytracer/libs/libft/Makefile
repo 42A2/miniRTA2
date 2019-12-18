@@ -1,5 +1,5 @@
 OTHER_DIR =	others_fcts
-FT_PRINTF_DIR = ft_printf
+FT_PRINTF_DIR = ft_fprintf
 LIBC_DIR = libc
 
 CC =		gcc
