@@ -6,7 +6,7 @@
 /*   By: yvanat <yvanat@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/14 05:14:16 by mbrunel           #+#    #+#             */
-/*   Updated: 2019/12/16 08:47:26 by yvanat           ###   ########.fr       */
+/*   Updated: 2020/01/19 15:56:03 by yvanat           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ int get_p(t_p *p, char *path)
 	char *shrs;
 	
 	shrs = "spt#RlAcb";
-	if (!(fd = open(path, O_RDWR)))
+	if ((fd = open(path, O_RDWR)) == -1)
 		return error(NULL, "open_eror\n");
 	ft_memset(incs, 0, sizeof(int) * 20);
 	while ((status = get_next_line(fd, &buf)) > 0 && ++incs[LINES_OF_FILE] < MAX_LENGTHG_FILE)
