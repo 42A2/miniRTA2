@@ -6,7 +6,7 @@
 /*   By: yvanat <yvanat@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/14 05:14:16 by mbrunel           #+#    #+#             */
-/*   Updated: 2020/01/19 15:56:03 by yvanat           ###   ########.fr       */
+/*   Updated: 2020/01/19 17:47:32 by yvanat           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,12 +35,14 @@ int get_p(t_p *p, char *path)
 			return (error(buf, "the vp is badly registered\n"));
 		else if (type <= AMBIENT && type >= POINT && ((incs[AMBIENT] == 1 && type == AMBIENT) || (get_lights(buf, &(p->lights[incs[AMBIENT] + incs[POINT]]), type, &(p->bg_color)) == -1)))
 			return (error(buf, "light parameters are badly registered\n"));
-		else if (type == CAMERA && (get_cam(buf, &(p->cam[incs[CAMERA]])) == -1))
+		else if (type == CAMERA && ft_isspace(buf[1]) && (get_cam(buf, &(p->cam[incs[CAMERA]])) == -1))
 			return (error(buf, "camera parameters are badly registered\n"));
-		else if (type < NB_FORM && (get_obj[type])(buf, &(p->objs[incs[NB_FORM]].o)) == -1)
-			return (error(buf, "objs parameters are badly registered\n"));
+		else if (type == CAMERA && buf[1] == 'y')
+			type = CYLINDRE;
 		else if (type == BONUS && (incs[BONUS] || get_bonus(buf, &(p->bonus)) == -1))
 			return (error(buf, "bonus parameters are badly registered\n"));
+		if (type < NB_FORM && (get_obj[type])(buf, &(p->objs[incs[NB_FORM]].o)) == -1)
+			return (error(buf, "objs parameters are badly registered\n"));
 		if (type < NB_FORM)
 			p->objs[incs[NB_FORM]].type = type;
 		incs[type]++;

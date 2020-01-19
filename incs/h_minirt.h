@@ -6,7 +6,7 @@
 /*   By: yvanat <yvanat@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/02 12:51:50 by mbrunel           #+#    #+#             */
-/*   Updated: 2020/01/19 14:52:43 by yvanat           ###   ########.fr       */
+/*   Updated: 2020/01/19 19:32:24 by yvanat           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@
 // formes
 #define SPHERE 0
 #define PLANE 1
-#define TRIANGLE 2
+#define CYLINDRE 2
 
 // tt augmenter de 1 lorsqu on rajoute un forme
 #define NB_FORM 3
@@ -121,6 +121,17 @@ typedef struct		s_tr
 	int				color;
 }					t_tr;
 
+typedef struct		s_cy
+{
+	t_vec			p;
+	t_vec			dir;
+	double			r;
+	double			h;
+	t_vec			rgb;
+	int				color;
+	double			spec;
+	double			reflect;
+}					t_cy;	
 
 typedef struct		s_sp
 {
@@ -182,7 +193,8 @@ int		get_cam(char *line, t_cam *cam);
 int		get_sphere(char *line, void **ptr);
 int		get_plane(char *line, void **ptr);
 int		get_bonus(char *line, t_bonus *bonus);
-int 	get_triangle(char *line, void **ptr);
+int 	get_cylindre(char *line, void **ptr);
+int		get_triangle(char *line, void **ptr);
 
 int		abs(int nb);
 double	d_abs(double nb);
@@ -198,6 +210,7 @@ t_vec 	create_vec(double x, double y, double z);
 double	norm_vec(t_vec vec);
 double	prod_scal(t_vec vec1, t_vec vec2);
 t_vec 	normalize(t_vec vec);
+t_vec	cross_prod(t_vec vec1, t_vec vec2);
 
 int		prod_color_float(int objcol, double i);
 int		add_color_to_color(int col1, int col2);
@@ -209,17 +222,19 @@ int		mid_color(int *color, int nb);
 void 	fill_img(int *img, t_info info, t_p p, int i_img);
 t_inter intersp(t_ray ray, void *ptr, double start, double max);
 t_inter	interpl(t_ray ray, void *ptr, double start, double max);
+t_inter	intercy(t_ray ray, void *ptr, double start, double max);
 t_inter	intertr(t_ray ray, void *ptr, double start, double max);
+
 static int		(*get_obj[NB_FORM])(char *line, void **ptr) = {
 	get_sphere,
 	get_plane,
-	get_triangle
+	get_cylindre,
 };
 
 static t_inter	(*get_inter[NB_FORM])(t_ray ray, void *ptr, double start, double max) = {
 	intersp,
 	interpl,
-	intertr,
+	intercy,
 };
 
 #endif

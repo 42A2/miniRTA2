@@ -6,7 +6,7 @@
 /*   By: yvanat <yvanat@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/16 01:16:49 by yvanat            #+#    #+#             */
-/*   Updated: 2020/01/19 15:38:53 by yvanat           ###   ########.fr       */
+/*   Updated: 2020/01/19 19:31:48 by yvanat           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,16 +17,63 @@ t_vec	retray(t_vec r, t_vec n)
 	return (sub_vec(mult_vec_d(mult_vec_d(n, prod_scal(r, n)), 2), r));
 }
 
-t_inter intertr(t_ray ray, void *ptr, double start, double max)
+t_inter intercy(t_ray ray, void *ptr, double start, double max)
 {
-	t_tr tr;
+	t_cy cy;
 	t_inter rt;
+	t_vec l;
+	t_vec w;
+	t_vec d;
+	double d2;
+	double w2;
+	t_vec wn;
+	double ww;
+	double r;
+	t_vec e;
+	double t;
+	t_vec f;
+	t_vec fn;
+	double s;
 
-	tr = *(t_tr*)ptr;
-	(void)ray;
-	(void)start;
-	(void)max;
-	rt.inter = 0;
+	
+
+	cy = *(t_cy*)ptr;
+	l = sub_vec(ray.o, cy.p);
+	w = cross_prod(ray.dir, cy.dir);
+	w2 = prod_scal(w, w);
+	if (!w2)
+	{
+		d = sub_vec(l, mult_vec_d(cy.dir, prod_scal(l, cy.dir)));
+		d2 = prod_scal(d, d);
+		if (d2 > cy.r * cy.r)
+			rt.inter = 0;
+		else
+			rt.inter = max - 1;
+	}
+	else
+	{
+		ww = sqrt(w2);
+		wn = div_vec_d(w, ww);
+		r = d_abs(prod_scal(l, wn));
+		if (r > cy.r)
+			rt.inter = 0;
+		else
+		{
+			e = cross_prod(l, cy.dir);
+			t = -1 * prod_scal(e, wn) / ww;
+			f = cross_prod(wn, cy.dir);
+			fn = div_vec(f, normalize(f));
+			s = sqrt(cy.r * cy.r - r * r) / d_abs(prod_scal(ray.dir, fn));
+			rt.inter = t + s < t - s ? t + s : t - s;
+			if (rt.inter < start || rt.inter > max)
+				rt.inter = 0;
+			rt.ipoint = add_vec(ray.o, mult_vec_d(ray.dir, rt.inter));
+		}
+	}
+	rt.color = cy.color;
+	rt.reflect = cy.reflect;
+	rt.spec = cy.spec;
+	rt.normal = div_vec_d(sub_vec(sub_vec(rt.ipoint, cy.p), mult_vec(mult_vec(sub_vec(rt.ipoint, cy.p), ray.dir), ray.dir)), cy.r);
 	return (rt);
 }
 
@@ -338,6 +385,7 @@ int		main(int argc, char *argv[])
 	*//*cam %d : %f %f %f		%f %f %f		%f %f %f\n", i, p.ob.x, p.cam[i].o.y, p.cam[i].o.z, p.cam[i].fov, p.cam[i].vec_dir.x, p.cam[i].vec_dir.y, p.cam[i].vec_dir.z);
 	*///int i = -1;
 		//printf("obj : %f %f %f %d	%x\n", ((t_tr*)(p.objs[5].o))->ang3.x, ((t_tr*)(p.objs[5].o))->ang3.y, ((t_tr*)(p.objs[5].o))->ang3.z, p.objs[5].type, ((t_tr*)(p.objs[5].o))->color);
+	//printf("cy : p : %lf %lf %lf	dir : %lf %lf %lf		diametre : %lf 		hauteur : %lf		rgb : %lf %lf %lf		spec : %lf 		refl : %lf\n", ((t_cy*)(p.objs[5].o))->p.x, ((t_cy*)(p.objs[5].o))->p.y, ((t_cy*)(p.objs[5].o))->p.z, ((t_cy*)(p.objs[5].o))->dir.x, ((t_cy*)(p.objs[5].o))->dir.y, ((t_cy*)(p.objs[5].o))->dir.z, ((t_cy*)(p.objs[5].o))->h, ((t_cy*)(p.objs[5].o))->d, ((t_cy*)(p.objs[5].o))->rgb.x, ((t_cy*)(p.objs[5].o))->rgb.y, ((t_cy*)(p.objs[5].o))->rgb.z, ((t_cy*)(p.objs[5].o))->spec, ((t_cy*)(p.objs[5].o))->reflect);
 	if ((mlx.win = mlx_new_window(mlx.ptr, p.vp.res_x, p.vp.res_y, "RT")))
 	{
 		if (!(mlx.img = mlx_new_image(mlx.ptr, p.vp.res_x, p.vp.res_y)))

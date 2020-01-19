@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_gets.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mbrunel <mbrunel@student.42.fr>            +#+  +:+       +#+        */
+/*   By: yvanat <yvanat@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/13 01:06:04 by mbrunel           #+#    #+#             */
-/*   Updated: 2019/12/17 08:06:23 by mbrunel          ###   ########.fr       */
+/*   Updated: 2020/01/19 19:34:39 by yvanat           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -171,6 +171,43 @@ int		get_triangle(char *line, void **ptr)
 	return (0);
 }
 
+int		get_cylindre(char *line, void **ptr)
+{
+	t_parse v;
+	int i;
+	t_cy *cy;
+
+	if (!(cy = malloc(sizeof(t_cy))))
+		return (-1);
+	i = 2;
+	if (wk(v.d1 = recupdbl(line, &i, 'f', ','), -__DBL_MAX__, __DBL_MAX__) == -1 ||\
+		wk(v.d2 = recupdbl(line, &i, 'f', ','), -__DBL_MAX__, __DBL_MAX__) == -1 ||\
+		wk(v.d3 = recupdbl(line, &i, 'f', ' '), -__DBL_MAX__, __DBL_MAX__) == -1)
+		return (-1);
+	cy->p = create_vec(v.d1, v.d2, v.d3);
+	if (wk(v.d1 = recupdbl(line, &i, 'f', ','), -__DBL_MAX__, __DBL_MAX__) == -1 ||\
+		wk(v.d2 = recupdbl(line, &i, 'f', ','), -__DBL_MAX__, __DBL_MAX__) == -1 ||\
+		wk(v.d3 = recupdbl(line, &i, 'f', ' '), -__DBL_MAX__, __DBL_MAX__) == -1)
+		return (-1);
+	cy->dir = normalize(create_vec(v.d1, v.d2, v.d3));
+	if (wk(cy->r = (recupdbl(line, &i, 'f', ' ') / 2), 0.0, __DBL_MAX__)== -1)
+		return (-1);
+	if (wk(cy->h = recupdbl(line, &i, 'f', ' '), 0.0, __DBL_MAX__) == -1)
+		return (-1);
+	if (wk(v.i1 = (int)recupdbl(line, &i, 'i', ','), 0, 255) == -1 ||\
+		wk(v.i2 = (int)recupdbl(line, &i, 'i', ','), 0, 255) == -1 ||\
+		wk(v.i3 = (int)recupdbl(line, &i, 'i', ' '), 0, 255) == -1)
+		return (-1);
+	cy->rgb = create_vec(v.i1, v.i2, v.i3);
+	cy->color = get_color_integer(v.i1, v.i2, v.i3);
+	if (wk(cy->spec = recupdbl(line, &i, 'f', ' '), 0.0, __DBL_MAX__) == -1)
+		return (-1);
+	if (wk(cy->reflect = recupdbl(line, &i, 'f', '\0'), 0.0, 1.0) == -1)
+		return (-1);
+	*ptr = cy;
+	return (0);
+}
+
 int		get_bonus(char *line, t_bonus *bonus)
 {
 	int i;
@@ -182,5 +219,6 @@ int		get_bonus(char *line, t_bonus *bonus)
 		return (-1);
 	if (wk(bonus->recurse_reflect = recupdbl(line, &i, 'i', '\0'), 0.0, INT32_MAX) == -1)
 		return (-1);
+	
 	return (0);
 }
