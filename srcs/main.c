@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yvanat <yvanat@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mbrunel <mbrunel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/16 01:16:49 by yvanat            #+#    #+#             */
-/*   Updated: 2020/01/19 19:31:48 by yvanat           ###   ########.fr       */
+/*   Updated: 2020/01/20 14:42:55 by mbrunel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,6 @@ t_inter intercy(t_ray ray, void *ptr, double start, double max)
 	t_inter rt;
 	t_vec l;
 	t_vec w;
-	t_vec d;
-	double d2;
 	double w2;
 	t_vec wn;
 	double ww;
@@ -34,46 +32,38 @@ t_inter intercy(t_ray ray, void *ptr, double start, double max)
 	t_vec f;
 	t_vec fn;
 	double s;
-
-	
+	double cq;
+	t_vec cp;
+	t_vec qp;
 
 	cy = *(t_cy*)ptr;
 	l = sub_vec(ray.o, cy.p);
 	w = cross_prod(ray.dir, cy.dir);
 	w2 = prod_scal(w, w);
-	if (!w2)
-	{
-		d = sub_vec(l, mult_vec_d(cy.dir, prod_scal(l, cy.dir)));
-		d2 = prod_scal(d, d);
-		if (d2 > cy.r * cy.r)
-			rt.inter = 0;
-		else
-			rt.inter = max - 1;
-	}
-	else
-	{
 		ww = sqrt(w2);
 		wn = div_vec_d(w, ww);
 		r = d_abs(prod_scal(l, wn));
 		if (r > cy.r)
-			rt.inter = 0;
-		else
 		{
-			e = cross_prod(l, cy.dir);
-			t = -1 * prod_scal(e, wn) / ww;
-			f = cross_prod(wn, cy.dir);
-			fn = div_vec(f, normalize(f));
-			s = sqrt(cy.r * cy.r - r * r) / d_abs(prod_scal(ray.dir, fn));
-			rt.inter = t + s < t - s ? t + s : t - s;
-			if (rt.inter < start || rt.inter > max)
-				rt.inter = 0;
-			rt.ipoint = add_vec(ray.o, mult_vec_d(ray.dir, rt.inter));
+			rt.inter = 0;
+			return (rt);
 		}
-	}
+		e = mult_vec_d(cross_prod(l, cy.dir), -1);
+		t = prod_scal(e, wn) / ww;
+		f = cross_prod(wn, cy.dir);
+		fn = div_vec(f, normalize(f));
+		s = sqrt(cy.r * cy.r - r * r) / d_abs(prod_scal(ray.dir, fn));
+		rt.inter = t - s;
+		if (rt.inter < start || rt.inter > max)
+			rt.inter = 0;
+	rt.ipoint = add_vec(ray.o, mult_vec_d(ray.dir, rt.inter));
 	rt.color = cy.color;
 	rt.reflect = cy.reflect;
 	rt.spec = cy.spec;
-	rt.normal = div_vec_d(sub_vec(sub_vec(rt.ipoint, cy.p), mult_vec(mult_vec(sub_vec(rt.ipoint, cy.p), ray.dir), ray.dir)), cy.r);
+	cp = sub_vec(rt.ipoint, cy.p);
+	cq = prod_scal(cp, cy.dir);
+	qp = sub_vec(cp, mult_vec_d(cy.dir, cq));
+	rt.normal = div_vec_d(qp, cy.r);
 	return (rt);
 }
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   h_minirt.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yvanat <yvanat@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mbrunel <mbrunel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/02 12:51:50 by mbrunel           #+#    #+#             */
-/*   Updated: 2020/01/19 19:32:24 by yvanat           ###   ########.fr       */
+/*   Updated: 2020/01/20 15:20:47 by mbrunel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,8 +37,8 @@
 
 //necessaires pour le code
 #define CODE_ERROR -8.1358795487531548454548874
-#define MIN_D 0.00000000001
-#define MIN_SHADOW 0.00001
+#define MIN_D 1e-50
+#define MIN_SHADOW 1e-5
 
 # include "mlx.h"
 # include "libft.h"

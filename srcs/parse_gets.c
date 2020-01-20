@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_gets.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yvanat <yvanat@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mbrunel <mbrunel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/13 01:06:04 by mbrunel           #+#    #+#             */
-/*   Updated: 2020/01/19 19:34:39 by yvanat           ###   ########.fr       */
+/*   Updated: 2020/01/20 14:37:47 by mbrunel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -185,10 +185,13 @@ int		get_cylindre(char *line, void **ptr)
 		wk(v.d3 = recupdbl(line, &i, 'f', ' '), -__DBL_MAX__, __DBL_MAX__) == -1)
 		return (-1);
 	cy->p = create_vec(v.d1, v.d2, v.d3);
-	if (wk(v.d1 = recupdbl(line, &i, 'f', ','), -__DBL_MAX__, __DBL_MAX__) == -1 ||\
-		wk(v.d2 = recupdbl(line, &i, 'f', ','), -__DBL_MAX__, __DBL_MAX__) == -1 ||\
-		wk(v.d3 = recupdbl(line, &i, 'f', ' '), -__DBL_MAX__, __DBL_MAX__) == -1)
+	if (wk(v.d1 = recupdbl(line, &i, 'f', ','), -1, 1) == -1 ||\
+		wk(v.d2 = recupdbl(line, &i, 'f', ','), -1, 1) == -1 ||\
+		wk(v.d3 = recupdbl(line, &i, 'f', ' '), -1, 1) == -1)
 		return (-1);
+	v.d1 = !v.d1 ? __DBL_MIN__ : v.d1;
+	v.d2 = !v.d2 ? __DBL_MIN__ : v.d2;
+	v.d3 = !v.d3 ? __DBL_MIN__ : v.d3;
 	cy->dir = normalize(create_vec(v.d1, v.d2, v.d3));
 	if (wk(cy->r = (recupdbl(line, &i, 'f', ' ') / 2), 0.0, __DBL_MAX__)== -1)
 		return (-1);
