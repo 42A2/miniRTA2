@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_gets.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mbrunel <mbrunel@student.42.fr>            +#+  +:+       +#+        */
+/*   By: yvanat <yvanat@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/13 01:06:04 by mbrunel           #+#    #+#             */
-/*   Updated: 2020/01/20 14:37:47 by mbrunel          ###   ########.fr       */
+/*   Updated: 2020/01/22 16:44:30 by yvanat           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -164,9 +164,13 @@ int		get_triangle(char *line, void **ptr)
 	tr->ang3 = create_vec(v.d1, v.d2, v.d3);
 	if (wk(v.i1 = (int)recupdbl(line, &i, 'd', ','), 0, 255) == -1 ||\
 		wk(v.i2 = (int)recupdbl(line, &i, 'd', ','), 0, 255) == -1 ||\
-		wk(v.i3 = (int)recupdbl(line, &i, 'd', '\0'), 0, 255) == -1)
+		wk(v.i3 = (int)recupdbl(line, &i, 'd', ' '), 0, 255) == -1)
 		return (-1);
 	tr->color = get_color_integer(v.i1, v.i2, v.i3);
+	if (wk(tr->spec = recupdbl(line, &i, 'f', ' '), 0.0, __DBL_MAX__) == -1)
+		return (-1);
+	if (wk(tr->reflect = recupdbl(line, &i, 'f', '\0'), 0.0, 1.0) == -1)
+		return (-1);
 	*ptr = tr;
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: yvanat <yvanat@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/14 05:14:16 by mbrunel           #+#    #+#             */
-/*   Updated: 2020/01/19 17:47:32 by yvanat           ###   ########.fr       */
+/*   Updated: 2020/01/22 15:59:21 by yvanat           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ int get_p(t_p *p, char *path)
 	char *buf;
 	char *shrs;
 	
-	shrs = "spt#RlAcb";
+	shrs = "spyt#RlAcb";
 	if ((fd = open(path, O_RDWR)) == -1)
 		return error(NULL, "open_eror\n");
 	ft_memset(incs, 0, sizeof(int) * 20);

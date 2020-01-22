@@ -6,7 +6,7 @@
 /*   By: yvanat <yvanat@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/02 12:51:50 by mbrunel           #+#    #+#             */
-/*   Updated: 2020/01/22 12:48:12 by yvanat           ###   ########.fr       */
+/*   Updated: 2020/01/22 16:43:58 by yvanat           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,16 +24,17 @@
 #define SPHERE 0
 #define PLANE 1
 #define CYLINDRE 2
+#define TRIANGLE 3
 
 // tt augmenter de 1 lorsqu on rajoute un forme
-#define NB_FORM 3
-#define RESOLUTION 4
-#define POINT 5
-#define AMBIENT 6
-#define CAMERA 7
-#define BONUS 8
-#define PARALLEL 9
-#define LINES_OF_FILE 10
+#define NB_FORM 4
+#define RESOLUTION 5
+#define POINT 6
+#define AMBIENT 7
+#define CAMERA 8
+#define BONUS 9
+#define PARALLEL 10
+#define LINES_OF_FILE 11
 
 //necessaires pour le code
 #define CODE_ERROR -8.1358795487531548454548874
@@ -119,6 +120,8 @@ typedef struct		s_tr
 	t_vec			ang3;
 	t_vec			rgb;
 	int				color;
+	double			spec;
+	double			reflect;
 }					t_tr;
 
 typedef struct		s_cy
@@ -229,12 +232,14 @@ static int		(*get_obj[NB_FORM])(char *line, void **ptr) = {
 	get_sphere,
 	get_plane,
 	get_cylindre,
+	get_triangle,
 };
 
 static t_inter	(*get_inter[NB_FORM])(t_ray ray, void *ptr, double start, double max) = {
 	intersp,
 	interpl,
 	intercy,
+	intertr,
 };
 
 #endif

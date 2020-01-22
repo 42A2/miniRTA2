@@ -6,7 +6,7 @@
 /*   By: yvanat <yvanat@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/16 01:16:49 by yvanat            #+#    #+#             */
-/*   Updated: 2020/01/22 12:56:51 by yvanat           ###   ########.fr       */
+/*   Updated: 2020/01/22 18:09:49 by yvanat           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,45 +17,131 @@ t_vec	retray(t_vec r, t_vec n)
 	return (sub_vec(mult_vec_d(mult_vec_d(n, prod_scal(r, n)), 2), r));
 }
 
+t_inter	intertr(t_ray ray, void *ptr, double start, double max)
+{
+	t_tr tr;
+	t_inter rt;
+	t_vec vec1;
+	t_vec vec2;
+	t_vec edge2;
+	t_vec edge3;
+	double d;
+	double m;
+	t_vec l;
+	t_vec vp;
+	t_vec c;
+	int boo;
+
+	tr = *(t_tr*)ptr;
+	boo = 0;
+	vec1 = sub_vec(tr.ang2, tr.ang1);
+	vec2 = sub_vec(tr.ang3, tr.ang1);
+	edge2 = sub_vec(tr.ang3, tr.ang2);
+	edge3 = sub_vec(tr.ang1, tr.ang3);
+	rt.normal = cross_prod(vec1, vec2);
+	m = prod_scal(rt.normal,ray.dir);
+	if (d_abs(m) < start)
+	{
+		rt.inter = 0;
+		return (rt);
+	}
+	else
+	{
+		l = sub_vec(ray.o, tr.ang1);
+		d = prod_scal(rt.normal, l);
+		rt.inter = -d / m;
+	}
+	if (rt.inter < start || rt.inter > max)
+		rt.inter = 0;
+	rt.ipoint = add_vec(ray.o, mult_vec_d(ray.dir, rt.inter));
+	vp = sub_vec(rt.ipoint, tr.ang1);
+	c = cross_prod(vec1, vp);
+	if (prod_scal(rt.normal, c) < 0)
+		boo++;
+	vp = sub_vec(rt.ipoint, tr.ang2);
+	c = cross_prod(edge2, vp);
+	if (prod_scal(rt.normal, c) < 0)
+		boo++;
+	vp = sub_vec(rt.ipoint, tr.ang3);
+	c = cross_prod(edge3, vp);
+	if (prod_scal(rt.normal, c) < 0)
+		boo++;
+	if (boo != 0)
+		rt.inter = 0;
+	rt.normal = prod_scal(sub_vec(tr.ang1, ray.o), rt.normal) < 0 ? rt.normal : mult_vec_d(rt.normal, -1);
+	rt.color = tr.color;
+	rt.reflect = tr.reflect;
+	rt.spec = tr.spec;
+	return (rt);
+}
+
+
 t_inter intercy(t_ray ray, void *ptr, double start, double max)
 {
+	t_vec L;
 	t_cy cy;
-	t_inter rt;
-	t_vec l;
 	t_vec w;
-	double w2;
+	double sqr_omega;
+	double a;
+	t_vec D;
+	double sqr_d;
 	t_vec wn;
-	double ww;
-	double r;
-	t_vec e;
+	double R;
+	t_vec E;
 	double t;
-	t_vec f;
-	t_vec fn;
+	t_inter rt;
+	t_vec F;
+	t_vec Fn;
 	double s;
-	double cq;
 	t_vec cp;
+	double cq;
 	t_vec qp;
+	int boo;
 
 	cy = *(t_cy*)ptr;
-	l = sub_vec(ray.o, cy.p);
+	boo = 1;
+	L = sub_vec(ray.o, cy.p);
 	w = cross_prod(ray.dir, cy.dir);
-	w2 = prod_scal(w, w);
-		ww = sqrt(w2);
-		wn = div_vec_d(w, ww);
-		r = d_abs(prod_scal(l, wn));
-		if (r > cy.r)
+	sqr_omega = prod_scal(w, w);
+	if (!sqr_omega)
+	{
+		a = prod_scal(L, cy.dir);
+		D = sub_vec(L, mult_vec_d(cy.dir, a));
+		sqr_d = prod_scal(D, D);
+		if (sqr_d > cy.r * cy.r)
 		{
 			rt.inter = 0;
-			return (rt);
 		}
-		e = mult_vec_d(cross_prod(l, cy.dir), -1);
-		t = prod_scal(e, wn) / ww;
-		f = cross_prod(wn, cy.dir);
-		fn = div_vec(f, normalize(f));
-		s = sqrt(cy.r * cy.r - r * r) / d_abs(prod_scal(ray.dir, fn));
-		rt.inter = t - s;
-		if (rt.inter < start || rt.inter > max)
+		else
+		{
 			rt.inter = 0;
+		}
+	}
+	else
+	{
+		wn = div_vec_d(w, sqrt(sqr_omega));
+		R = d_abs(prod_scal(L, wn));
+		if (R > cy.r)
+			rt.inter = 0;
+		else
+		{
+			E = cross_prod(L, cy.dir);
+			t = prod_scal(mult_vec_d(E, -1), wn) / sqrt(sqr_omega);
+			F = cross_prod(wn, cy.dir);
+			Fn = div_vec_d(F, norm_vec(F));
+			s = sqrt(cy.r * cy.r - R * R) / d_abs(prod_scal(ray.dir, Fn));
+			rt.inter = t - s;
+			if (norm_vec(sub_vec(add_vec(ray.o, mult_vec_d(ray.dir, rt.inter)), cy.p)) > sqrt(cy.h / 2 * cy.h / 2 + cy.r * cy.r))
+			{
+				rt.inter = t + s;
+				boo = -1;
+				if (norm_vec(sub_vec(add_vec(ray.o, mult_vec_d(ray.dir, rt.inter)), cy.p)) > sqrt(cy.h / 2 * cy.h / 2 + cy.r * cy.r))
+					rt.inter = 0;
+			}
+		}
+	}
+	if (rt.inter < start || rt.inter > max)
+		rt.inter = 0;
 	rt.ipoint = add_vec(ray.o, mult_vec_d(ray.dir, rt.inter));
 	rt.color = cy.color;
 	rt.reflect = cy.reflect;
@@ -63,7 +149,7 @@ t_inter intercy(t_ray ray, void *ptr, double start, double max)
 	cp = sub_vec(rt.ipoint, cy.p);
 	cq = prod_scal(cp, cy.dir);
 	qp = sub_vec(cp, mult_vec_d(cy.dir, cq));
-	rt.normal = div_vec_d(qp, cy.r);
+	rt.normal = mult_vec_d(div_vec_d(qp, cy.r), boo);
 	return (rt);
 }
 
