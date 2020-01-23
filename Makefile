@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: mbrunel <mbrunel@student.42.fr>            +#+  +:+       +#+         #
+#    By: yvanat <yvanat@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/11/06 03:24:21 by mbrunel           #+#    #+#              #
-#    Updated: 2019/12/15 21:48:50 by mbrunel          ###   ########.fr        #
+#    Updated: 2020/01/23 21:24:29 by yvanat           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -27,7 +27,8 @@ SRCS = 		main.c \
 			colors_utils.c \
 			parser.c \
 			parse_gets.c \
-			parse_utils.c
+			parse_utils.c \
+			sq.c
 
 OBJS =		$(patsubst %.c, $(OBJ_DIR)/%.o, $(SRCS))
 MLX_DIR = mlx

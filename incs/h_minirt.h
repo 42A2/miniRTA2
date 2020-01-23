@@ -6,7 +6,7 @@
 /*   By: yvanat <yvanat@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/02 12:51:50 by mbrunel           #+#    #+#             */
-/*   Updated: 2020/01/22 16:43:58 by yvanat           ###   ########.fr       */
+/*   Updated: 2020/01/23 20:50:37 by yvanat           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,19 +25,20 @@
 #define PLANE 1
 #define CYLINDRE 2
 #define TRIANGLE 3
+#define SQUARE 4
 
 // tt augmenter de 1 lorsqu on rajoute un forme
-#define NB_FORM 4
-#define RESOLUTION 5
-#define POINT 6
-#define AMBIENT 7
-#define CAMERA 8
-#define BONUS 9
-#define PARALLEL 10
-#define LINES_OF_FILE 11
+#define NB_FORM 5
+#define RESOLUTION 6 
+#define POINT 7
+#define AMBIENT 8
+#define CAMERA 9
+#define BONUS 10
+#define PARALLEL 11
+#define LINES_OF_FILE 12
 
 //necessaires pour le code
-#define CODE_ERROR -8.1358795487531548454548874
+#define CODE_ERROR -18.8358795487531548454548874
 #define MIN_D 1e-50
 #define MIN_SHADOW 1e-5
 
@@ -112,6 +113,17 @@ typedef struct		s_light
 	int				color;
 	t_vec			rgb;
 }					t_light;
+
+typedef struct		s_sq
+{
+	double			d;
+	t_vec			dir;
+	t_vec			p;
+	double			h;
+	int				color;
+	double			spec;
+	double			reflect;
+}					t_sq;
 
 typedef struct		s_tr
 {
@@ -198,6 +210,8 @@ int		get_plane(char *line, void **ptr);
 int		get_bonus(char *line, t_bonus *bonus);
 int 	get_cylindre(char *line, void **ptr);
 int		get_triangle(char *line, void **ptr);
+int		get_square(char *line, void **ptr);
+
 
 int		abs(int nb);
 double	d_abs(double nb);
@@ -214,6 +228,7 @@ double	norm_vec(t_vec vec);
 double	prod_scal(t_vec vec1, t_vec vec2);
 t_vec 	normalize(t_vec vec);
 t_vec	cross_prod(t_vec vec1, t_vec vec2);
+t_vec	i_prod_scal(t_vec vec);
 
 int		prod_color_float(int objcol, double i);
 int		add_color_to_color(int col1, int col2);
@@ -223,16 +238,20 @@ int		comp_cols(int col1, int col2, double delta);
 int		mid_color(int *color, int nb);
 
 void 	fill_img(int *img, t_info info, t_p p, int i_img);
+t_vec cam_rot(t_vec dir, t_vec cam);
 t_inter intersp(t_ray ray, void *ptr, double start, double max);
 t_inter	interpl(t_ray ray, void *ptr, double start, double max);
 t_inter	intercy(t_ray ray, void *ptr, double start, double max);
 t_inter	intertr(t_ray ray, void *ptr, double start, double max);
+t_inter	intersq(t_ray ray, void *ptr, double start, double max);
 
-static int		(*get_obj[NB_FORM])(char *line, void **ptr) = {
+
+static int		(*get_obj[NB_FORM + 1])(char *line, void **ptr) = {
 	get_sphere,
 	get_plane,
 	get_cylindre,
 	get_triangle,
+	get_square,
 };
 
 static t_inter	(*get_inter[NB_FORM])(t_ray ray, void *ptr, double start, double max) = {
@@ -240,6 +259,7 @@ static t_inter	(*get_inter[NB_FORM])(t_ray ray, void *ptr, double start, double 
 	interpl,
 	intercy,
 	intertr,
+	intersq,
 };
 
 #endif

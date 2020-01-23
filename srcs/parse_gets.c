@@ -6,7 +6,7 @@
 /*   By: yvanat <yvanat@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/13 01:06:04 by mbrunel           #+#    #+#             */
-/*   Updated: 2020/01/22 16:44:30 by yvanat           ###   ########.fr       */
+/*   Updated: 2020/01/23 18:09:43 by yvanat           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,9 +119,9 @@ int		get_plane(char *line, void **ptr)
 		wk(v.d3 = recupdbl(line, &i, 'f', ' '), -__DBL_MAX__, __DBL_MAX__) == -1)
 		return (-1);
 	pl->p = create_vec(v.d1, v.d2, v.d3);
-	if (wk(v.d1 = recupdbl(line, &i, 'f', ','), -__DBL_MAX__, __DBL_MAX__) == -1 ||\
-		wk(v.d2 = recupdbl(line, &i, 'f', ','), -__DBL_MAX__, __DBL_MAX__) == -1 ||\
-		wk(v.d3 = recupdbl(line, &i, 'f', ' '), -__DBL_MAX__, __DBL_MAX__) == -1)
+	if (wk(v.d1 = recupdbl(line, &i, 'f', ','), -1, 1) == -1 ||\
+		wk(v.d2 = recupdbl(line, &i, 'f', ','), -1, 1) == -1 ||\
+		wk(v.d3 = recupdbl(line, &i, 'f', ' '), -1, 1) == -1)
 		return (-1);
 	pl->dir = create_vec(v.d1, v.d2, v.d3);
 	if (wk(v.i1 = (int)recupdbl(line, &i, 'i', ','), 0, 255) == -1 ||\
@@ -212,6 +212,41 @@ int		get_cylindre(char *line, void **ptr)
 	if (wk(cy->reflect = recupdbl(line, &i, 'f', '\0'), 0.0, 1.0) == -1)
 		return (-1);
 	*ptr = cy;
+	return (0);
+}
+
+int		get_square(char *line, void **ptr)
+{
+	t_parse v;
+	int i;
+	t_sq *sq;
+
+	if (!(sq = malloc(sizeof(t_sq))))
+		return (-1);
+	i = 2;
+	if (wk(v.d1 = recupdbl(line, &i, 'f', ','), -__DBL_MAX__, __DBL_MAX__) == -1 ||\
+		wk(v.d2 = recupdbl(line, &i, 'f', ','), -__DBL_MAX__, __DBL_MAX__) == -1 ||\
+		wk(v.d3 = recupdbl(line, &i, 'f', ' '), -__DBL_MAX__, __DBL_MAX__) == -1)
+		return (-1);
+	sq->p = create_vec(v.d1, v.d2, v.d3);
+	if (wk(v.d1 = recupdbl(line, &i, 'f', ','), -1, 1) == -1 ||\
+		wk(v.d2 = recupdbl(line, &i, 'f', ','), -1, 1) == -1 ||\
+		wk(v.d3 = recupdbl(line, &i, 'f', ' '), -1, 1) == -1)
+		return (-1);
+	if (wk(sq->h = recupdbl(line, &i, 'f', ' '), 0.0, __DBL_MAX__) == -1)
+		return (-1);
+	sq->dir = create_vec(v.d1, v.d2, v.d3);
+	if (wk(v.i1 = (int)recupdbl(line, &i, 'i', ','), 0, 255) == -1 ||\
+		wk(v.i2 = (int)recupdbl(line, &i, 'i', ','), 0, 255) == -1 ||\
+		wk(v.i3 = (int)recupdbl(line, &i, 'i', ' '), 0, 255) == -1)
+		return (-1);
+	sq->color = get_color_integer(v.i1, v.i2, v.i3);
+	sq->d = -1 * prod_scal(sq->dir, sq->p);
+	if (wk(sq->spec = recupdbl(line, &i, 'f', ' '), 0.0, __DBL_MAX__) == -1)
+		return (-1);
+	if (wk(sq->reflect = recupdbl(line, &i, 'f', '\0'), 0.0, 1.0) == -1)
+		return (-1);
+	*ptr = sq;
 	return (0);
 }
 

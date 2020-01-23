@@ -6,7 +6,7 @@
 /*   By: yvanat <yvanat@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/10 01:53:19 by mbrunel           #+#    #+#             */
-/*   Updated: 2019/12/16 07:56:19 by yvanat           ###   ########.fr       */
+/*   Updated: 2020/01/23 21:27:36 by yvanat           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,4 +46,12 @@ double d_abs(double nb)
 int abs(int nb)
 {
 	return (nb >= 0 ? nb : -nb);
+}
+
+t_vec i_prod_scal(t_vec vec)
+{
+	t_vec rt;
+	rt.x = 0;
+	(void)vec;
+	return (rt);
 }
