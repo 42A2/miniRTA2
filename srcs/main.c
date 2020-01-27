@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yvanat <yvanat@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mbrunel <mbrunel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/16 01:16:49 by yvanat            #+#    #+#             */
-/*   Updated: 2020/01/23 21:26:19 by yvanat           ###   ########.fr       */
+/*   Updated: 2020/01/27 23:10:43 by mbrunel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -436,42 +436,70 @@ void	fill_img(int *img, t_info info, t_p p, int i_img)
 		aliasing(img, len, p, i_img);
 }
 
-int quit(t_mlx *mlx)
+int	swap_cam(int i, void *swap)
 {
-	(void)mlx;
-	exit(0);
+	t_swap s;
+	s = *(t_swap*)swap;
+	if (i >= 18 && i <= 21)
+		s.i = i - 18;
+	else if (i == 23)
+		s.i = 4;
+	else if (i == 22)
+		s.i = 5;
+	else if (i == 26)
+		s.i = 6;
+	else if (i == 28)
+		s.i = 7;
+	else if (i == 25)
+		s.i = 8;
+	else if (i >= 83 && i <= 92)
+		s.i = i - 83;
+	else if (i == 53)
+		exit(0);
+	if (s.p.nb_cam <= s.i)
+	{
+		ft_fprintf(1, "no such camera\n");
+		return (0);
+	}
+	mlx_destroy_image(s.mlx.ptr, s.img);
+	return (img_to_win(s));
+}
+
+int quit(int *i)
+{
+	exit((int)i);
+}
+
+int img_to_win(t_swap s)
+{
+	if (!(s.mlx.img = mlx_new_image(s.mlx.ptr, s.p.vp.res_x, s.p.vp.res_y)))
+			return (-1);
+	if (!(s.img = (int*)mlx_get_data_addr(s.mlx.img, &(s.info.n), &(s.info.l) , &(s.info.e))))
+		return (-1);
+	fill_img(s.img, s.info, s.p, s.i);
+	mlx_put_image_to_window(s.mlx.ptr, s.mlx.win, s.mlx.img, 0, 0);
+	mlx_key_hook(s.mlx.win, &swap_cam, &s);
+	mlx_hook(s.mlx.win, 17, 1, &quit, NULL);
+	mlx_loop(s.mlx.ptr);
+	return (0);
 }
 
 int		main(int argc, char *argv[])
 {
 	t_mlx	mlx;
-	t_info	info;
-	t_p		p;
-	int 	*img;
+	t_swap swap;
 
+	swap.i = 0;
 	mlx.ptr = mlx_init();
 	if (!argv[1] || argc > 2)
 		exit (error(NULL, "manque ou surplus d'args \n"));
-	if (get_p(&p, argv[1]) == -1)
+	if (get_p(&(swap.p), argv[1]) == -1)
 		return (-1);
-	/*int i = -1;
-	printf("res : %d %d\n", p.vp.res_x, p.vp.res_y);
-	while (++i < p.nb_lights)
-	printf("light %d : %f %f %f		%f		%f %f %f	%d	%x\n", i, p.lights[i].pos.x, p.lights[i].pos.y, p.lights[i].pos.z, p.lights[i].intensity, p.lights[i].rgb.x, p.lights[i].rgb.y, p.lights[i].rgb.z, p.lights[i].type,p.lights[i].color);
-	*//*cam %d : %f %f %f		%f %f %f		%f %f %f\n", i, p.ob.x, p.cam[i].o.y, p.cam[i].o.z, p.cam[i].fov, p.cam[i].vec_dir.x, p.cam[i].vec_dir.y, p.cam[i].vec_dir.z);
-	*///int i = -1;
-		//printf("obj : %f %f %f %d	%x\n", ((t_tr*)(p.objs[5].o))->ang3.x, ((t_tr*)(p.objs[5].o))->ang3.y, ((t_tr*)(p.objs[5].o))->ang3.z, p.objs[5].type, ((t_tr*)(p.objs[5].o))->color);
-	//printf("cy : p : %lf %lf %lf	dir : %lf %lf %lf		diametre : %lf 		hauteur : %lf		rgb : %lf %lf %lf		spec : %lf 		refl : %lf\n", ((t_cy*)(p.objs[5].o))->p.x, ((t_cy*)(p.objs[5].o))->p.y, ((t_cy*)(p.objs[5].o))->p.z, ((t_cy*)(p.objs[5].o))->dir.x, ((t_cy*)(p.objs[5].o))->dir.y, ((t_cy*)(p.objs[5].o))->dir.z, ((t_cy*)(p.objs[5].o))->h, ((t_cy*)(p.objs[5].o))->d, ((t_cy*)(p.objs[5].o))->rgb.x, ((t_cy*)(p.objs[5].o))->rgb.y, ((t_cy*)(p.objs[5].o))->rgb.z, ((t_cy*)(p.objs[5].o))->spec, ((t_cy*)(p.objs[5].o))->reflect);
-	if ((mlx.win = mlx_new_window(mlx.ptr, p.vp.res_x, p.vp.res_y, "RT")))
+	if ((mlx.win = mlx_new_window(mlx.ptr, swap.p.vp.res_x, swap.p.vp.res_y, "RT")))
 	{
-		if (!(mlx.img = mlx_new_image(mlx.ptr, p.vp.res_x, p.vp.res_y)))
+		swap.mlx = mlx;
+		if (img_to_win(swap) == -1)
 			return (-1);
-		if (!(img = (int*)mlx_get_data_addr(mlx.img, &(info.n), &(info.l) , &(info.e))))
-			return (-1);
-		fill_img(img, info, p, 0);
-		mlx_put_image_to_window(mlx.ptr, mlx.win, mlx.img, 0, 0);
-		mlx_key_hook(mlx.win, &quit, &mlx);
-		mlx_loop(mlx.ptr);
 	}
 	return (0);
 }

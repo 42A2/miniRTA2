@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   h_minirt.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yvanat <yvanat@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mbrunel <mbrunel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/02 12:51:50 by mbrunel           #+#    #+#             */
-/*   Updated: 2020/01/23 20:50:37 by yvanat           ###   ########.fr       */
+/*   Updated: 2020/01/27 22:09:32 by mbrunel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -196,9 +196,18 @@ typedef struct		s_inter
 	t_vec			ipoint;
 }					t_inter;
 
+typedef struct		s_swap
+{
+	t_mlx			mlx;
+	int				*img;
+	t_p				p;
+	int				i;
+	t_info			info;
+}					t_swap;
+
 int 	get_p(t_p *p, char *path);
 double	recupdbl(char *line, int *i, char type, char format);
-int		chr(const char *str, char c);
+int		f_chr(const char *str, char c);
 int		check_chr(int param, char c);
 int		error(void *line, char *msg);
 int		wk(double arg, double min, double max);
@@ -238,7 +247,9 @@ int		comp_cols(int col1, int col2, double delta);
 int		mid_color(int *color, int nb);
 
 void 	fill_img(int *img, t_info info, t_p p, int i_img);
-t_vec cam_rot(t_vec dir, t_vec cam);
+int		img_to_win(t_swap s);
+
+t_vec	cam_rot(t_vec dir, t_vec cam);
 t_inter intersp(t_ray ray, void *ptr, double start, double max);
 t_inter	interpl(t_ray ray, void *ptr, double start, double max);
 t_inter	intercy(t_ray ray, void *ptr, double start, double max);

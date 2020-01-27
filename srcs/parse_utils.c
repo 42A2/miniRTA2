@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yvanat <yvanat@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mbrunel <mbrunel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/07 03:28:23 by mbrunel           #+#    #+#             */
-/*   Updated: 2020/01/19 17:36:39 by yvanat           ###   ########.fr       */
+/*   Updated: 2020/01/27 22:08:54 by mbrunel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ double	recupdbl(char *line, int *i, char type, char format)
 	return (line[(*i)++] == format || line[(*i - 1)] == '#' ? nbr * negative : CODE_ERROR);
 }
 
-int		chr(const char *str, char c)
+int		f_chr(const char *str, char c)
 {
 	int i;
 

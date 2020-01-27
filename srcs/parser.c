@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yvanat <yvanat@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mbrunel <mbrunel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/14 05:14:16 by mbrunel           #+#    #+#             */
-/*   Updated: 2020/01/23 18:05:09 by yvanat           ###   ########.fr       */
+/*   Updated: 2020/01/27 22:20:43 by mbrunel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ int get_p(t_p *p, char *path)
 	ft_memset(incs, 0, sizeof(int) * 20);
 	while ((status = get_next_line(fd, &buf)) > 0 && ++incs[LINES_OF_FILE] < MAX_LENGTHG_FILE)
 	{
-		if ((type = (chr(shrs, buf[0]))) == -1)
+		if ((type = (f_chr(shrs, buf[0]))) == -1)
 			return (error(buf, "object not found in database\n"));
 		if (type == SPHERE && buf[1] == 'q')
 			type = SQUARE;
@@ -53,6 +53,7 @@ int get_p(t_p *p, char *path)
 		free(buf);
 	}
 	p->nb_cam = incs[CAMERA];
+	printf("%d\n", p->nb_cam);
 	p->nb_lights = incs[POINT] + incs[AMBIENT];
 	p->nb_objs = incs[NB_FORM];
 	return (0);

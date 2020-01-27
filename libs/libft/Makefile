@@ -1,5 +1,5 @@
 OTHER_DIR =	others_fcts
-FT_PRINTF_DIR = ft_fprintf
+FT_FPRINTF_DIR = ft_fprintf
 LIBC_DIR = libc
 
 CC =		gcc
@@ -11,9 +11,9 @@ OBJ =		$(SRC:%.c=%.o)
 
 $(NAME):	${OBJ}
 			$(MAKE) -C $(LIBC_DIR)
-			$(MAKE) -C $(FT_PRINTF_DIR)
+			$(MAKE) -C $(FT_FPRINTF_DIR)
 			cp $(LIBC_DIR)/libc.a $@
-			ar rc $@ $< $(FT_PRINTF_DIR)/*.o
+			ar rc $@ $< $(FT_FPRINTF_DIR)/*.o
 			ranlib $@
 
 all:		${NAME}
