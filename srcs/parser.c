@@ -6,7 +6,7 @@
 /*   By: mbrunel <mbrunel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/14 05:14:16 by mbrunel           #+#    #+#             */
-/*   Updated: 2020/01/27 22:20:43 by mbrunel          ###   ########.fr       */
+/*   Updated: 2020/01/27 23:20:25 by mbrunel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,6 @@ int get_p(t_p *p, char *path)
 		free(buf);
 	}
 	p->nb_cam = incs[CAMERA];
-	printf("%d\n", p->nb_cam);
 	p->nb_lights = incs[POINT] + incs[AMBIENT];
 	p->nb_objs = incs[NB_FORM];
 	return (0);
