@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: mbrunel <mbrunel@student.42.fr>            +#+  +:+       +#+         #
+#    By: yvanat <yvanat@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/11/06 03:24:21 by mbrunel           #+#    #+#              #
-#    Updated: 2020/01/27 22:04:42 by mbrunel          ###   ########.fr        #
+#    Updated: 2020/01/31 17:48:40 by yvanat           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -50,7 +50,6 @@ $(OBJ_DIR)/%.o : $(SRC_DIR)/%.c $(INC_DIR)/* Makefile
 all :	${NAME}
 
 clean : 
-
 			rm -rf $(OBJS) $(LIB_DIR)/$(LIBFT_DIR)/*/*.o $(LIB_DIR)/$(MLX_DIR)/*.o
 
 fclean : clean

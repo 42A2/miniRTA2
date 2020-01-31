@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   h_minirt.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mbrunel <mbrunel@student.42.fr>            +#+  +:+       +#+        */
+/*   By: yvanat <yvanat@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/02 12:51:50 by mbrunel           #+#    #+#             */
-/*   Updated: 2020/01/27 22:09:32 by mbrunel          ###   ########.fr       */
+/*   Updated: 2020/01/31 20:36:20 by yvanat           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -249,7 +249,7 @@ int		mid_color(int *color, int nb);
 void 	fill_img(int *img, t_info info, t_p p, int i_img);
 int		img_to_win(t_swap s);
 
-t_vec	cam_rot(t_vec dir, t_vec cam);
+t_vec	cam_rot(t_vec dir, t_vec cam, t_vec ang);
 t_inter intersp(t_ray ray, void *ptr, double start, double max);
 t_inter	interpl(t_ray ray, void *ptr, double start, double max);
 t_inter	intercy(t_ray ray, void *ptr, double start, double max);

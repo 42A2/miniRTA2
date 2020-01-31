@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mbrunel <mbrunel@student.42.fr>            +#+  +:+       +#+        */
+/*   By: yvanat <yvanat@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/16 01:16:49 by yvanat            #+#    #+#             */
-/*   Updated: 2020/01/27 23:10:43 by mbrunel          ###   ########.fr       */
+/*   Updated: 2020/01/31 21:04:47 by yvanat           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,9 +82,6 @@ t_inter intercy(t_ray ray, void *ptr, double start, double max)
 	t_cy cy;
 	t_vec w;
 	double sqr_omega;
-	double a;
-	t_vec D;
-	double sqr_d;
 	t_vec wn;
 	double R;
 	t_vec E;
@@ -104,19 +101,7 @@ t_inter intercy(t_ray ray, void *ptr, double start, double max)
 	w = cross_prod(ray.dir, cy.dir);
 	sqr_omega = prod_scal(w, w);
 	if (!sqr_omega)
-	{
-		a = prod_scal(L, cy.dir);
-		D = sub_vec(L, mult_vec_d(cy.dir, a));
-		sqr_d = prod_scal(D, D);
-		if (sqr_d > cy.r * cy.r)
-		{
-			rt.inter = 0;
-		}
-		else
-		{
-			rt.inter = 0;
-		}
-	}
+		rt.inter = 0;
 	else
 	{
 		wn = div_vec_d(w, sqrt(sqr_omega));
@@ -138,6 +123,8 @@ t_inter intercy(t_ray ray, void *ptr, double start, double max)
 				if (norm_vec(sub_vec(add_vec(ray.o, mult_vec_d(ray.dir, rt.inter)), cy.p)) > sqrt(cy.h / 2 * cy.h / 2 + cy.r * cy.r))
 					rt.inter = 0;
 			}
+			else if (rt.inter < 0)
+				rt.inter = t + s;
 		}
 	}
 	if (rt.inter < start || rt.inter > max)
@@ -210,7 +197,12 @@ t_inter intersp(t_ray ray, void *ptr, double start, double max)
 	{
 		t1 = (-b + sqrt(dis)) / (2 * a);
 		t2 = (-b - sqrt(dis)) / (2 * a);
-		rt.inter = t1 < t2 ? t1 : t2;
+		if (t1 < 0)
+			rt.inter = t2;
+		else if (t2 < 0)
+			rt.inter = t1;
+		else
+			rt.inter = t1 < t2 ? t1 : t2;
 	}
 	else if (dis == 0)
 		rt.inter = -b / 2 * a;
@@ -318,35 +310,19 @@ t_vec	c_to_vp(double i, double j, t_vp vp, double dist)
 	return (normalize(dir));
 }
 
-t_vec cam_rot(t_vec dir, t_vec cam)
+t_vec cam_rot(t_vec dir, t_vec cam, t_vec ang)
 {
-	(void)cam;
 	t_vec rotate;
-	double theta = 0;
-	int boo;
+	t_vec tmp;
 
-	boo = 0;
 	if (cam.z < 0)
-	{
-		boo = 1;
-		cam.z *= -1;
-		mult_vec_d(dir, -1);
-	}
-	theta = acos(cam.z / sqrt(cam.y * cam.y + cam.z * cam.z));
-	if (cam.y < 0)
-		theta *= -1;
-	rotate.x = dir.x;
-	rotate.z = cos(theta) * dir.z - sin(theta) * dir.y;
-	rotate.y = sin(theta) * dir.z + cos(theta) * dir.y;
-	theta = acos(cam.z / sqrt(cam.x * cam.x + cam.z * cam.z));
-	if (cam.x < 0)
-		theta *= -1;
-	rotate.x += cos(theta) * dir.x - sin(theta) * dir.z;
-	rotate.z += sin(theta) * dir.x + cos(theta) * dir.z;
-	rotate.y += dir.y;
-	// on peut rajouter la rotate en z ici
-	if (boo)
-		rotate.z *= -1;
+		dir.z *= -1;
+	tmp.x = cos(ang.y) * dir.x - sin(ang.y) * dir.z;
+	tmp.z = sin(ang.y) * dir.x + cos(ang.y) * dir.z;
+	tmp.y = dir.y;
+	rotate.z = cos(ang.x) * tmp.z - sin(ang.x) * tmp.y;
+	rotate.y = sin(ang.x) * tmp.z + cos(ang.x) * tmp.y;
+	rotate.x = tmp.x;
 	return(normalize(rotate));
 }
 
@@ -366,7 +342,7 @@ int		check_diff(int i, int j, int *tab, int len, double delta)
 	return (0);
 }
 
-int recalc_img(int i, int j, t_p p, int actualpix, int i_img)
+int recalc_img(int i, int j, t_p p, int actualpix, int i_img, t_vec ang)
 {
 	int nb;
 	nb = ((p.bonus.coeff_aliasing * 2) - 1) * ((p.bonus.coeff_aliasing * 2) - 1);
@@ -388,7 +364,7 @@ int recalc_img(int i, int j, t_p p, int actualpix, int i_img)
 		{
 			if (k || m)
 			{
-				ray.dir = c_to_vp((double)(((double)k / (p.bonus.coeff_aliasing) * 2)) + i, (double)(j + ((double)m / (p.bonus.coeff_aliasing * 2))), p.vp, p.cam[i_img].dist);
+				ray.dir = cam_rot(c_to_vp((double)(((double)k / (p.bonus.coeff_aliasing) * 2)) + i, (double)(j + ((double)m / (p.bonus.coeff_aliasing * 2))), p.vp, p.cam[i_img].dist), p.cam[i_img].vec_dir, ang);
 				color[n] = find_pix_color(ray, p, p.bonus.recurse_reflect);
 			}
 			else
@@ -399,7 +375,7 @@ int recalc_img(int i, int j, t_p p, int actualpix, int i_img)
 	return (mid_color(color, nb));
 }
 
-void		aliasing(int *img, int len, t_p p, int i_img)
+void		aliasing(int *img, int len, t_p p, int i_img, t_vec ang)
 {
 	int i;
 	int j;
@@ -409,7 +385,7 @@ void		aliasing(int *img, int len, t_p p, int i_img)
 		j = 0;
 		while (++j < p.vp.res_x - 1)
 			if (check_diff(i, j, img, len, p.bonus.delta_aliasing) == -1)
-				img[i * len + j] = recalc_img(i, j, p, img[i * len + j], i_img);
+				img[i * len + j] = recalc_img(i, j, p, img[i * len + j], i_img, ang);
 	}
 }
 void	fill_img(int *img, t_info info, t_p p, int i_img)
@@ -418,22 +394,25 @@ void	fill_img(int *img, t_info info, t_p p, int i_img)
 	int j;
 	t_ray ray;
 	int len;
-	 
+	t_vec ang;
+
 	len = info.l / 4;
 	i = -1;
 	ray.o = p.cam[i_img].o;
+	ang.x = acos(p.cam[i_img].vec_dir.z / sqrt(p.cam[i_img].vec_dir.y * p.cam[i_img].vec_dir.y + p.cam[i_img].vec_dir.z * p.cam[i_img].vec_dir.z));
+	ang.y = acos(p.cam[i_img].vec_dir.z / sqrt(p.cam[i_img].vec_dir.x * p.cam[i_img].vec_dir.x + p.cam[i_img].vec_dir.z * p.cam[i_img].vec_dir.z));
+	ang.z = acos(p.cam[i_img].vec_dir.z / sqrt(p.cam[i_img].vec_dir.x * p.cam[i_img].vec_dir.x + p.cam[i_img].vec_dir.y * p.cam[i_img].vec_dir.y));	
 	while (++i < p.vp.res_y)
 	{
 		j = -1;
 		while (++j < p.vp.res_x)
 		{	
-		//	printf("%d\n", j);
-			ray.dir = cam_rot(c_to_vp((double)i, (double)j, p.vp, p.cam[i_img].dist), p.cam[i_img].vec_dir);
+			ray.dir = cam_rot(c_to_vp((double)i, (double)j, p.vp, p.cam[i_img].dist), p.cam[i_img].vec_dir, ang);
 			img[i * len + j] = find_pix_color(ray, p, p.bonus.recurse_reflect);
 		}
 	}
 	if (p.bonus.coeff_aliasing)
-		aliasing(img, len, p, i_img);
+		aliasing(img, len, p, i_img, ang);
 }
 
 int	swap_cam(int i, void *swap)
@@ -456,6 +435,10 @@ int	swap_cam(int i, void *swap)
 		s.i = i - 83;
 	else if (i == 53)
 		exit(0);
+	else if (i == 48)
+		s.i = (s.i + 1) % s.p.nb_cam;
+	else
+		return (0);
 	if (s.p.nb_cam <= s.i)
 	{
 		ft_fprintf(1, "no such camera\n");
