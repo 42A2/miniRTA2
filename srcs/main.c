@@ -6,7 +6,7 @@
 /*   By: yvanat <yvanat@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/16 01:16:49 by yvanat            #+#    #+#             */
-/*   Updated: 2020/01/31 21:04:47 by yvanat           ###   ########.fr       */
+/*   Updated: 2020/02/01 19:24:32 by yvanat           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -315,14 +315,18 @@ t_vec cam_rot(t_vec dir, t_vec cam, t_vec ang)
 	t_vec rotate;
 	t_vec tmp;
 
-	if (cam.z < 0)
-		dir.z *= -1;
 	tmp.x = cos(ang.y) * dir.x - sin(ang.y) * dir.z;
 	tmp.z = sin(ang.y) * dir.x + cos(ang.y) * dir.z;
 	tmp.y = dir.y;
 	rotate.z = cos(ang.x) * tmp.z - sin(ang.x) * tmp.y;
 	rotate.y = sin(ang.x) * tmp.z + cos(ang.x) * tmp.y;
 	rotate.x = tmp.x;
+	/*if (cam.x > 0)
+		rotate.x *= -1;
+	if (cam.y > 0)
+		rotate.y *= -1;
+	if (cam.z < 0)
+		rotate.z *= -1;*/
 	return(normalize(rotate));
 }
 

@@ -6,7 +6,7 @@
 /*   By: yvanat <yvanat@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/13 01:06:04 by mbrunel           #+#    #+#             */
-/*   Updated: 2020/01/23 18:09:43 by yvanat           ###   ########.fr       */
+/*   Updated: 2020/02/01 19:01:03 by yvanat           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ int		get_cam(char *line, t_cam *cam)
 	cam->o = create_vec(v.d1, v.d2, v.d3);
 	if (wk(v.d1 = recupdbl(line, &i, 'f', ','), -1 + MIN_D, 1) == -1 ||\
 		wk(v.d2 = recupdbl(line, &i, 'f', ','), -1 + MIN_D, 1) == -1 ||\
-		wk(v.d3 = recupdbl(line, &i, 'f', ' '), -1 + MIN_D, 1) == -1)
+		wk(v.d3 = (recupdbl(line, &i, 'f', ' ') + MIN_D), -1 + MIN_D, 1) == -1)
 		return (-1);
 	cam->vec_dir = create_vec(v.d1, v.d2, v.d3);
 	if (wk(cam->fov = recupdbl(line, &i, 'f', '\0'), 0.0, 180.0) == -1)
