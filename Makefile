@@ -6,7 +6,7 @@
 #    By: yvanat <yvanat@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/11/06 03:24:21 by mbrunel           #+#    #+#              #
-#    Updated: 2020/01/31 17:48:40 by yvanat           ###   ########.fr        #
+#    Updated: 2020/02/01 19:37:59 by yvanat           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -28,7 +28,8 @@ SRCS = 		main.c \
 			parser.c \
 			parse_gets.c \
 			parse_utils.c \
-			sq.c
+			sq.c \
+			fill_it.c
 
 OBJS =		$(patsubst %.c, $(OBJ_DIR)/%.o, $(SRCS))
 MLX_DIR = mlx
