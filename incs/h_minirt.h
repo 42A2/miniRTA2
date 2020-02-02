@@ -6,7 +6,7 @@
 /*   By: yvanat <yvanat@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/02 12:51:50 by mbrunel           #+#    #+#             */
-/*   Updated: 2020/02/01 19:01:38 by yvanat           ###   ########.fr       */
+/*   Updated: 2020/02/03 00:41:50 by yvanat           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,10 +41,13 @@
 #define CODE_ERROR -18.8358795487531548454548874
 #define MIN_D 1e-50
 #define MIN_SHADOW 1e-5
+# define HEADER_SIZE 122
 
 # include "mlx.h"
 # include "libft.h"
 # include <math.h>
+
+
 
 typedef struct		s_mlx
 {
@@ -203,6 +206,7 @@ typedef struct		s_swap
 	t_p				p;
 	int				i;
 	t_info			info;
+	int				save;
 }					t_swap;
 
 int 	get_p(t_p *p, char *path);
@@ -255,6 +259,11 @@ t_inter	interpl(t_ray ray, void *ptr, double start, double max);
 t_inter	intercy(t_ray ray, void *ptr, double start, double max);
 t_inter	intertr(t_ray ray, void *ptr, double start, double max);
 t_inter	intersq(t_ray ray, void *ptr, double start, double max);
+
+void	fill_bmp(char **data, t_swap *s);
+void	header_bmp(char **data, t_swap *s);
+void	export_bmp(char *filename, t_swap *s);
+char	*create_bmp_filename(char *file, int i);
 
 
 static int		(*get_obj[NB_FORM + 1])(char *line, void **ptr) = {
