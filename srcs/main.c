@@ -3,15 +3,55 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yvanat <yvanat@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mbrunel <mbrunel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/16 01:16:49 by yvanat            #+#    #+#             */
-/*   Updated: 2020/02/01 19:35:51 by yvanat           ###   ########.fr       */
+/*   Updated: 2020/02/02 03:35:23 by mbrunel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../incs/h_minirt.h"
 
+int stretch(int i, int x, int y, void *swap)
+{
+	t_swap s;
+	t_vec ang;
+	t_ray ray;
+	int type;
+
+	
+	s = *(t_swap*)swap;
+	if (s.c1.inter == 0)
+		return (0);
+	type = s.p.objs[s.c1.i_obj].type;
+	ang.x = acos(s.p.cam[s.i].vec_dir.z / sqrt(s.p.cam[s.i].vec_dir.y * s.p.cam[s.i].vec_dir.y + s.p.cam[s.i].vec_dir.z * s.p.cam[s.i].vec_dir.z));
+	ang.y = acos(s.p.cam[s.i].vec_dir.z / sqrt(s.p.cam[s.i].vec_dir.x * s.p.cam[s.i].vec_dir.x + s.p.cam[s.i].vec_dir.z * s.p.cam[s.i].vec_dir.z));
+	ray.o = s.p.cam[s.i].o;
+	ray.dir = cam_rot(c_to_vp((double)y, (double)x, s.p.vp, s.p.cam[s.i].dist), s.p.cam[s.i].vec_dir, ang);
+	if (i == 1 && type != TRIANGLE)
+		chng_origin[type](s.p.objs[s.c1.i_obj].o, ray);
+	else if (i == 2 && type != TRIANGLE && type != PLANE)
+		chng_stretch[type](s.p.objs[s.c1.i_obj].o, ray);
+	else
+		return (0);
+	return (img_to_win(s));
+}
+
+int get_pos(int i, int x, int y, void *swap)
+{
+	t_swap s;
+	t_vec ang;
+	t_ray ray;
+
+	(void)i;
+	s = *(t_swap*)swap;
+	ang.x = acos(s.p.cam[s.i].vec_dir.z / sqrt(s.p.cam[s.i].vec_dir.y * s.p.cam[s.i].vec_dir.y + s.p.cam[s.i].vec_dir.z * s.p.cam[s.i].vec_dir.z));
+	ang.y = acos(s.p.cam[s.i].vec_dir.z / sqrt(s.p.cam[s.i].vec_dir.x * s.p.cam[s.i].vec_dir.x + s.p.cam[s.i].vec_dir.z * s.p.cam[s.i].vec_dir.z));
+	ray.o = s.p.cam[s.i].o;
+	ray.dir = cam_rot(c_to_vp((double)y, (double)x, s.p.vp, s.p.cam[s.i].dist), s.p.cam[s.i].vec_dir, ang);
+	((t_swap*)swap)->c1 = min_inter(ray, s.p, MIN_D, __DBL_MAX__);
+	return (0);
+}
 int	swap_cam(int i, void *swap)
 {
 	t_swap s;
@@ -52,14 +92,16 @@ int quit(int *i)
 
 int img_to_win(t_swap s)
 {
+	mlx_key_hook(s.mlx.win, &swap_cam, &s);
+	mlx_hook(s.mlx.win, 4, 1L<<2, &get_pos, &s);
+	mlx_hook(s.mlx.win, 17, 1L<<17, &quit, NULL);
+	mlx_hook(s.mlx.win, 5, 1L<<3, &stretch, &s);
 	if (!(s.mlx.img = mlx_new_image(s.mlx.ptr, s.p.vp.res_x, s.p.vp.res_y)))
 			return (-1);
 	if (!(s.img = (int*)mlx_get_data_addr(s.mlx.img, &(s.info.n), &(s.info.l) , &(s.info.e))))
 		return (-1);
 	fill_img(s.img, s.info, s.p, s.i);
 	mlx_put_image_to_window(s.mlx.ptr, s.mlx.win, s.mlx.img, 0, 0);
-	mlx_key_hook(s.mlx.win, &swap_cam, &s);
-	mlx_hook(s.mlx.win, 17, 1, &quit, NULL);
 	mlx_loop(s.mlx.ptr);
 	return (0);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   h_minirt.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yvanat <yvanat@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mbrunel <mbrunel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/02 12:51:50 by mbrunel           #+#    #+#             */
-/*   Updated: 2020/02/01 19:01:38 by yvanat           ###   ########.fr       */
+/*   Updated: 2020/02/02 03:11:23 by mbrunel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,14 @@ typedef struct		s_info
 	int				e;
 	int				l;
 }					t_info;
+
+typedef struct		s_mouse
+{
+	int				x;
+	int				y;
+	int				button;
+}					t_mouse;
+
 
 typedef struct		s_parse
 {
@@ -194,6 +202,7 @@ typedef struct		s_inter
 	double			reflect;
 	t_vec			normal;
 	t_vec			ipoint;
+	int				i_obj;
 }					t_inter;
 
 typedef struct		s_swap
@@ -203,6 +212,7 @@ typedef struct		s_swap
 	t_p				p;
 	int				i;
 	t_info			info;
+	t_inter			c1;
 }					t_swap;
 
 int 	get_p(t_p *p, char *path);
@@ -255,7 +265,20 @@ t_inter	interpl(t_ray ray, void *ptr, double start, double max);
 t_inter	intercy(t_ray ray, void *ptr, double start, double max);
 t_inter	intertr(t_ray ray, void *ptr, double start, double max);
 t_inter	intersq(t_ray ray, void *ptr, double start, double max);
+t_vec	c_to_vp(double i, double j, t_vp vp, double dist);
+t_inter	min_inter(t_ray ray, t_p p, double start, double max);
 
+void	chng_sp(void *ptr, t_ray new);
+void	chng_pl(void *ptr, t_ray new);
+void	chng_cy(void *ptr, t_ray new);
+void	chng_tr(void *ptr, t_ray new);
+void	chng_sq(void *ptr, t_ray new);
+
+void	stretch_sp(void *ptr, t_ray new);
+void	stretch_pl(void *ptr, t_ray new);
+void	stretch_cy(void *ptr, t_ray new);
+void	stretch_tr(void *ptr, t_ray new);
+void	stretch_sq(void *ptr, t_ray new);
 
 static int		(*get_obj[NB_FORM + 1])(char *line, void **ptr) = {
 	get_sphere,
@@ -271,6 +294,22 @@ static t_inter	(*get_inter[NB_FORM])(t_ray ray, void *ptr, double start, double 
 	intercy,
 	intertr,
 	intersq,
+};
+
+static void		(*chng_stretch[NB_FORM])(void *ptr, t_ray new) = {
+	stretch_sp,
+	stretch_pl,
+	stretch_cy,
+	stretch_tr,
+	stretch_sq,
+};
+
+static void		(*chng_origin[NB_FORM])(void *ptr, t_ray new) = {
+	chng_sp,
+	chng_pl,
+	chng_cy,
+	chng_tr,
+	chng_sq,
 };
 
 #endif

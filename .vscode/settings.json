@@ -1,0 +1,20 @@
+{
+    "files.associations": {
+        "__bit_reference": "c",
+        "__functional_03": "c",
+        "__mutex_base": "c",
+        "__node_handle": "c",
+        "array": "c",
+        "optional": "c",
+        "functional": "c",
+        "ios": "c",
+        "istream": "c",
+        "memory": "c",
+        "ostream": "c",
+        "sstream": "c",
+        "streambuf": "c",
+        "string_view": "c",
+        "tuple": "c",
+        "vector": "c"
+    }
+}
