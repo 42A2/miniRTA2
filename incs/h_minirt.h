@@ -6,7 +6,7 @@
 /*   By: mbrunel <mbrunel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/02 12:51:50 by mbrunel           #+#    #+#             */
-/*   Updated: 2020/02/03 06:42:23 by mbrunel          ###   ########.fr       */
+/*   Updated: 2020/02/03 06:46:15 by mbrunel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,34 @@
 #define CODE_ERROR -18.8358795487531548454548874
 #define MIN_D 1e-50
 #define MIN_SHADOW 1e-5
+/*restrictions*/
+# define RES_X_MAX 2300
+# define RES_Y_MAX 1900
+# define MAX_LENGTHG_FILE 300
+# define VP_H 1.0
+# define VP_W 1.0
+
+/*formes*/
+# define SPHERE 0
+# define PLANE 1
+# define CYLINDRE 2
+# define TRIANGLE 3
+# define SQUARE 4
+
+/*tt augmenter de 1 lorsqu on rajoute un forme*/
+# define NB_FORM 5
+# define RESOLUTION 6
+# define POINT 7
+# define AMBIENT 8
+# define CAMERA 9
+# define BONUS 10
+# define PARALLEL 11
+# define LINES_OF_FILE 12
+
+/*necessaires pour le code*/
+# define CODE_ERROR -18.8358795487531548454548874
+# define MIN_D 1e-50
+# define MIN_SHADOW 1e-5
 # define HEADER_SIZE 122
 
 # include "mlx.h"
@@ -78,10 +106,8 @@ typedef struct		s_mouse
 	int				button;
 }					t_mouse;
 
-
 typedef struct		s_parse
 {
-
 	double			d1;
 	double			d2;
 	double			d3;
@@ -95,6 +121,8 @@ typedef struct		s_bonus
 	double			delta_aliasing;
 	int				coeff_aliasing;
 	int				recurse_reflect;
+	int				filter_type;
+	double			filter_strength;
 }					t_bonus;
 
 typedef struct		s_vp
@@ -160,7 +188,7 @@ typedef struct		s_cy
 	int				color;
 	double			spec;
 	double			reflect;
-}					t_cy;	
+}					t_cy;
 
 typedef struct		s_sp
 {
@@ -183,8 +211,8 @@ typedef struct		s_pl
 
 typedef struct		s_objs
 {
-	void *o;
-	int type;
+	void			*o;
+	int				type;
 }					t_objs;
 
 typedef struct		s_p
@@ -221,9 +249,12 @@ typedef struct		s_swap
 	t_inter			c1;
 	int				save;
 	char			*name;
+	int				bpp;
+	int				endian;
+	int				size_line;
 }					t_swap;
 
-int 	get_p(t_p *p, char *path);
+int		get_p(t_p *p, char *path);
 double	recupdbl(char *line, int *i, char type, char format);
 int		f_chr(const char *str, char c);
 int		check_chr(int param, char c);
@@ -235,10 +266,9 @@ int		get_cam(char *line, t_cam *cam);
 int		get_sphere(char *line, void **ptr);
 int		get_plane(char *line, void **ptr);
 int		get_bonus(char *line, t_bonus *bonus);
-int 	get_cylindre(char *line, void **ptr);
+int		get_cylindre(char *line, void **ptr);
 int		get_triangle(char *line, void **ptr);
 int		get_square(char *line, void **ptr);
-
 
 int		abs(int nb);
 double	d_abs(double nb);
@@ -250,10 +280,10 @@ t_vec	div_vec(t_vec vec1, t_vec vec2);
 t_vec	div_vec_d(t_vec vec1, double val);
 t_vec	mult_vec(t_vec vec1, t_vec vec2);
 t_vec	mult_vec_d(t_vec vec1, double val);
-t_vec 	create_vec(double x, double y, double z);
+t_vec	create_vec(double x, double y, double z);
 double	norm_vec(t_vec vec);
 double	prod_scal(t_vec vec1, t_vec vec2);
-t_vec 	normalize(t_vec vec);
+t_vec	normalize(t_vec vec);
 t_vec	cross_prod(t_vec vec1, t_vec vec2);
 t_vec	i_prod_scal(t_vec vec);
 
@@ -263,8 +293,12 @@ int		prod_color_vec(int objcol, t_vec i);
 int		get_color_integer(int r, int g, int b);
 int		comp_cols(int col1, int col2, double delta);
 int		mid_color(int *color, int nb);
+int		red_filter(int color, double strength);
+int		green_filter(int color, double strength);
+int		blue_filter(int color, double strength);
+void	filter(int type, double strength, int *img, int i);
 
-void 	fill_img(int *img, t_info info, t_p p, int i_img);
+void	fill_img(int *img, t_info info, t_p p, int i_img);
 int		img_to_win(t_swap s);
 
 t_vec	cam_rot(t_vec dir, t_vec cam, t_vec ang);
@@ -291,7 +325,6 @@ void	fill_bmp(char **data, t_swap *s);
 void	header_bmp(char **data, t_swap *s);
 void	export_bmp(char *filename, t_swap *s);
 char	*create_bmp_filename(char *file, int i);
-
 
 static int		(*get_obj[NB_FORM + 1])(char *line, void **ptr) = {
 	get_sphere,
