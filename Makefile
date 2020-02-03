@@ -6,7 +6,7 @@
 #    By: mbrunel <mbrunel@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/11/06 03:24:21 by mbrunel           #+#    #+#              #
-#    Updated: 2020/02/01 20:47:06 by mbrunel          ###   ########.fr        #
+#    Updated: 2020/02/03 01:21:14 by mbrunel          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -30,7 +30,8 @@ SRCS = 		main.c \
 			parse_utils.c \
 			sq.c \
 			fill_it.c \
-			chng_stretch.c
+			chng_stretch.c\
+			bmp.c
 
 OBJS =		$(patsubst %.c, $(OBJ_DIR)/%.o, $(SRCS))
 MLX_DIR = mlx
