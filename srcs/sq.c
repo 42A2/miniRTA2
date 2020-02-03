@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   sq.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yvanat <yvanat@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mbrunel <mbrunel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/23 21:22:50 by yvanat            #+#    #+#             */
-/*   Updated: 2020/01/24 17:25:32 by yvanat           ###   ########.fr       */
+/*   Updated: 2020/02/02 22:38:12 by mbrunel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,10 +61,10 @@ t_inter			intersq(t_ray ray, void *ptr, double start, double max)
 	sq = *(t_sq*)ptr;
 	random_normal = inv_prod_scal(sq.dir);
 	normal_random_normal = cross_prod(random_normal, sq.dir);
-	p1 = add_vec(sq.p, mult_vec_d(random_normal, sqrt(sq.d * sq.d / 2)));
-	p2 = sub_vec(sq.p, mult_vec_d(random_normal, sqrt(sq.d * sq.d / 2)));
-	p3 = add_vec(sq.p, mult_vec_d(normal_random_normal, sqrt(sq.d * sq.d / 2)));
-	p4 = sub_vec(sq.p, mult_vec_d(normal_random_normal, sqrt(sq.d * sq.d / 2)));
+	p1 = add_vec(sq.p, mult_vec_d(random_normal, sqrt(sq.h * sq.h / 2)));
+	p2 = sub_vec(sq.p, mult_vec_d(random_normal, sqrt(sq.h * sq.h / 2)));
+	p3 = add_vec(sq.p, mult_vec_d(normal_random_normal, sqrt(sq.h * sq.h / 2)));
+	p4 = sub_vec(sq.p, mult_vec_d(normal_random_normal, sqrt(sq.h * sq.h / 2)));
 	boo = 0;
 	vec1 = sub_vec(p2, p1);
 	vec2 = sub_vec(p3, p1);

@@ -6,7 +6,7 @@
 /*   By: mbrunel <mbrunel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/16 01:16:49 by yvanat            #+#    #+#             */
-/*   Updated: 2020/02/02 03:35:23 by mbrunel          ###   ########.fr       */
+/*   Updated: 2020/02/03 00:08:49 by mbrunel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,9 +28,9 @@ int stretch(int i, int x, int y, void *swap)
 	ang.y = acos(s.p.cam[s.i].vec_dir.z / sqrt(s.p.cam[s.i].vec_dir.x * s.p.cam[s.i].vec_dir.x + s.p.cam[s.i].vec_dir.z * s.p.cam[s.i].vec_dir.z));
 	ray.o = s.p.cam[s.i].o;
 	ray.dir = cam_rot(c_to_vp((double)y, (double)x, s.p.vp, s.p.cam[s.i].dist), s.p.cam[s.i].vec_dir, ang);
-	if (i == 1 && type != TRIANGLE)
+	if (i == 1)
 		chng_origin[type](s.p.objs[s.c1.i_obj].o, ray);
-	else if (i == 2 && type != TRIANGLE && type != PLANE)
+	else if (i == 2 && type != PLANE)
 		chng_stretch[type](s.p.objs[s.c1.i_obj].o, ray);
 	else
 		return (0);
