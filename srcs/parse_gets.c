@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_gets.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mbrunel <mbrunel@student.42.fr>            +#+  +:+       +#+        */
+/*   By: yvanat <yvanat@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/13 01:06:04 by mbrunel           #+#    #+#             */
-/*   Updated: 2020/02/02 22:37:07 by mbrunel          ###   ########.fr       */
+/*   Updated: 2020/02/03 04:00:27 by yvanat           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -259,8 +259,12 @@ int		get_bonus(char *line, t_bonus *bonus)
 		return (-1);
 	if (wk(bonus->coeff_aliasing = recupdbl(line, &i, 'i', ' '), 0.0, INT32_MAX) == -1)
 		return (-1);
-	if (wk(bonus->recurse_reflect = recupdbl(line, &i, 'i', '\0'), 0.0, INT32_MAX) == -1)
+	if (wk(bonus->recurse_reflect = recupdbl(line, &i, 'i', ' '), 0.0, INT32_MAX) == -1)
 		return (-1);
-	
+	if (wk(bonus->filter_type = recupdbl(line, &i, 'i', ' '), 0.0, 3.0) == -1)
+		return (-1);
+	if (wk(bonus->filter_strength = recupdbl(line, &i, 'f', '\0'), 0.0, 1.0) == -1)
+		return (-1);
+	bonus->filter_strength = bonus->filter_strength * 10 + 1;
 	return (0);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   h_minirt.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mbrunel <mbrunel@student.42.fr>            +#+  +:+       +#+        */
+/*   By: yvanat <yvanat@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/02 12:51:50 by mbrunel           #+#    #+#             */
-/*   Updated: 2020/02/03 01:36:19 by mbrunel          ###   ########.fr       */
+/*   Updated: 2020/02/03 04:09:15 by yvanat           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,6 +94,8 @@ typedef struct		s_bonus
 	double			delta_aliasing;
 	int				coeff_aliasing;
 	int				recurse_reflect;
+	int				filter_type;
+	double			filter_strength;
 }					t_bonus;
 
 typedef struct		s_vp
@@ -260,6 +262,10 @@ int		prod_color_vec(int objcol, t_vec i);
 int		get_color_integer(int r, int g, int b);
 int		comp_cols(int col1, int col2, double delta);
 int		mid_color(int *color, int nb);
+int		red_filter(int color, double strength);
+int		green_filter(int color, double strength);
+int		blue_filter(int color, double strength);
+void	filter(int type, double strength, int *img, int i);
 
 void 	fill_img(int *img, t_info info, t_p p, int i_img);
 int		img_to_win(t_swap s);

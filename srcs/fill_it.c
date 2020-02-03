@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   fill_it.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mbrunel <mbrunel@student.42.fr>            +#+  +:+       +#+        */
+/*   By: yvanat <yvanat@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/01 19:33:33 by yvanat            #+#    #+#             */
-/*   Updated: 2020/02/02 03:50:04 by mbrunel          ###   ########.fr       */
+/*   Updated: 2020/02/03 04:09:09 by yvanat           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -286,7 +286,7 @@ int		find_pix_color(t_ray ray, t_p p, int depth)
 
 	i = -1;
 	intensity = create_vec(0.0, 0.0, 0.0);
-	min = min_inter(ray, p, MIN_D, __DBL_MAX__);
+	min = min_inter(ray, p, MIN_SHADOW, __DBL_MAX__);
 	if (!min.inter)
 		return (p.bg_color);
 	while (++i < p.nb_lights)
@@ -373,9 +373,15 @@ int recalc_img(int i, int j, t_p p, int actualpix, int i_img, t_vec ang)
 			{
 				ray.dir = cam_rot(c_to_vp((double)(((double)k / (p.bonus.coeff_aliasing) * 2)) + i, (double)(j + ((double)m / (p.bonus.coeff_aliasing * 2))), p.vp, p.cam[i_img].dist), p.cam[i_img].vec_dir, ang);
 				color[n] = find_pix_color(ray, p, p.bonus.recurse_reflect);
+				if (p.bonus.filter_type)
+					filter(p.bonus.filter_type, p.bonus.filter_strength, color, n);
 			}
 			else
+			{
 				color[n] = actualpix;
+				if (p.bonus.filter_type)
+					filter(p.bonus.filter_type, p.bonus.filter_strength, color, n);
+			}
 			n++;
 		}
 	}
@@ -416,6 +422,8 @@ void	fill_img(int *img, t_info info, t_p p, int i_img)
 		{	
 			ray.dir = cam_rot(c_to_vp((double)i, (double)j, p.vp, p.cam[i_img].dist), p.cam[i_img].vec_dir, ang);
 			img[i * len + j] = find_pix_color(ray, p, p.bonus.recurse_reflect);
+			if (p.bonus.filter_type)
+					filter(p.bonus.filter_type, p.bonus.filter_strength, img, i * len + j);
 		}
 	}
 	if (p.bonus.coeff_aliasing)
