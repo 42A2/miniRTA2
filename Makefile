@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: mbrunel <mbrunel@student.42.fr>            +#+  +:+       +#+         #
+#    By: yvanat <yvanat@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/11/06 03:24:21 by mbrunel           #+#    #+#              #
-#    Updated: 2020/02/03 01:21:14 by mbrunel          ###   ########.fr        #
+#    Updated: 2020/02/03 05:59:02 by yvanat           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -24,7 +24,9 @@ SRCS = 		main.c \
 			vec_utils1.c \
 			vec_utils2.c \
 			vec_utils3.c \
+			vec_utils4.c \
 			colors_utils.c \
+			colors_utils2.c \
 			parser.c \
 			parse_gets.c \
 			parse_utils.c \

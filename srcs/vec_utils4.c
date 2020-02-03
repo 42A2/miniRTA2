@@ -1,38 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   vec_utils3.c                                       :+:      :+:    :+:   */
+/*   vec_utils4.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: yvanat <yvanat@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/12/10 01:53:19 by mbrunel           #+#    #+#             */
-/*   Updated: 2020/02/03 05:59:12 by yvanat           ###   ########.fr       */
+/*   Created: 2020/02/03 05:59:18 by yvanat            #+#    #+#             */
+/*   Updated: 2020/02/03 05:59:30 by yvanat           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../incs/h_minirt.h"
 
-double	norm_vec(t_vec vec)
+double	d_abs(double nb)
 {
-	return (sqrt(vec.x * vec.x + vec.y * vec.y + vec.z * vec.z));
+	return (nb >= 0 ? nb : -nb);
 }
 
-t_vec	normalize(t_vec vec)
+int		abs(int nb)
 {
-	return (div_vec_d(vec, norm_vec(vec)));
+	return (nb >= 0 ? nb : -nb);
 }
 
-double	prod_scal(t_vec vec1, t_vec vec2)
+t_vec	i_prod_scal(t_vec vec)
 {
-	return (vec1.x * vec2.x + vec1.y * vec2.y + vec1.z * vec2.z);
-}
+	t_vec rt;
 
-t_vec	create_vec(double x, double y, double z)
-{
-	t_vec vec;
-
-	vec.x = x;
-	vec.y = y;
-	vec.z = z;
-	return (vec);
+	rt.x = 0;
+	(void)vec;
+	return (rt);
 }

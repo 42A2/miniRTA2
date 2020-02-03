@@ -6,7 +6,7 @@
 /*   By: yvanat <yvanat@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/01 19:33:33 by yvanat            #+#    #+#             */
-/*   Updated: 2020/02/03 04:09:09 by yvanat           ###   ########.fr       */
+/*   Updated: 2020/02/03 06:10:03 by yvanat           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,18 +19,18 @@ t_vec	retray(t_vec r, t_vec n)
 
 t_inter	intertr(t_ray ray, void *ptr, double start, double max)
 {
-	t_tr tr;
-	t_inter rt;
-	t_vec vec1;
-	t_vec vec2;
-	t_vec edge2;
-	t_vec edge3;
-	double d;
-	double m;
-	t_vec l;
-	t_vec vp;
-	t_vec c;
-	int boo;
+	t_tr	tr;
+	t_inter	rt;
+	t_vec	vec1;
+	t_vec	vec2;
+	t_vec	edge2;
+	t_vec	edge3;
+	double	d;
+	double	m;
+	t_vec	l;
+	t_vec	vp;
+	t_vec	c;
+	int		boo;
 
 	tr = *(t_tr*)ptr;
 	boo = 0;
@@ -39,7 +39,7 @@ t_inter	intertr(t_ray ray, void *ptr, double start, double max)
 	edge2 = sub_vec(tr.ang3, tr.ang2);
 	edge3 = sub_vec(tr.ang1, tr.ang3);
 	rt.normal = cross_prod(vec1, vec2);
-	m = prod_scal(rt.normal,ray.dir);
+	m = prod_scal(rt.normal, ray.dir);
 	if (d_abs(m) < start)
 	{
 		rt.inter = 0;
@@ -68,32 +68,32 @@ t_inter	intertr(t_ray ray, void *ptr, double start, double max)
 		boo++;
 	if (boo != 0)
 		rt.inter = 0;
-	rt.normal = prod_scal(sub_vec(tr.ang1, ray.o), rt.normal) < 0 ? rt.normal : mult_vec_d(rt.normal, -1);
+	rt.normal = prod_scal(sub_vec(tr.ang1, ray.o), rt.normal)
+		< 0 ? rt.normal : mult_vec_d(rt.normal, -1);
 	rt.color = tr.color;
 	rt.reflect = tr.reflect;
 	rt.spec = tr.spec;
 	return (rt);
 }
 
-
-t_inter intercy(t_ray ray, void *ptr, double start, double max)
+t_inter	intercy(t_ray ray, void *ptr, double start, double max)
 {
-	t_vec L;
-	t_cy cy;
-	t_vec w;
-	double sqr_omega;
-	t_vec wn;
-	double R;
-	t_vec E;
-	double t;
-	t_inter rt;
-	t_vec F;
-	t_vec Fn;
-	double s;
-	t_vec cp;
-	double cq;
-	t_vec qp;
-	int boo;
+	t_vec	L;
+	t_cy	cy;
+	t_vec	w;
+	double	sqr_omega;
+	t_vec	wn;
+	double	R;
+	t_vec	E;
+	double	t;
+	t_inter	rt;
+	t_vec	F;
+	t_vec	Fn;
+	double	s;
+	t_vec	cp;
+	double	cq;
+	t_vec	qp;
+	int		boo;
 
 	cy = *(t_cy*)ptr;
 	boo = 1;
@@ -142,14 +142,14 @@ t_inter intercy(t_ray ray, void *ptr, double start, double max)
 
 t_inter	interpl(t_ray ray, void *ptr, double start, double max)
 {
-	t_pl pl;
-	t_inter rt;
-	t_vec l;
-	double d;
-	double m;
+	t_pl	pl;
+	t_inter	rt;
+	t_vec	l;
+	double	d;
+	double	m;
 
 	pl = *(t_pl*)ptr;
-	m = prod_scal(pl.dir,ray.dir);
+	m = prod_scal(pl.dir, ray.dir);
 	if (d_abs(m) < start)
 	{
 		rt.inter = 0;
@@ -175,18 +175,18 @@ t_inter	interpl(t_ray ray, void *ptr, double start, double max)
 	return (rt);
 }
 
-t_inter intersp(t_ray ray, void *ptr, double start, double max)
+t_inter	intersp(t_ray ray, void *ptr, double start, double max)
 {
-	double t1;
-	double t2;
-	double a;
-	double b;
-	double c;
-	double dis;
-	t_inter rt;
-	t_sp sp;
-	t_vec oc;
-	
+	double	t1;
+	double	t2;
+	double	a;
+	double	b;
+	double	c;
+	double	dis;
+	t_inter	rt;
+	t_sp	sp;
+	t_vec	oc;
+
 	sp = *(t_sp*)ptr;
 	oc = sub_vec(ray.o, sp.o);
 	a = prod_scal(ray.dir, ray.dir);
@@ -220,12 +220,11 @@ t_inter intersp(t_ray ray, void *ptr, double start, double max)
 
 t_inter	min_inter(t_ray ray, t_p p, double start, double max)
 {
-	t_inter min;
-	t_inter inter;
-	int j;
+	t_inter	min;
+	t_inter	inter;
+	int		j;
 
 	j = -1;
-
 	min.color = p.bg_color;
 	min.inter = max;
 	while (++j < p.nb_objs)
@@ -243,13 +242,13 @@ t_inter	min_inter(t_ray ray, t_p p, double start, double max)
 
 t_vec	light_intensity(t_vec ipoint, t_vec normal, t_light light, t_p p, double spec, t_vec invray)
 {
-	t_vec i;
-	double coeff;
+	t_vec	i;
+	double	coeff;
 	double	p_scal;
 	t_vec	l;
-	t_inter closest;
-	t_ray shadow;
-	double max;
+	t_inter	closest;
+	t_ray	shadow;
+	double	max;
 
 	i = create_vec(0, 0, 0);
 	l = light.type == POINT ? sub_vec(light.pos, ipoint) : mult_vec_d(light.pos, -1);
@@ -267,7 +266,7 @@ t_vec	light_intensity(t_vec ipoint, t_vec normal, t_light light, t_p p, double s
 	}
 	if (spec != -1)
 	{
-		l = sub_vec(mult_vec_d(mult_vec_d(normal, prod_scal(normal, l)), 2), l); 
+		l = sub_vec(mult_vec_d(mult_vec_d(normal, prod_scal(normal, l)), 2), l);
 		if ((p_scal = prod_scal(l, invray)) > 0)
 		{
 			coeff = light.intensity * pow(p_scal / (norm_vec(l) * norm_vec(invray)), spec);
@@ -279,10 +278,10 @@ t_vec	light_intensity(t_vec ipoint, t_vec normal, t_light light, t_p p, double s
 
 int		find_pix_color(t_ray ray, t_p p, int depth)
 {
-	t_vec intensity;
-	t_inter min;
-	int i;
-	int color;
+	t_vec	intensity;
+	t_inter	min;
+	int	i;
+	int	color;
 
 	i = -1;
 	intensity = create_vec(0.0, 0.0, 0.0);
@@ -303,8 +302,8 @@ int		find_pix_color(t_ray ray, t_p p, int depth)
 
 t_vec	c_to_vp(double i, double j, t_vp vp, double dist)
 {
-	t_vec dir;
-	int mid;
+	t_vec	dir;
+	int		mid;
 
 	mid = vp.res_x < vp.res_y ? vp.res_x : vp.res_y;
 	dir.x = (j - vp.res_x / 2.0) * (VP_W / mid);
@@ -313,10 +312,10 @@ t_vec	c_to_vp(double i, double j, t_vp vp, double dist)
 	return (normalize(dir));
 }
 
-t_vec cam_rot(t_vec dir, t_vec cam, t_vec ang)
+t_vec	cam_rot(t_vec dir, t_vec cam, t_vec ang)
 {
-	t_vec rotate;
-	t_vec tmp;
+	t_vec	rotate;
+	t_vec	tmp;
 
 	tmp.x = cos(ang.y) * dir.x - sin(ang.y) * dir.z;
 	tmp.z = sin(ang.y) * dir.x + cos(ang.y) * dir.z;
@@ -330,13 +329,13 @@ t_vec cam_rot(t_vec dir, t_vec cam, t_vec ang)
 		rotate.y *= -1;
 	if (cam.z < 0)
 		rotate.z *= -1;
-	return(normalize(rotate));
+	return (normalize(rotate));
 }
 
 int		check_diff(int i, int j, int *tab, int len, double delta)
 {
-	int k;
-	int m;
+	int	k;
+	int	m;
 
 	k = -2;
 	while (++k < 2)
@@ -349,18 +348,18 @@ int		check_diff(int i, int j, int *tab, int len, double delta)
 	return (0);
 }
 
-int recalc_img(int i, int j, t_p p, int actualpix, int i_img, t_vec ang)
+int		recalc_img(int i, int j, t_p p, int actualpix, int i_img, t_vec ang)
 {
-	int nb;
-	nb = ((p.bonus.coeff_aliasing * 2) - 1) * ((p.bonus.coeff_aliasing * 2) - 1);
-	int *color;
-	t_ray ray;
-	int k;
-	int m;
-	int n;
+	int		nb;
+	int		*color;
+	t_ray	ray;
+	int		k;
+	int		m;
+	int		n;
 
+	nb = ((p.bonus.coeff_aliasing * 2) - 1) * ((p.bonus.coeff_aliasing * 2) - 1);
 	if (!(color = malloc(nb * sizeof(int))))
-		exit (0);
+		exit(0);
 	n = 0;
 	ray.o = p.cam[i_img].o;
 	k = -p.bonus.coeff_aliasing;
@@ -388,10 +387,11 @@ int recalc_img(int i, int j, t_p p, int actualpix, int i_img, t_vec ang)
 	return (mid_color(color, nb));
 }
 
-void		aliasing(int *img, int len, t_p p, int i_img, t_vec ang)
+void	aliasing(int *img, int len, t_p p, int i_img, t_vec ang)
 {
-	int i;
-	int j;
+	int	i;
+	int	j;
+
 	i = 0;
 	while (++i < p.vp.res_y - 1)
 	{
@@ -401,29 +401,30 @@ void		aliasing(int *img, int len, t_p p, int i_img, t_vec ang)
 				img[i * len + j] = recalc_img(i, j, p, img[i * len + j], i_img, ang);
 	}
 }
+
 void	fill_img(int *img, t_info info, t_p p, int i_img)
 {
-	int i;
-	int j;
-	t_ray ray;
-	int len;
-	t_vec ang;
+	int		i;
+	int		j;
+	t_ray	ray;
+	int		len;
+	t_vec	ang;
 
 	len = info.l / 4;
 	i = -1;
 	ray.o = p.cam[i_img].o;
 	ang.x = acos(p.cam[i_img].vec_dir.z / sqrt(p.cam[i_img].vec_dir.y * p.cam[i_img].vec_dir.y + p.cam[i_img].vec_dir.z * p.cam[i_img].vec_dir.z));
 	ang.y = acos(p.cam[i_img].vec_dir.z / sqrt(p.cam[i_img].vec_dir.x * p.cam[i_img].vec_dir.x + p.cam[i_img].vec_dir.z * p.cam[i_img].vec_dir.z));
-	ang.z = acos(p.cam[i_img].vec_dir.z / sqrt(p.cam[i_img].vec_dir.x * p.cam[i_img].vec_dir.x + p.cam[i_img].vec_dir.y * p.cam[i_img].vec_dir.y));	
+	ang.z = acos(p.cam[i_img].vec_dir.z / sqrt(p.cam[i_img].vec_dir.x * p.cam[i_img].vec_dir.x + p.cam[i_img].vec_dir.y * p.cam[i_img].vec_dir.y));
 	while (++i < p.vp.res_y)
 	{
 		j = -1;
 		while (++j < p.vp.res_x)
-		{	
+		{
 			ray.dir = cam_rot(c_to_vp((double)i, (double)j, p.vp, p.cam[i_img].dist), p.cam[i_img].vec_dir, ang);
 			img[i * len + j] = find_pix_color(ray, p, p.bonus.recurse_reflect);
 			if (p.bonus.filter_type)
-					filter(p.bonus.filter_type, p.bonus.filter_strength, img, i * len + j);
+				filter(p.bonus.filter_type, p.bonus.filter_strength, img, i * len + j);
 		}
 	}
 	if (p.bonus.coeff_aliasing)
