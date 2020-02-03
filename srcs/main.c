@@ -6,7 +6,7 @@
 /*   By: mbrunel <mbrunel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/16 01:16:49 by yvanat            #+#    #+#             */
-/*   Updated: 2020/02/03 01:19:57 by mbrunel          ###   ########.fr       */
+/*   Updated: 2020/02/03 01:40:00 by mbrunel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,9 +57,8 @@ int quit(void *swap)
 	t_swap *s;
 
 	s = (t_swap*)swap;
-	printf("kjlkj %d\n", s->save);
 	if (s->save)
-		export_bmp(create_bmp_filename("yvanat", 6), s);
+		export_bmp(create_bmp_filename(s->name, s->save), s);
 	exit(0);
 }
 
@@ -112,6 +111,18 @@ int img_to_win(t_swap s)
 	return (0);
 }
 
+int check_n(char *buf)
+{
+	int i;
+
+	i = -1;
+	while (buf[++i] && buf[i] != '.')
+		;
+	if (buf[i + 1] == 'r' && buf[i + 2] == 't' && !buf[i + 3])
+		return (i);
+	return (-1);
+}
+
 int		main(int argc, char *argv[])
 {
 	t_mlx	mlx;
@@ -122,8 +133,9 @@ int		main(int argc, char *argv[])
 	swap.save = 0;
 	if (argc == 3 && !ft_strncmp(argv[2], "-save", 5))
 		swap.save = 1;
-	if (!argv[1] || (argc > 2 && !swap.save))
+	if ((argc > 2 && !swap.save) || (swap.save = check_n(argv[1])) == -1)
 		exit (error(NULL, "manque ou surplus d'args ou \"-save\" mal ecrit\n"));
+	swap.name = argv[1];
 	if (get_p(&(swap.p), argv[1]) == -1)
 		return (-1);
 	if ((mlx.win = mlx_new_window(mlx.ptr, swap.p.vp.res_x, swap.p.vp.res_y, "RT")))

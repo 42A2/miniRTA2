@@ -6,7 +6,7 @@
 /*   By: mbrunel <mbrunel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/02 12:51:50 by mbrunel           #+#    #+#             */
-/*   Updated: 2020/02/03 01:21:17 by mbrunel          ###   ########.fr       */
+/*   Updated: 2020/02/03 01:36:19 by mbrunel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -217,6 +217,7 @@ typedef struct		s_swap
 	t_info			info;
 	t_inter			c1;
 	int				save;
+	char			*name;
 }					t_swap;
 
 int 	get_p(t_p *p, char *path);

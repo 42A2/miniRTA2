@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   bmp.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yvanat <yvanat@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mbrunel <mbrunel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/02 23:37:51 by yvanat            #+#    #+#             */
-/*   Updated: 2020/02/03 00:38:23 by yvanat           ###   ########.fr       */
+/*   Updated: 2020/02/03 02:04:06 by mbrunel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ void	export_bmp(char *filename, t_swap *s)
 
 	size = s->p.vp.res_y * s->p.vp.res_x * 3;
 	if (!(data = malloc((size + HEADER_SIZE))))
-		exit(error(NULL, "rate"));
+		exit(error(NULL, "stack error\n"));
 	i = 0;
 	while (i < size + HEADER_SIZE)
 		data[i++] = 0;
@@ -78,7 +78,7 @@ void	export_bmp(char *filename, t_swap *s)
 	printf("%s\n", filename);
 	fill_bmp(&data, s);
 	if ((fd = open(filename, O_CREAT | O_TRUNC | O_RDWR, 0644)) <= 0)
-		exit(error(NULL, "rate"));
+		exit(error(NULL, "stack error\n"));
 	write(fd, data, (size + HEADER_SIZE));
 	close(fd);
 }
@@ -89,7 +89,7 @@ char	*create_bmp_filename(char *file, int i)
 	int			n;
 
 	if (!(filename = malloc(sizeof(char) * (i + 5))))
-		exit(error(NULL, "rate"));
+		exit(error(NULL, "stack error\n"));
 	n = -1;
 	while (++n <= i)
 		*(filename + n) = *(file + n);
