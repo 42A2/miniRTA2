@@ -6,7 +6,7 @@
 /*   By: mbrunel <mbrunel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/01 20:42:22 by mbrunel           #+#    #+#             */
-/*   Updated: 2020/02/03 00:22:04 by mbrunel          ###   ########.fr       */
+/*   Updated: 2020/02/03 04:33:18 by mbrunel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,6 +77,7 @@ void    stretch_cy(void *ptr, t_ray new)
     cy = (t_cy*)ptr;
     translation = add_vec(new.o, mult_vec_d(new.dir, (norm_vec(sub_vec(cy->p, new.o)))));
     cy->r = norm_vec(sub_vec(cy->p, translation));
+    cy->h = norm_vec(sub_vec(cy->p, translation));
 }
 
 void    stretch_pl(void *ptr, t_ray new)
@@ -92,26 +93,26 @@ void    stretch_sq(void *ptr, t_ray new)
 
     sq = (t_sq*)ptr;
     translation = add_vec(new.o, mult_vec_d(new.dir, (norm_vec(sub_vec(sq->p, new.o)))));
-    sq->h = norm_vec(sub_vec(sq->p, translation));
+    sq->h = norm_vec(sub_vec(sq->p, translation)) * 2;
 }
 
 void    stretch_tr(void *ptr, t_ray new)
 {
     t_tr *tr;
-    t_vec click;
+    t_vec new_pos;
     double dist1;
     double dist2;
     double dist3;
 
     tr = (t_tr*)ptr;
-    click = add_vec(new.o, mult_vec_d(new.dir, (norm_vec(sub_vec(tr->ang1, new.o)))));
-    dist1 = norm_vec(sub_vec(tr->ang1, click));
-    dist2 = norm_vec(sub_vec(tr->ang2, click));
-    dist3 = norm_vec(sub_vec(tr->ang3, click));
+    new_pos = add_vec(new.o, mult_vec_d(new.dir, (norm_vec(sub_vec(tr->ang1, new.o)))));
+    dist1 = norm_vec(sub_vec(tr->ang1, tr->click));
+    dist2 = norm_vec(sub_vec(tr->ang2, tr->click));
+    dist3 = norm_vec(sub_vec(tr->ang3, tr->click));
     if (dist1 <= dist2 && dist1 <= dist3)
-        tr->ang1 = click;
+        tr->ang1 = new_pos;
     else if (dist2 <= dist3)
-        tr->ang2 = click;
+        tr->ang2 = new_pos;
     else
-        tr->ang3 = click;
+        tr->ang3 = new_pos;
 }

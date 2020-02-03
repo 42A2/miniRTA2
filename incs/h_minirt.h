@@ -6,7 +6,7 @@
 /*   By: mbrunel <mbrunel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/02 12:51:50 by mbrunel           #+#    #+#             */
-/*   Updated: 2020/02/03 01:36:19 by mbrunel          ###   ########.fr       */
+/*   Updated: 2020/02/03 06:42:23 by mbrunel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 #define MAX_LENGTHG_FILE 300
 #define VP_H 1.0
 #define VP_W 1.0
+#define STEP 4e-2  //for cam mvment
 
 // formes
 #define SPHERE 0
@@ -46,7 +47,7 @@
 # include "mlx.h"
 # include "libft.h"
 # include <math.h>
-
+# include <sys/timeb.h>
 
 
 typedef struct		s_mlx
@@ -108,6 +109,7 @@ typedef struct		s_cam
 	t_vec			o;
 	t_vec			vec_dir;
 	double			fov;
+	double			time;
 }					t_cam;
 
 typedef struct		s_ray
@@ -145,6 +147,7 @@ typedef struct		s_tr
 	int				color;
 	double			spec;
 	double			reflect;
+	t_vec			click;
 }					t_tr;
 
 typedef struct		s_cy
@@ -318,7 +321,7 @@ static void		(*chng_origin[NB_FORM])(void *ptr, t_ray new) = {
 	chng_sp,
 	chng_pl,
 	chng_cy,
-	chng_tr,
+	stretch_tr,
 	chng_sq,
 };
 
