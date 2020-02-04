@@ -6,7 +6,7 @@
 /*   By: mbrunel <mbrunel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/02 12:51:50 by mbrunel           #+#    #+#             */
-/*   Updated: 2020/02/04 01:59:25 by mbrunel          ###   ########.fr       */
+/*   Updated: 2020/02/04 04:43:37 by mbrunel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,8 @@
 #define VP_H 1.0
 #define VP_W 1.0
 #define STEP 5 //for cam mvment
+#define BG_COLOR 0
+#define DEC 1
 
 // formes
 #define SPHERE 0
@@ -30,7 +32,7 @@
 
 // tt augmenter de 1 lorsqu on rajoute un forme
 #define NB_FORM 5
-#define RESOLUTION 6 
+#define RESOLUTION 6
 #define POINT 7
 #define AMBIENT 8
 #define CAMERA 9
@@ -40,38 +42,11 @@
 
 //necessaires pour le code
 #define CODE_ERROR -18.8358795487531548454548874
-#define MIN_D 1e-50
+#define MIN_D 1e-100
+#define MAX_D 1e100
+#define I_MAX __INT32_MAX__
 #define MIN_SHADOW 1e-5
-/*restrictions*/
-# define RES_X_MAX 2300
-# define RES_Y_MAX 1900
-# define MAX_LENGTHG_FILE 300
-# define VP_H 1.0
-# define VP_W 1.0
-
-/*formes*/
-# define SPHERE 0
-# define PLANE 1
-# define CYLINDRE 2
-# define TRIANGLE 3
-# define SQUARE 4
-
-/*tt augmenter de 1 lorsqu on rajoute un forme*/
-# define NB_FORM 5
-# define RESOLUTION 6
-# define POINT 7
-# define AMBIENT 8
-# define CAMERA 9
-# define BONUS 10
-# define PARALLEL 11
-# define LINES_OF_FILE 12
-
-/*necessaires pour le code*/
-# define CODE_ERROR -18.8358795487531548454548874
-# define MIN_D 1e-50
-# define MIN_SHADOW 1e-5
-# define HEADER_SIZE 122
-# define BG_COLOR 0
+#define HEADER_SIZE 122
 
 # include "mlx.h"
 # include "libft.h"
@@ -224,7 +199,6 @@ typedef struct		s_p
 	t_objs			objs[MAX_LENGTHG_FILE];
 	t_light			lights[MAX_LENGTHG_FILE];
 	t_bonus			bonus;
-	int				bg_color;
 	int				nb_lights;
 	int				nb_objs;
 	int				nb_cam;
@@ -263,7 +237,7 @@ int		check_chr(int param, char c);
 int		error(void *line, char *msg);
 int		wk(double arg, double min, double max);
 int		get_vp(char *line, t_vp *vp);
-int		get_lights(char *line, t_light *light, int type, int *bg_color);
+int		get_lights(char *line, t_light *light, int type);
 int		get_cam(char *line, t_cam *cam);
 int		get_sphere(char *line, void **ptr);
 int		get_plane(char *line, void **ptr);

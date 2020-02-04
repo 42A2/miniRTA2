@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: yvanat <yvanat@student.42.fr>              +#+  +:+       +#+         #
+#    By: mbrunel <mbrunel@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/11/06 03:24:21 by mbrunel           #+#    #+#              #
-#    Updated: 2020/02/03 05:59:02 by yvanat           ###   ########.fr        #
+#    Updated: 2020/02/04 04:34:18 by mbrunel          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,7 +17,7 @@ OBJ_DIR = objs
 
 CC =		gcc
 CFLAGS =	-Wall -Werror -Wextra
-OFLAGS =	$(LIB_DIR)/$(LIBFT_DIR)/$(LIBFT) $(MLX) 
+OFLAGS =	$(LIB_DIR)/$(LIBFT_DIR)/$(LIBFT) $(MLX)
 NAME =		miniRT
 
 SRCS = 		main.c \
@@ -28,12 +28,15 @@ SRCS = 		main.c \
 			colors_utils.c \
 			colors_utils2.c \
 			parser.c \
-			parse_gets.c \
+			parse_gets1.c \
 			parse_utils.c \
 			sq.c \
 			fill_it.c \
-			chng_stretch.c\
-			bmp.c
+			chng.c\
+			bmp.c \
+			parse_gets2.c\
+			stretch.c\
+			parse_gets3.c
 
 OBJS =		$(patsubst %.c, $(OBJ_DIR)/%.o, $(SRCS))
 MLX_DIR = mlx
@@ -54,7 +57,7 @@ $(OBJ_DIR)/%.o : $(SRC_DIR)/%.c $(INC_DIR)/* Makefile
 
 all :	${NAME}
 
-clean : 
+clean :
 			rm -rf $(OBJS) $(LIB_DIR)/$(LIBFT_DIR)/*/*.o $(LIB_DIR)/$(MLX_DIR)/*.o
 
 fclean : clean

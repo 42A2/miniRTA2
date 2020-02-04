@@ -6,7 +6,7 @@
 /*   By: mbrunel <mbrunel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/01 19:33:33 by yvanat            #+#    #+#             */
-/*   Updated: 2020/02/04 02:14:20 by mbrunel          ###   ########.fr       */
+/*   Updated: 2020/02/04 04:19:06 by mbrunel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -225,7 +225,7 @@ t_inter	min_inter(t_ray ray, t_p p, double start, double max)
 	int		j;
 
 	j = -1;
-	min.color = p.bg_color;
+	min.color = BG_COLOR;
 	min.inter = max;
 	while (++j < p.nb_objs)
 	{

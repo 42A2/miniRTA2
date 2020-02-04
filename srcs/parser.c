@@ -6,7 +6,7 @@
 /*   By: mbrunel <mbrunel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/14 05:14:16 by mbrunel           #+#    #+#             */
-/*   Updated: 2020/02/03 02:03:18 by mbrunel          ###   ########.fr       */
+/*   Updated: 2020/02/04 04:18:14 by mbrunel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ int get_p(t_p *p, char *path)
 	int incs[20];
 	char *buf;
 	char *shrs;
-	
+
 	shrs = "spyt0#RlAcb";
 	if ((fd = open(path, O_RDWR)) == -1)
 		return error(NULL, "open_eror\n");
@@ -35,7 +35,7 @@ int get_p(t_p *p, char *path)
 			continue ;
 		else if (type == RESOLUTION && (incs[RESOLUTION] || get_vp(buf, &(p->vp)) == -1))
 			return (error(buf, "the vp is badly registered\n"));
-		else if (type <= AMBIENT && type >= POINT && ((incs[AMBIENT] == 1 && type == AMBIENT) || (get_lights(buf, &(p->lights[incs[AMBIENT] + incs[POINT]]), type, &(p->bg_color)) == -1)))
+		else if (type <= AMBIENT && type >= POINT && ((incs[AMBIENT] == 1 && type == AMBIENT) || (get_lights(buf, &(p->lights[incs[AMBIENT] + incs[POINT]]), type) == -1)))
 			return (error(buf, "light parameters are badly registered\n"));
 		else if (type == CAMERA && ft_isspace(buf[1]) && (get_cam(buf, &(p->cam[incs[CAMERA]])) == -1))
 			return (error(buf, "camera parameters are badly registered\n"));

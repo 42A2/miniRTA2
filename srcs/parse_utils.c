@@ -6,28 +6,30 @@
 /*   By: mbrunel <mbrunel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/07 03:28:23 by mbrunel           #+#    #+#             */
-/*   Updated: 2020/01/27 22:08:54 by mbrunel          ###   ########.fr       */
+/*   Updated: 2020/02/04 04:55:07 by mbrunel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../incs/h_minirt.h"
 
-double	recupdbl(char *line, int *i, char type, char format)
+static void	recup2(int *negative, int *j, int *i, char *line)
+{
+	*negative = 1;
+	*j = 0;
+	while (ft_isspace(line[*i]))
+		(*i)++;
+	if (line[*i] == '-' && (*i)++)
+		*negative = -1;
+}
+
+double		recupdbl(char *line, int *i, char type, char format)
 {
 	double	nbr;
 	double	part2;
 	int		j;
 	int		negative;
 
-	negative = 1;
-	j = 0;
-	while (ft_isspace(line[*i]))
-		(*i)++;
-	if (line[*i] == '-')
-	{
-		negative = -1;
-		(*i)++;
-	}
+	recup2(&negative, &j, i, line);
 	nbr = ft_atoi(line + *i);
 	while (ft_isdigit(line[*i]))
 		(*i)++;
@@ -40,13 +42,14 @@ double	recupdbl(char *line, int *i, char type, char format)
 		nbr += part2 / (pow(10, j));
 	}
 	while (ft_isspace(line[*i]))
-			(*i)++;
+		(*i)++;
 	if (ft_isspace(line[*i - 1]) && format == ' ')
 		return (nbr * negative);
-	return (line[(*i)++] == format || line[(*i - 1)] == '#' ? nbr * negative : CODE_ERROR);
+	return (line[(*i)++] == format || line[(*i - 1)\
+	] == '#' ? nbr * negative : CODE_ERROR);
 }
 
-int		f_chr(const char *str, char c)
+int			f_chr(const char *str, char c)
 {
 	int i;
 
@@ -59,7 +62,7 @@ int		f_chr(const char *str, char c)
 	return (-1);
 }
 
-int		wk(double arg, double min, double max)
+int			wk(double arg, double min, double max)
 {
 	if (arg == CODE_ERROR)
 		return (-1);
@@ -70,7 +73,7 @@ int		wk(double arg, double min, double max)
 	return (-1);
 }
 
-int error(void *line, char *msg)
+int			error(void *line, char *msg)
 {
 	if (line)
 		free(line);

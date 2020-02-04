@@ -6,7 +6,7 @@
 /*   By: mbrunel <mbrunel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/02 23:37:51 by yvanat            #+#    #+#             */
-/*   Updated: 2020/02/04 01:21:50 by mbrunel          ###   ########.fr       */
+/*   Updated: 2020/02/04 03:34:33 by mbrunel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,6 @@ void	export_bmp(char *filename, t_swap *s)
 	while (i < size + HEADER_SIZE)
 		data[i++] = 0;
 	header_bmp(&data, s);
-	printf("%s\n", filename);
 	fill_bmp(&data, s);
 	if ((fd = open(filename, O_CREAT | O_TRUNC | O_RDWR, 0644)) <= 0)
 		exit(error(NULL, "stack error\n"));

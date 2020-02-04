@@ -6,7 +6,7 @@
 /*   By: mbrunel <mbrunel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/16 01:16:49 by yvanat            #+#    #+#             */
-/*   Updated: 2020/02/04 03:25:55 by mbrunel          ###   ########.fr       */
+/*   Updated: 2020/02/04 04:43:23 by mbrunel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ int stretch(int i, int x, int y, void *swap)
 	t_ray ray;
 	int type;
 
-	
+
 	s = *(t_swap*)swap;
 	if (s.c1.inter)
 		type = s.p.objs[s.c1.i_obj].type;
@@ -123,7 +123,7 @@ int quit(void *swap)
 		export_bmp(create_bmp_filename(s->name, s->save), s);
 	if (s->p.bonus.stereo)
 	{
-		chng = create_vec(1.5,0,0);
+		chng = create_vec(DEC,0,0);
 		ang.x = acos(s->p.cam[s->i].vec_dir.z / sqrt(s->p.cam[s->i].vec_dir.y * s->p.cam[s->i].vec_dir.y + s->p.cam[s->i].vec_dir.z * s->p.cam[s->i].vec_dir.z));
 		ang.y = acos(s->p.cam[s->i].vec_dir.z / sqrt(s->p.cam[s->i].vec_dir.x * s->p.cam[s->i].vec_dir.x + s->p.cam[s->i].vec_dir.z * s->p.cam[s->i].vec_dir.z));
 		s->p.cam[s->i].o = add_vec(s->p.cam[s->i].o, rot(chng, s->p.cam[s->i].vec_dir, ang));
