@@ -6,30 +6,30 @@
 /*   By: mbrunel <mbrunel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/16 01:16:49 by yvanat            #+#    #+#             */
-/*   Updated: 2020/02/04 04:43:23 by mbrunel          ###   ########.fr       */
+/*   Updated: 2020/02/04 06:10:19 by mbrunel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../incs/h_minirt.h"
 
-t_vec rot(t_vec dir, t_vec cam, t_vec ang)
+t_vec	rot(t_vec dir, t_vec cam, t_vec ang)
 {
-	t_vec rotate;
-	t_vec tmp;
+	t_vec	rotate;
+	t_vec	tmp;
 
-	tmp.x = cos(ang.y) * dir.x - sin(ang.y) * dir.z;
-	tmp.z = sin(ang.y) * dir.x + cos(ang.y) * dir.z;
-	tmp.y = dir.y;
-	rotate.z = cos(ang.x) * tmp.z - sin(ang.x) * tmp.y;
-	rotate.y = sin(ang.x) * tmp.z + cos(ang.x) * tmp.y;
-	rotate.x = tmp.x;
-	if (cam.x > 0)
-		rotate.x *= -1;
-	if (cam.y > 0)
-		rotate.y *= -1;
 	if (cam.z < 0)
-		rotate.z *= -1;
-	return(rotate);
+		dir.z *= -1;
+	if (cam.x > 0)
+		ang.y = 2 * M_PI - ang.y;
+	tmp.x = cos(ang.y) * dir.x - sin(ang.y) * dir.z;
+	tmp.y = dir.y;
+	tmp.z = sin(ang.y) * dir.x + cos(ang.y) * dir.z;
+	if (cam.y > 0)
+		ang.x = 2 * M_PI - ang.x;
+	rotate.x = tmp.x + dir.x;
+	rotate.y = tmp.y + cos(ang.x) * dir.y - sin(ang.x) * dir.z;
+	rotate.z = tmp.z + sin(ang.x) * dir.y + cos(ang.x) * dir.z;
+	return (rotate);
 }
 
 int	chng_ocam(int i, void *swap)

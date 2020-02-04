@@ -6,7 +6,7 @@
 /*   By: mbrunel <mbrunel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/01 19:33:33 by yvanat            #+#    #+#             */
-/*   Updated: 2020/02/04 04:19:06 by mbrunel          ###   ########.fr       */
+/*   Updated: 2020/02/04 06:56:18 by mbrunel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,6 +95,7 @@ t_inter	intercy(t_ray ray, void *ptr, double start, double max)
 	t_vec	qp;
 	int		boo;
 
+	rt.normal = create_vec(0,0,0);
 	cy = *(t_cy*)ptr;
 	boo = 1;
 	L = sub_vec(ray.o, cy.p);
@@ -119,6 +120,7 @@ t_inter	intercy(t_ray ray, void *ptr, double start, double max)
 			if (norm_vec(sub_vec(add_vec(ray.o, mult_vec_d(ray.dir, rt.inter)), cy.p)) > sqrt(cy.h / 2 * cy.h / 2 + cy.r * cy.r))
 			{
 				rt.inter = t + s;
+				rt.normal = cy.dir;
 				boo = -1;
 				if (norm_vec(sub_vec(add_vec(ray.o, mult_vec_d(ray.dir, rt.inter)), cy.p)) > sqrt(cy.h / 2 * cy.h / 2 + cy.r * cy.r))
 					rt.inter = 0;
@@ -136,7 +138,8 @@ t_inter	intercy(t_ray ray, void *ptr, double start, double max)
 	cp = sub_vec(rt.ipoint, cy.p);
 	cq = prod_scal(cp, cy.dir);
 	qp = sub_vec(cp, mult_vec_d(cy.dir, cq));
-	rt.normal = mult_vec_d(div_vec_d(qp, cy.r), boo);
+	if (!norm_vec(rt.normal))
+		rt.normal = mult_vec_d(div_vec_d(qp, cy.r), boo);
 	return (rt);
 }
 
@@ -317,18 +320,18 @@ t_vec	cam_rot(t_vec dir, t_vec cam, t_vec ang)
 	t_vec	rotate;
 	t_vec	tmp;
 
-	tmp.x = cos(ang.y) * dir.x - sin(ang.y) * dir.z;
-	tmp.z = sin(ang.y) * dir.x + cos(ang.y) * dir.z;
-	tmp.y = dir.y;
-	rotate.z = cos(ang.x) * tmp.z - sin(ang.x) * tmp.y;
-	rotate.y = sin(ang.x) * tmp.z + cos(ang.x) * tmp.y;
-	rotate.x = tmp.x;
-	if (cam.x < 0)
-		rotate.x *= -1;
-	if (cam.y < 0)
-		rotate.y *= -1;
 	if (cam.z < 0)
-		rotate.z *= -1;
+		dir.z *= -1;
+	if (cam.x > 0)
+		ang.y = 2 * M_PI - ang.y;
+	tmp.x = cos(ang.y) * dir.x - sin(ang.y) * dir.z;
+	tmp.y = dir.y;
+	tmp.z = sin(ang.y) * dir.x + cos(ang.y) * dir.z;
+	if (cam.y > 0)
+		ang.x = 2 * M_PI - ang.x;
+	rotate.x = tmp.x + dir.x;
+	rotate.y = tmp.y + cos(ang.x) * dir.y - sin(ang.x) * dir.z;
+	rotate.z = tmp.z + sin(ang.x) * dir.y + cos(ang.x) * dir.z;
 	return (normalize(rotate));
 }
 
@@ -413,9 +416,8 @@ void	fill_img(int *img, t_info info, t_p p, int i_img)
 	len = info.l / 4;
 	i = -1;
 	ray.o = p.cam[i_img].o;
-	ang.x = acos(p.cam[i_img].vec_dir.z / sqrt(p.cam[i_img].vec_dir.y * p.cam[i_img].vec_dir.y + p.cam[i_img].vec_dir.z * p.cam[i_img].vec_dir.z));
 	ang.y = acos(p.cam[i_img].vec_dir.z / sqrt(p.cam[i_img].vec_dir.x * p.cam[i_img].vec_dir.x + p.cam[i_img].vec_dir.z * p.cam[i_img].vec_dir.z));
-	ang.z = acos(p.cam[i_img].vec_dir.z / sqrt(p.cam[i_img].vec_dir.x * p.cam[i_img].vec_dir.x + p.cam[i_img].vec_dir.y * p.cam[i_img].vec_dir.y));
+	ang.x = acos(p.cam[i_img].vec_dir.z / sqrt(p.cam[i_img].vec_dir.y * p.cam[i_img].vec_dir.y + p.cam[i_img].vec_dir.z * p.cam[i_img].vec_dir.z));
 	while (++i < p.vp.res_y)
 	{
 		j = -1;
