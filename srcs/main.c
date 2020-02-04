@@ -6,7 +6,7 @@
 /*   By: mbrunel <mbrunel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/16 01:16:49 by yvanat            #+#    #+#             */
-/*   Updated: 2020/02/03 06:46:18 by mbrunel          ###   ########.fr       */
+/*   Updated: 2020/02/04 03:25:55 by mbrunel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,43 +32,31 @@ t_vec rot(t_vec dir, t_vec cam, t_vec ang)
 	return(rotate);
 }
 
-int calc_time(double *time)
-{
-	struct timeb hop;
-	
-	ftime(&hop);
-	*time = hop.millitm;
-	return (0);
-}
-
 int	chng_ocam(int i, void *swap)
 {
 	t_vec chng;
 	t_vec ang;
-	struct timeb hop;
-	double time;
 	t_swap *s;
 
 	s = (t_swap*)swap;
-	ftime(&hop);
-	time = hop.millitm - s->p.cam[s->i].time;
 	if (i == 123)
-		chng = create_vec(-STEP * time, 0, 0);
+		chng = create_vec(-STEP * s->p.cam[s->i].time, 0, 0);
 	else if (i == 124)
-		chng = create_vec(STEP * time,0,0);
+		chng = create_vec(STEP * s->p.cam[s->i].time,0,0);
 	else if (i == 125)
-		chng = create_vec(0,0,-STEP * time);
+		chng = create_vec(0,0,-STEP * s->p.cam[s->i].time);
 	else if (i == 126)
-		chng = create_vec(0,0,STEP * time);
+		chng = create_vec(0,0,STEP * s->p.cam[s->i].time);
 	else if (i == 116)
-		chng = create_vec(0,STEP * time,0);
+		chng = create_vec(0,STEP * s->p.cam[s->i].time,0);
 	else if (i == 121)
-		chng = create_vec(0,-STEP * time,0);
+		chng = create_vec(0,-STEP * s->p.cam[s->i].time,0);
 	else
 		return (0);
 	ang.x = acos(s->p.cam[s->i].vec_dir.z / sqrt(s->p.cam[s->i].vec_dir.y * s->p.cam[s->i].vec_dir.y + s->p.cam[s->i].vec_dir.z * s->p.cam[s->i].vec_dir.z));
 	ang.y = acos(s->p.cam[s->i].vec_dir.z / sqrt(s->p.cam[s->i].vec_dir.x * s->p.cam[s->i].vec_dir.x + s->p.cam[s->i].vec_dir.z * s->p.cam[s->i].vec_dir.z));
 	s->p.cam[s->i].o = add_vec(s->p.cam[s->i].o, rot(chng, s->p.cam[s->i].vec_dir, ang));
+	s->p.cam[s->i].time = 0;
 	return (img_to_win(*s));
 }
 
@@ -83,21 +71,26 @@ int stretch(int i, int x, int y, void *swap)
 	s = *(t_swap*)swap;
 	if (s.c1.inter)
 		type = s.p.objs[s.c1.i_obj].type;
+	else if (i == 1)
+		return (0);
 	else
 		type = -1;
 	ang.x = acos(s.p.cam[s.i].vec_dir.z / sqrt(s.p.cam[s.i].vec_dir.y * s.p.cam[s.i].vec_dir.y + s.p.cam[s.i].vec_dir.z * s.p.cam[s.i].vec_dir.z));
 	ang.y = acos(s.p.cam[s.i].vec_dir.z / sqrt(s.p.cam[s.i].vec_dir.x * s.p.cam[s.i].vec_dir.x + s.p.cam[s.i].vec_dir.z * s.p.cam[s.i].vec_dir.z));
 	ray.o = s.p.cam[s.i].o;
 	ray.dir = cam_rot(c_to_vp((double)y, (double)x, s.p.vp, s.p.cam[s.i].dist), s.p.cam[s.i].vec_dir, ang);
-	if (s.c1.inter == 0)
+	if (s.c1.inter == 0 || (type == PLANE && i == 2))
+	{
 		s.p.cam->vec_dir = ray.dir;
+		printf("%f %f %f\n", ray.dir.x, ray.dir.y, ray.dir.z);
+	}
 	else if (i == 1 || type == TRIANGLE)
 	{
 		if (type == TRIANGLE)
 			((t_tr*)(s.p.objs[s.c1.i_obj].o))->click = s.c1.ipoint;
 		chng_origin[type](s.p.objs[s.c1.i_obj].o, ray);
 	}
-	else if (i == 2 && type != PLANE)
+	else if (i == 2)
 		chng_stretch[type](s.p.objs[s.c1.i_obj].o, ray);
 	else
 		return (0);
@@ -122,10 +115,25 @@ int get_pos(int i, int x, int y, void *swap)
 int quit(void *swap)
 {
 	t_swap *s;
+	t_vec chng;
+	t_vec ang;
 
 	s = (t_swap*)swap;
 	if (s->name)
 		export_bmp(create_bmp_filename(s->name, s->save), s);
+	if (s->p.bonus.stereo)
+	{
+		chng = create_vec(1.5,0,0);
+		ang.x = acos(s->p.cam[s->i].vec_dir.z / sqrt(s->p.cam[s->i].vec_dir.y * s->p.cam[s->i].vec_dir.y + s->p.cam[s->i].vec_dir.z * s->p.cam[s->i].vec_dir.z));
+		ang.y = acos(s->p.cam[s->i].vec_dir.z / sqrt(s->p.cam[s->i].vec_dir.x * s->p.cam[s->i].vec_dir.x + s->p.cam[s->i].vec_dir.z * s->p.cam[s->i].vec_dir.z));
+		s->p.cam[s->i].o = add_vec(s->p.cam[s->i].o, rot(chng, s->p.cam[s->i].vec_dir, ang));
+		fill_img(s->img, s->info, s->p, s->i);
+		if ((s->mlx.win = mlx_new_window(s->mlx.ptr, s->p.vp.res_x, s->p.vp.res_y, "3D")))
+		{
+			s->p.bonus.stereo = 0;
+			img_to_win(*s);
+		}
+	}
 	exit(0);
 }
 
@@ -151,13 +159,12 @@ int	swap_cam(int i, void *swap)
 		quit(swap);
 	else if (i == 48)
 		s.i = (s.i + 1) % s.p.nb_cam;
-	else if ((i >= 123 && i <= 126) || i == 116 || i == 121)
-		return (calc_time(&(s.p.cam[s.i].time)));
 	else
-		return (0);
-	if (s.p.nb_cam <= s.i)
 	{
-		ft_fprintf(1, "no such camera\n");
+		if ((i >= 123 && i <= 126) || i == 116 || i == 121)
+			((t_swap*)(swap))->p.cam[s.i].time += 1;
+		else if (s.p.nb_cam <= s.i)
+			ft_fprintf(1, "no such camera\n");
 		return (0);
 	}
 	mlx_destroy_image(s.mlx.ptr, s.img);

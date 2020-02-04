@@ -6,7 +6,7 @@
 /*   By: mbrunel <mbrunel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/02 12:51:50 by mbrunel           #+#    #+#             */
-/*   Updated: 2020/02/03 06:46:15 by mbrunel          ###   ########.fr       */
+/*   Updated: 2020/02/04 01:59:25 by mbrunel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
 #define MAX_LENGTHG_FILE 300
 #define VP_H 1.0
 #define VP_W 1.0
-#define STEP 4e-2  //for cam mvment
+#define STEP 5 //for cam mvment
 
 // formes
 #define SPHERE 0
@@ -71,6 +71,7 @@
 # define MIN_D 1e-50
 # define MIN_SHADOW 1e-5
 # define HEADER_SIZE 122
+# define BG_COLOR 0
 
 # include "mlx.h"
 # include "libft.h"
@@ -123,6 +124,7 @@ typedef struct		s_bonus
 	int				recurse_reflect;
 	int				filter_type;
 	double			filter_strength;
+	int				stereo;
 }					t_bonus;
 
 typedef struct		s_vp

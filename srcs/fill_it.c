@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   fill_it.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yvanat <yvanat@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mbrunel <mbrunel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/01 19:33:33 by yvanat            #+#    #+#             */
-/*   Updated: 2020/02/03 06:10:03 by yvanat           ###   ########.fr       */
+/*   Updated: 2020/02/04 02:14:20 by mbrunel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -287,7 +287,7 @@ int		find_pix_color(t_ray ray, t_p p, int depth)
 	intensity = create_vec(0.0, 0.0, 0.0);
 	min = min_inter(ray, p, MIN_SHADOW, __DBL_MAX__);
 	if (!min.inter)
-		return (p.bg_color);
+		return (BG_COLOR);
 	while (++i < p.nb_lights)
 	{
 		intensity = add_vec(intensity, ((p.lights[i].type != AMBIENT) ? light_intensity(min.ipoint, min.normal, p.lights[i], p, min.spec, mult_vec_d(ray.dir, -1)) : mult_vec_d(div_vec(p.lights[i].rgb, create_vec(255, 255, 255)), p.lights[i].intensity)));
@@ -323,9 +323,9 @@ t_vec	cam_rot(t_vec dir, t_vec cam, t_vec ang)
 	rotate.z = cos(ang.x) * tmp.z - sin(ang.x) * tmp.y;
 	rotate.y = sin(ang.x) * tmp.z + cos(ang.x) * tmp.y;
 	rotate.x = tmp.x;
-	if (cam.x > 0)
+	if (cam.x < 0)
 		rotate.x *= -1;
-	if (cam.y > 0)
+	if (cam.y < 0)
 		rotate.y *= -1;
 	if (cam.z < 0)
 		rotate.z *= -1;

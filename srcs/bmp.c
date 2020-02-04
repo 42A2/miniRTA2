@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   bmp.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yvanat <yvanat@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mbrunel <mbrunel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/02 23:37:51 by yvanat            #+#    #+#             */
-/*   Updated: 2020/02/03 05:56:40 by yvanat           ###   ########.fr       */
+/*   Updated: 2020/02/04 01:21:50 by mbrunel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,7 @@ void	fill_bmp(char **data, t_swap *s)
 	int		y;
 	char	*mlx_data;
 
-	mlx_data = mlx_get_data_addr(s->mlx.img,
-		&(s->bpp), &(s->size_line), &(s->endian));
+	mlx_data = (char*)s->img;
 	i = HEADER_SIZE;
 	y = s->p.vp.res_y;
 	while (y--)
