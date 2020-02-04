@@ -6,7 +6,7 @@
 /*   By: mbrunel <mbrunel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/02 12:51:50 by mbrunel           #+#    #+#             */
-/*   Updated: 2020/02/04 04:43:37 by mbrunel          ###   ########.fr       */
+/*   Updated: 2020/02/04 05:58:11 by mbrunel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@
 #define VP_W 1.0
 #define STEP 5 //for cam mvment
 #define BG_COLOR 0
-#define DEC 1
+#define DEC 0.8
 
 // formes
 #define SPHERE 0
@@ -91,6 +91,14 @@ typedef struct		s_parse
 	int				i2;
 	int				i3;
 }					t_parse;
+
+typedef struct		s_pars2
+{
+	int 	fd;
+	int		status;
+	int		type;
+}					t_parse2;
+
 
 typedef struct		s_bonus
 {
