@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   h_minirt.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mbrunel <mbrunel@student.42.fr>            +#+  +:+       +#+        */
+/*   By: yvanat <yvanat@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/02 12:51:50 by mbrunel           #+#    #+#             */
-/*   Updated: 2020/02/04 01:59:25 by mbrunel          ###   ########.fr       */
+/*   Updated: 2020/02/04 05:43:14 by yvanat           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@
 # define MIN_D 1e-50
 # define MIN_SHADOW 1e-5
 # define HEADER_SIZE 122
-# define BG_COLOR 0
+# define BG_COLOR 0xFFFFFF
 
 # include "mlx.h"
 # include "libft.h"
