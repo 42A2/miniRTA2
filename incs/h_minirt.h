@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   h_minirt.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yvanat <yvanat@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mbrunel <mbrunel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/02 12:51:50 by mbrunel           #+#    #+#             */
-/*   Updated: 2020/02/05 01:10:57 by yvanat           ###   ########.fr       */
+/*   Updated: 2020/02/05 05:47:20 by mbrunel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,8 @@
 /*
 **restrictions
 */
-# define RES_X_MAX 2300
-# define RES_Y_MAX 1900
+# define RES_X_MAX 2560
+# define RES_Y_MAX 1440
 # define MAX_LENGTHG_FILE 300
 # define VP_H 1.0
 # define VP_W 1.0
@@ -106,6 +106,12 @@ typedef struct		s_pars2
 	int				type;
 }					t_parse2;
 
+typedef struct		s_vp
+{
+	int				res_x;
+	int				res_y;
+}					t_vp;
+
 typedef struct		s_bonus
 {
 	double			delta_aliasing;
@@ -114,13 +120,10 @@ typedef struct		s_bonus
 	int				filter_type;
 	double			filter_strength;
 	int				stereo;
+	t_vp			save_res;
+	double			save_delta_as;
+	double			save_coef_as;
 }					t_bonus;
-
-typedef struct		s_vp
-{
-	int				res_x;
-	int				res_y;
-}					t_vp;
 
 typedef struct		s_cam
 {
@@ -242,6 +245,7 @@ typedef struct		s_swap
 	int				bpp;
 	int				endian;
 	int				size_line;
+	int				s_s;
 }					t_swap;
 
 int					get_p(t_p *p, char *path);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   fill_it.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yvanat <yvanat@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mbrunel <mbrunel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/01 19:33:33 by yvanat            #+#    #+#             */
-/*   Updated: 2020/02/05 00:45:39 by yvanat           ###   ########.fr       */
+/*   Updated: 2020/02/05 05:19:46 by mbrunel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,9 +95,8 @@ t_inter	intercy(t_ray ray, void *ptr, double start, double max)
 	t_vec	qp;
 	int		boo;
 
-	rt.normal = create_vec(0,0,0);
 	cy = *(t_cy*)ptr;
-	boo = 1;
+	boo = 0;
 	L = sub_vec(ray.o, cy.p);
 	w = cross_prod(ray.dir, cy.dir);
 	sqr_omega = prod_scal(w, w);
@@ -120,8 +119,7 @@ t_inter	intercy(t_ray ray, void *ptr, double start, double max)
 			if (norm_vec(sub_vec(add_vec(ray.o, mult_vec_d(ray.dir, rt.inter)), cy.p)) > sqrt(cy.h / 2 * cy.h / 2 + cy.r * cy.r))
 			{
 				rt.inter = t + s;
-				rt.normal = cy.dir;
-				boo = -1;
+				boo = 1;
 				if (norm_vec(sub_vec(add_vec(ray.o, mult_vec_d(ray.dir, rt.inter)), cy.p)) > sqrt(cy.h / 2 * cy.h / 2 + cy.r * cy.r))
 					rt.inter = 0;
 			}
@@ -138,8 +136,7 @@ t_inter	intercy(t_ray ray, void *ptr, double start, double max)
 	cp = sub_vec(rt.ipoint, cy.p);
 	cq = prod_scal(cp, cy.dir);
 	qp = sub_vec(cp, mult_vec_d(cy.dir, cq));
-	if (!norm_vec(rt.normal))
-		rt.normal = mult_vec_d(div_vec_d(qp, cy.r), boo);
+	rt.normal = boo ? cy.dir : div_vec_d(qp, cy.r);
 	return (rt);
 }
 

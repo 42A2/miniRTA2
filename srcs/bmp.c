@@ -6,7 +6,7 @@
 /*   By: mbrunel <mbrunel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/02 23:37:51 by yvanat            #+#    #+#             */
-/*   Updated: 2020/02/04 03:34:33 by mbrunel          ###   ########.fr       */
+/*   Updated: 2020/02/05 08:44:21 by mbrunel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,6 +77,8 @@ void	export_bmp(char *filename, t_swap *s)
 		exit(error(NULL, "stack error\n"));
 	write(fd, data, (size + HEADER_SIZE));
 	close(fd);
+	free(filename);
+	free(data);
 }
 
 char	*create_bmp_filename(char *file, int i)

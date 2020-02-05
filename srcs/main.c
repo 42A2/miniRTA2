@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yvanat <yvanat@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mbrunel <mbrunel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/16 01:16:49 by yvanat            #+#    #+#             */
-/*   Updated: 2020/02/05 01:19:07 by yvanat           ###   ########.fr       */
+/*   Updated: 2020/02/05 08:58:34 by mbrunel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,63 +109,106 @@ int get_pos(int i, int x, int y, void *swap)
 	((t_swap*)swap)->c1 = min_inter(ray, s.p, MIN_D, __DBL_MAX__);
 	return (0);
 }
-int quit(void *swap)
+
+int quit(int rt, void *swap)
 {
 	t_swap *s;
+	int		i;
+
+	i = -1;
+	s = (t_swap*)swap;
+	while (++i < s->p.nb_objs)
+		free(s->p.objs[i].o);
+	exit(rt != -1 ? 0 : -1);
+}
+
+int stereo(t_swap *s)
+{
 	t_vec chng;
 	t_vec ang;
+	int *img1;
+	int *img2;
+	int i;
+	int j;
+	int prev_len;
+	int len;
 
-	s = (t_swap*)swap;
-	if (s->name)
-		export_bmp(create_bmp_filename(s->name, s->save), s);
-	if (s->p.bonus.stereo)
+	i = -1;
+	prev_len = s->info.l / 4;
+	if (!(img1 = malloc(sizeof(int) * s->p.vp.res_y * (s->info.l / 4))))
+		quit(error(NULL, "memory error\n"), s);
+	if (!(img2 = malloc(sizeof(int) * s->p.vp.res_y * (s->info.l / 4))))
+		quit(error(img2, "memory error\n"), s);
+	ft_memcpy(img1, s->img, sizeof(int) * s->p.vp.res_y * (s->info.l / 4));
+	chng = create_vec(DEC,0,0);
+	ang.x = acos(s->p.cam[s->i].vec_dir.z / sqrt(s->p.cam[s->i].vec_dir.y * s->p.cam[s->i].vec_dir.y + s->p.cam[s->i].vec_dir.z * s->p.cam[s->i].vec_dir.z));
+	ang.y = acos(s->p.cam[s->i].vec_dir.z / sqrt(s->p.cam[s->i].vec_dir.x * s->p.cam[s->i].vec_dir.x + s->p.cam[s->i].vec_dir.z * s->p.cam[s->i].vec_dir.z));
+	s->p.cam[s->i].o = add_vec(s->p.cam[s->i].o, rot(chng, s->p.cam[s->i].vec_dir, ang));
+	fill_img(s->img, s->info, s->p, s->i);
+	ft_memcpy(img2, s->img, sizeof(int) * s->p.vp.res_y * (s->info.l / 4));
+	if (!(s->mlx.img = mlx_new_image(s->mlx.ptr, s->p.vp.res_x * 2, s->p.vp.res_y)))
+		return (-1);
+	if (!(s->img = (int*)mlx_get_data_addr(s->mlx.img, &(s->info.n), &(s->info.l) , &(s->info.e))))
+		return (-1);
+	len = s->info.l / 4;
+	while (++i < s->p.vp.res_y)
 	{
-		chng = create_vec(DEC,0,0);
-		ang.x = acos(s->p.cam[s->i].vec_dir.z / sqrt(s->p.cam[s->i].vec_dir.y * s->p.cam[s->i].vec_dir.y + s->p.cam[s->i].vec_dir.z * s->p.cam[s->i].vec_dir.z));
-		ang.y = acos(s->p.cam[s->i].vec_dir.z / sqrt(s->p.cam[s->i].vec_dir.x * s->p.cam[s->i].vec_dir.x + s->p.cam[s->i].vec_dir.z * s->p.cam[s->i].vec_dir.z));
-		s->p.cam[s->i].o = add_vec(s->p.cam[s->i].o, rot(chng, s->p.cam[s->i].vec_dir, ang));
-		fill_img(s->img, s->info, s->p, s->i);
-		if ((s->mlx.win = mlx_new_window(s->mlx.ptr, s->p.vp.res_x, s->p.vp.res_y, "Right_side")))
+		j = -1;
+		while (++j < s->p.vp.res_x)
 		{
-			s->p.bonus.stereo = 0;
-			img_to_win(s);
+			s->img[i * len + j] = img1[i * (prev_len) +j];
+			s->img[i * len + j + s->p.vp.res_x] = img2[i * (prev_len) + j];
 		}
 	}
-	exit(0);
+	s->p.vp.res_x *= 2;
+	free(img2);
+	free(img1);
+	export_bmp(create_bmp_filename("3D.rt", 2), s);
+	return (quit(0, s));
 }
 
 int	swap_cam(int i, void *swap)
 {
-	t_swap s;
-	s = *(t_swap*)swap;
+	t_swap *s;
+	s = (t_swap*)swap;
 	if (i >= 18 && i <= 21)
-		s.i = i - 18;
+		s->i = i - 18;
 	else if (i == 23)
-		s.i = 4;
+		s->i = 4;
 	else if (i == 22)
-		s.i = 5;
+		s->i = 5;
 	else if (i == 26)
-		s.i = 6;
+		s->i = 6;
 	else if (i == 28)
-		s.i = 7;
+		s->i = 7;
 	else if (i == 25)
-		s.i = 8;
+		s->i = 8;
 	else if (i >= 83 && i <= 92)
-		s.i = i - 83;
+		s->i = i - 83;
 	else if (i == 53)
-		quit(swap);
+		quit(0, swap);
 	else if (i == 48)
-		s.i = (s.i + 1) % s.p.nb_cam;
+		s->i = (s->i + 1) % s->p.nb_cam;
+	else if (i == 1)
+	{
+		s->p.vp = s->p.bonus.save_res;
+		s->p.bonus.coeff_aliasing = s->p.bonus.save_coef_as;
+		s->p.bonus.delta_aliasing = s->p.bonus.save_delta_as;
+		s->s_s = 1;
+		img_to_win(s);
+	}
+	else if(i == 2)
+		return (stereo(s));
 	else
 	{
 		if ((i >= 123 && i <= 126) || i == 116 || i == 121)
-			((t_swap*)(swap))->p.cam[s.i].time += 1;
-		else if (s.p.nb_cam <= s.i)
+			((t_swap*)(swap))->p.cam[s->i].time += 1;
+		else if (s->p.nb_cam <= s->i)
 			ft_fprintf(1, "no such camera\n");
 		return (0);
 	}
-	mlx_destroy_image(s.mlx.ptr, s.img);
-	return (img_to_win(&s));
+	mlx_destroy_image(s->mlx.ptr, s->img);
+	return (img_to_win(s));
 }
 
 int img_to_win(t_swap *s)
@@ -175,7 +218,19 @@ int img_to_win(t_swap *s)
 	if (!(s->img = (int*)mlx_get_data_addr(s->mlx.img, &(s->info.n), &(s->info.l) , &(s->info.e))))
 		return (-1);
 	fill_img(s->img, s->info, s->p, s->i);
-	mlx_put_image_to_window(s->mlx.ptr, s->mlx.win, s->mlx.img, 0, 0);
+	if (s->s_s)
+	{
+		export_bmp(create_bmp_filename(s->name, s->save), s);
+		quit(0, s);
+	}
+	if (mlx_put_image_to_window(s->mlx.ptr, s->mlx.win, s->mlx.img, 0, 0) == -1)
+		return (-1);
+	mlx_hook(s->mlx.win, 2, 1L<<0, &swap_cam, s);
+	mlx_hook(s->mlx.win, 3, 1L<<1, &chng_ocam, s);
+	mlx_hook(s->mlx.win, 4, 1L<<2, &get_pos, s);
+	mlx_hook(s->mlx.win, 5, 1L<<3, &stretch, s);
+	mlx_hook(s->mlx.win, 17, 1L<<17, &quit, s);
+	mlx_loop(s->mlx.ptr);
 	return (0);
 }
 
@@ -198,26 +253,20 @@ int		main(int argc, char *argv[])
 
 	s.i = 0;
 	mlx.ptr = mlx_init();
-	s.name = NULL;
+	s.s_s = 0;
 	if (argc == 3 && !ft_strncmp(argv[2], "-save", 5))
-		s.name = argv[1];
-	if ((argc > 2 && !s.name) || argc < 2)
+		s.s_s = 1;
+	s.name = argv[1];
+	if ((argc > 2 && !s.save) || argc < 2)
 		exit (error(NULL, "manque ou surplus d'args ou \"-save\" mal ecrit\n"));
 	if ((s.save = check_n(argv[1])) == -1)
 		exit (error(NULL, "file bad named\n"));
 	if (get_p(&(s.p), argv[1]) == -1)
-		return (-1);
-	if ((mlx.win = mlx_new_window(mlx.ptr, s.p.vp.res_x, s.p.vp.res_y, "RT")))
-	{
-		s.mlx = mlx;
-		if (img_to_win(&s) == -1)
-			return (-1);
-		mlx_hook(s.mlx.win, 2, 1L<<0, &swap_cam, &s);
-		mlx_hook(s.mlx.win, 3, 1L<<1, &chng_ocam, &s);
-		mlx_hook(s.mlx.win, 4, 1L<<2, &get_pos, &s);
-		mlx_hook(s.mlx.win, 5, 1L<<3, &stretch, &s);
-		mlx_hook(s.mlx.win, 17, 1L<<17, &quit, &s);
-		mlx_loop(s.mlx.ptr);
-	}
+		quit(-1, &s);
+	if (!s.s_s && !(mlx.win = mlx_new_window(mlx.ptr, s.p.vp.res_x, s.p.vp.res_y, "RT")))
+		quit(error(NULL, "mlx error\n"), &s);
+	s.mlx = mlx;
+	if (img_to_win(&s) == -1)
+		quit(error(NULL, "mlx error\n"), &s);
 	return (0);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yvanat <yvanat@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mbrunel <mbrunel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/14 05:14:16 by mbrunel           #+#    #+#             */
-/*   Updated: 2020/02/05 00:45:29 by yvanat           ###   ########.fr       */
+/*   Updated: 2020/02/05 08:57:43 by mbrunel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,8 +42,12 @@ static int	p3(t_p *p, int *incs)
 	p->nb_cam = incs[CAMERA];
 	p->nb_lights = incs[POINT] + incs[AMBIENT];
 	p->nb_objs = incs[NB_FORM];
-	if (!p->nb_cam)
-		return (error(NULL, "void file\n"));
+	if (!incs[RESOLUTION])
+		return (error(NULL, "no resolution\n"));
+	if (!incs[CAMERA])
+		return (error(NULL, "no cam\n"));
+	if (!incs[AMBIENT])
+		return (error(NULL, "no ambiant\n"));
 	return (0);
 }
 

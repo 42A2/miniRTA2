@@ -6,11 +6,40 @@
 /*   By: mbrunel <mbrunel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/04 04:12:08 by mbrunel           #+#    #+#             */
-/*   Updated: 2020/02/04 04:34:38 by mbrunel          ###   ########.fr       */
+/*   Updated: 2020/02/05 05:14:02 by mbrunel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../incs/h_minirt.h"
+
+int			get_sphere(char *line, void **ptr)
+{
+	t_parse	v;
+	int		i;
+	t_sp	*sphere;
+
+	if (!(sphere = malloc(sizeof(t_sp))))
+		return (-1);
+	i = 2;
+	if (wk(v.d1 = recupdbl(line, &i, 'f', ','), -MAX_D, MAX_D) == -1 ||\
+		wk(v.d2 = recupdbl(line, &i, 'f', ','), -MAX_D, MAX_D) == -1 ||\
+		wk(v.d3 = recupdbl(line, &i, 'f', ' '), -MAX_D, MAX_D) == -1)
+		return (-1);
+	sphere->o = create_vec(v.d1, v.d2, v.d3);
+	if (wk(sphere->r = recupdbl(line, &i, 'f', ' '), 0.0, MAX_D) == -1)
+		return (-1);
+	if (wk(v.i1 = (int)recupdbl(line, &i, 'i', ','), 0, 255) == -1 ||\
+		wk(v.i2 = (int)recupdbl(line, &i, 'i', ','), 0, 255) == -1 ||\
+		wk(v.i3 = (int)recupdbl(line, &i, 'i', ' '), 0, 255) == -1)
+		return (-1);
+	sphere->color = get_color_integer(v.i1, v.i2, v.i3);
+	if (wk(sphere->spec = recupdbl(line, &i, 'f', ' '), 0.0, MAX_D) == -1)
+		return (-1);
+	if (wk(sphere->reflect = recupdbl(line, &i, 'f', '\0'), 0.0, 1.0) == -1)
+		return (-1);
+	*ptr = sphere;
+	return (0);
+}
 
 static int	plane2(char *line, t_pl *pl, int i)
 {
