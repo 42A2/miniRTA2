@@ -6,7 +6,7 @@
 /*   By: mbrunel <mbrunel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/13 01:06:04 by mbrunel           #+#    #+#             */
-/*   Updated: 2020/02/05 05:18:00 by mbrunel          ###   ########.fr       */
+/*   Updated: 2020/02/05 09:05:00 by mbrunel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,7 +120,5 @@ int			get_bonus(char *line, t_bonus *bonus)
 	, &i, 'f', ' '), 0.0, 1.0) == -1)
 		return (-1);
 	bonus->filter_strength = bonus->filter_strength * 10 + 1;
-	if (wk(bonus->stereo = recupdbl(line, &i, 'i', ' '), 0.0, 1.0) == -1)
-		return (-1);
 	return (bonus2(&i, line, bonus));
 }

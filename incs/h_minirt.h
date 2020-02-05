@@ -6,7 +6,7 @@
 /*   By: mbrunel <mbrunel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/02 12:51:50 by mbrunel           #+#    #+#             */
-/*   Updated: 2020/02/05 05:47:20 by mbrunel          ###   ########.fr       */
+/*   Updated: 2020/02/05 09:04:28 by mbrunel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,7 +119,6 @@ typedef struct		s_bonus
 	int				recurse_reflect;
 	int				filter_type;
 	double			filter_strength;
-	int				stereo;
 	t_vp			save_res;
 	double			save_delta_as;
 	double			save_coef_as;
