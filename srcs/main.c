@@ -6,7 +6,7 @@
 /*   By: mbrunel <mbrunel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/16 01:16:49 by yvanat            #+#    #+#             */
-/*   Updated: 2020/02/05 09:49:05 by mbrunel          ###   ########.fr       */
+/*   Updated: 2020/02/05 10:51:05 by mbrunel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,8 +120,8 @@ static int quit(int rt, void *swap)
 	s = (t_swap*)swap;
 	while (++i < s->p.nb_objs)
 		free(s->p.objs[i].o);
-	mlx_destroy_image(s->mlx.ptr, s->mlx.img);
-	//mlx_destroy_window(s->mlx.ptr, s->mlx.win);
+	if (s->mlx.img)
+		mlx_destroy_image(s->mlx.ptr, s->mlx.img);
 	exit(rt != -1 ? 0 : -1);
 }
 
@@ -198,6 +198,7 @@ int	swap_cam(int i, void *swap)
 		s->p.bonus.coeff_aliasing = s->p.bonus.save_coef_as;
 		s->p.bonus.delta_aliasing = s->p.bonus.save_delta_as;
 		s->s_s = 1;
+		mlx_destroy_image(s->mlx.ptr, s->mlx.img);
 		img_to_win(s);
 	}
 	else if(i == 2)
@@ -210,7 +211,7 @@ int	swap_cam(int i, void *swap)
 			ft_fprintf(1, "no such camera\n");
 		return (0);
 	}
-	mlx_destroy_image(s->mlx.ptr, s->img);
+	mlx_destroy_image(s->mlx.ptr, s->mlx.img);
 	return (img_to_win(s));
 }
 

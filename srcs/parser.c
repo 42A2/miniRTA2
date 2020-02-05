@@ -6,7 +6,7 @@
 /*   By: mbrunel <mbrunel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/14 05:14:16 by mbrunel           #+#    #+#             */
-/*   Updated: 2020/02/05 08:57:43 by mbrunel          ###   ########.fr       */
+/*   Updated: 2020/02/05 11:05:04 by mbrunel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ static int	p3(t_p *p, int *incs)
 	if (!incs[RESOLUTION])
 		return (error(NULL, "no resolution\n"));
 	if (!incs[CAMERA])
-		return (error(NULL, "no cam\n"));
+		return (error(NULL, "no camera\n"));
 	if (!incs[AMBIENT])
 		return (error(NULL, "no ambiant\n"));
 	return (0);
@@ -75,7 +75,10 @@ int			get_p(t_p *p, char *path)
 		if ((n.type = (f_chr(shrs, buf[0]))) == -1)
 			return (error(buf, "object not found in database\n"));
 		else if (shrs[n.type] == '#' || buf[0] == '\0')
+		{
+			free(buf);
 			continue ;
+		}
 		else if (p2(&(n.type), incs, buf, p) == -1)
 			return (-1);
 		if (n.type < NB_FORM)

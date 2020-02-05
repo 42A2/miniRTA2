@@ -6,7 +6,7 @@
 /*   By: mbrunel <mbrunel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/01 19:33:33 by yvanat            #+#    #+#             */
-/*   Updated: 2020/02/05 09:24:05 by mbrunel          ###   ########.fr       */
+/*   Updated: 2020/02/05 10:35:17 by mbrunel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,6 +116,8 @@ t_inter	intercy(t_ray ray, void *ptr, double start, double max)
 			Fn = div_vec_d(F, norm_vec(F));
 			s = sqrt(cy.r * cy.r - R * R) / d_abs(prod_scal(ray.dir, Fn));
 			rt.inter = t - s;
+			if (norm_vec(add_vec(cy.dir, ray.dir)) < norm_vec(add_vec(mult_vec_d(cy.dir, -1), ray.dir)))
+				mult_vec_d(cy.dir, -1);
 			if (norm_vec(sub_vec(add_vec(ray.o, mult_vec_d(ray.dir, rt.inter)), cy.p)) > sqrt(cy.h / 2 * cy.h / 2 + cy.r * cy.r))
 			{
 				rt.inter = t + s;
@@ -124,7 +126,10 @@ t_inter	intercy(t_ray ray, void *ptr, double start, double max)
 					rt.inter = 0;
 			}
 			else if (rt.inter < 0)
+			{
 				rt.inter = t + s;
+				boo = 1;
+			}
 		}
 	}
 	if (rt.inter < start || rt.inter > max)
