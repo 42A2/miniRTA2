@@ -6,7 +6,7 @@
 /*   By: yvanat <yvanat@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/01 19:33:33 by yvanat            #+#    #+#             */
-/*   Updated: 2020/02/05 00:45:39 by yvanat           ###   ########.fr       */
+/*   Updated: 2020/02/05 08:34:47 by yvanat           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -317,22 +317,21 @@ t_vec	c_to_vp(double i, double j, t_vp vp, double dist)
 
 t_vec	cam_rot(t_vec dir, t_vec cam, t_vec ang)
 {
-	t_vec	rotate;
 	t_vec	tmp;
-
 	if (cam.z < 0)
-		dir.z *= -1;
+		ang.y += M_PI;
 	if (cam.x > 0)
-		ang.y = 2 * M_PI - ang.y;
+		ang.y = M_PI * 2 - ang.y;
+	if (cam.y < 0)
+		ang.x = M_PI * 2 - ang.x;
+	tmp.x = dir.x;
+	tmp.y = sin(ang.x) * dir.z + cos(ang.x) * dir.y;
+	tmp.z = cos(ang.x) * dir.z - sin(ang.x) * dir.y;
+	dir = tmp;
 	tmp.x = cos(ang.y) * dir.x - sin(ang.y) * dir.z;
 	tmp.y = dir.y;
 	tmp.z = sin(ang.y) * dir.x + cos(ang.y) * dir.z;
-	if (cam.y > 0)
-		ang.x = 2 * M_PI - ang.x;
-	rotate.x = tmp.x + dir.x;
-	rotate.y = tmp.y + cos(ang.x) * dir.y - sin(ang.x) * dir.z;
-	rotate.z = tmp.z + sin(ang.x) * dir.y + cos(ang.x) * dir.z;
-	return (normalize(rotate));
+	return (normalize(tmp));
 }
 
 int		check_diff(int i, int j, int *tab, int len, double delta)
@@ -416,8 +415,8 @@ void	fill_img(int *img, t_info info, t_p p, int i_img)
 	len = info.l / 4;
 	i = -1;
 	ray.o = p.cam[i_img].o;
-	ang.y = acos(p.cam[i_img].vec_dir.z / sqrt(p.cam[i_img].vec_dir.x * p.cam[i_img].vec_dir.x + p.cam[i_img].vec_dir.z * p.cam[i_img].vec_dir.z));
 	ang.x = acos(p.cam[i_img].vec_dir.z / sqrt(p.cam[i_img].vec_dir.y * p.cam[i_img].vec_dir.y + p.cam[i_img].vec_dir.z * p.cam[i_img].vec_dir.z));
+	ang.y = acos(p.cam[i_img].vec_dir.z / sqrt(p.cam[i_img].vec_dir.x * p.cam[i_img].vec_dir.x + p.cam[i_img].vec_dir.z * p.cam[i_img].vec_dir.z));
 	while (++i < p.vp.res_y)
 	{
 		j = -1;
