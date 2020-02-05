@@ -6,7 +6,7 @@
 /*   By: mbrunel <mbrunel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/16 01:16:49 by yvanat            #+#    #+#             */
-/*   Updated: 2020/02/05 09:03:04 by mbrunel          ###   ########.fr       */
+/*   Updated: 2020/02/05 09:49:05 by mbrunel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,7 @@ int	chng_ocam(int i, void *swap)
 	ang.y = acos(s->p.cam[s->i].vec_dir.z / sqrt(s->p.cam[s->i].vec_dir.x * s->p.cam[s->i].vec_dir.x + s->p.cam[s->i].vec_dir.z * s->p.cam[s->i].vec_dir.z));
 	s->p.cam[s->i].o = add_vec(s->p.cam[s->i].o, rot(chng, s->p.cam[s->i].vec_dir, ang));
 	s->p.cam[s->i].time = 0;
+	mlx_destroy_image(s->mlx.ptr, s->mlx.img);
 	return (img_to_win(s));
 }
 
@@ -90,6 +91,7 @@ int stretch(int i, int x, int y, void *swap)
 		g_chng_stretch[type](s.p.objs[s.c1.i_obj].o, ray);
 	else
 		return (0);
+	mlx_destroy_image(s.mlx.ptr, s.mlx.img);
 	return (img_to_win(&s));
 }
 
@@ -109,7 +111,7 @@ int get_pos(int i, int x, int y, void *swap)
 	return (0);
 }
 
-int quit(int rt, void *swap)
+static int quit(int rt, void *swap)
 {
 	t_swap *s;
 	int		i;
@@ -118,6 +120,8 @@ int quit(int rt, void *swap)
 	s = (t_swap*)swap;
 	while (++i < s->p.nb_objs)
 		free(s->p.objs[i].o);
+	mlx_destroy_image(s->mlx.ptr, s->mlx.img);
+	//mlx_destroy_window(s->mlx.ptr, s->mlx.win);
 	exit(rt != -1 ? 0 : -1);
 }
 
@@ -137,7 +141,7 @@ int stereo(t_swap *s)
 	if (!(img1 = malloc(sizeof(int) * s->p.vp.res_y * (s->info.l / 4))))
 		quit(error(NULL, "memory error\n"), s);
 	if (!(img2 = malloc(sizeof(int) * s->p.vp.res_y * (s->info.l / 4))))
-		quit(error(img2, "memory error\n"), s);
+		quit(error(img1, "memory error\n"), s);
 	ft_memcpy(img1, s->img, sizeof(int) * s->p.vp.res_y * (s->info.l / 4));
 	chng = create_vec(DEC,0,0);
 	ang.x = acos(s->p.cam[s->i].vec_dir.z / sqrt(s->p.cam[s->i].vec_dir.y * s->p.cam[s->i].vec_dir.y + s->p.cam[s->i].vec_dir.z * s->p.cam[s->i].vec_dir.z));

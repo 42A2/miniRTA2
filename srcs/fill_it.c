@@ -6,7 +6,7 @@
 /*   By: mbrunel <mbrunel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/01 19:33:33 by yvanat            #+#    #+#             */
-/*   Updated: 2020/02/05 09:03:19 by mbrunel          ###   ########.fr       */
+/*   Updated: 2020/02/05 09:24:05 by mbrunel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -358,7 +358,7 @@ int		recalc_img(int i, int j, t_p p, int actualpix, int i_img, t_vec ang)
 
 	nb = ((p.bonus.coeff_aliasing * 2) - 1) * ((p.bonus.coeff_aliasing * 2) - 1);
 	if (!(color = malloc(nb * sizeof(int))))
-		exit(0);
+		exit(error(NULL, "memory error\n"));
 	n = 0;
 	ray.o = p.cam[i_img].o;
 	k = -p.bonus.coeff_aliasing;
