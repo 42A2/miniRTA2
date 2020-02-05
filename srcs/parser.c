@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mbrunel <mbrunel@student.42.fr>            +#+  +:+       +#+        */
+/*   By: yvanat <yvanat@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/14 05:14:16 by mbrunel           #+#    #+#             */
-/*   Updated: 2020/02/04 06:03:36 by mbrunel          ###   ########.fr       */
+/*   Updated: 2020/02/05 00:45:29 by yvanat           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ static int	p2(int *type, int *incs, char *buf, t_p *p)
 	else if (*type == BONUS && (incs[BONUS\
 	] || get_bonus(buf, &(p->bonus)) == -1))
 		return (error(buf, "bonus parameters are badly registered\n"));
-	if (*type < NB_FORM && (get_obj[*type])(buf\
+	if (*type < NB_FORM && (g_get_obj[*type])(buf\
 	, &(p->objs[incs[NB_FORM]].o)) == -1)
 		return (error(buf, "objs parameters are badly registered\n"));
 	return (0);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   fill_it.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mbrunel <mbrunel@student.42.fr>            +#+  +:+       +#+        */
+/*   By: yvanat <yvanat@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/01 19:33:33 by yvanat            #+#    #+#             */
-/*   Updated: 2020/02/04 06:56:18 by mbrunel          ###   ########.fr       */
+/*   Updated: 2020/02/05 00:45:39 by yvanat           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -232,7 +232,7 @@ t_inter	min_inter(t_ray ray, t_p p, double start, double max)
 	min.inter = max;
 	while (++j < p.nb_objs)
 	{
-		inter = (get_inter[p.objs[j].type])(ray, p.objs[j].o, start, max);
+		inter = (g_get_inter[p.objs[j].type])(ray, p.objs[j].o, start, max);
 		if (inter.inter < min.inter && inter.inter > start)
 		{
 			min = inter;

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mbrunel <mbrunel@student.42.fr>            +#+  +:+       +#+        */
+/*   By: yvanat <yvanat@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/16 01:16:49 by yvanat            #+#    #+#             */
-/*   Updated: 2020/02/04 06:10:19 by mbrunel          ###   ########.fr       */
+/*   Updated: 2020/02/05 01:19:07 by yvanat           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ int	chng_ocam(int i, void *swap)
 	ang.y = acos(s->p.cam[s->i].vec_dir.z / sqrt(s->p.cam[s->i].vec_dir.x * s->p.cam[s->i].vec_dir.x + s->p.cam[s->i].vec_dir.z * s->p.cam[s->i].vec_dir.z));
 	s->p.cam[s->i].o = add_vec(s->p.cam[s->i].o, rot(chng, s->p.cam[s->i].vec_dir, ang));
 	s->p.cam[s->i].time = 0;
-	return (img_to_win(*s));
+	return (img_to_win(s));
 }
 
 int stretch(int i, int x, int y, void *swap)
@@ -80,21 +80,18 @@ int stretch(int i, int x, int y, void *swap)
 	ray.o = s.p.cam[s.i].o;
 	ray.dir = cam_rot(c_to_vp((double)y, (double)x, s.p.vp, s.p.cam[s.i].dist), s.p.cam[s.i].vec_dir, ang);
 	if (s.c1.inter == 0 || (type == PLANE && i == 2))
-	{
 		s.p.cam->vec_dir = ray.dir;
-		printf("%f %f %f\n", ray.dir.x, ray.dir.y, ray.dir.z);
-	}
 	else if (i == 1 || type == TRIANGLE)
 	{
 		if (type == TRIANGLE)
 			((t_tr*)(s.p.objs[s.c1.i_obj].o))->click = s.c1.ipoint;
-		chng_origin[type](s.p.objs[s.c1.i_obj].o, ray);
+		g_chng_origin[type](s.p.objs[s.c1.i_obj].o, ray);
 	}
 	else if (i == 2)
-		chng_stretch[type](s.p.objs[s.c1.i_obj].o, ray);
+		g_chng_stretch[type](s.p.objs[s.c1.i_obj].o, ray);
 	else
 		return (0);
-	return (img_to_win(s));
+	return (img_to_win(&s));
 }
 
 int get_pos(int i, int x, int y, void *swap)
@@ -128,10 +125,10 @@ int quit(void *swap)
 		ang.y = acos(s->p.cam[s->i].vec_dir.z / sqrt(s->p.cam[s->i].vec_dir.x * s->p.cam[s->i].vec_dir.x + s->p.cam[s->i].vec_dir.z * s->p.cam[s->i].vec_dir.z));
 		s->p.cam[s->i].o = add_vec(s->p.cam[s->i].o, rot(chng, s->p.cam[s->i].vec_dir, ang));
 		fill_img(s->img, s->info, s->p, s->i);
-		if ((s->mlx.win = mlx_new_window(s->mlx.ptr, s->p.vp.res_x, s->p.vp.res_y, "3D")))
+		if ((s->mlx.win = mlx_new_window(s->mlx.ptr, s->p.vp.res_x, s->p.vp.res_y, "Right_side")))
 		{
 			s->p.bonus.stereo = 0;
-			img_to_win(*s);
+			img_to_win(s);
 		}
 	}
 	exit(0);
@@ -168,23 +165,17 @@ int	swap_cam(int i, void *swap)
 		return (0);
 	}
 	mlx_destroy_image(s.mlx.ptr, s.img);
-	return (img_to_win(s));
+	return (img_to_win(&s));
 }
 
-int img_to_win(t_swap s)
+int img_to_win(t_swap *s)
 {
-	if (!(s.mlx.img = mlx_new_image(s.mlx.ptr, s.p.vp.res_x, s.p.vp.res_y)))
+	if (!(s->mlx.img = mlx_new_image(s->mlx.ptr, s->p.vp.res_x, s->p.vp.res_y)))
 			return (-1);
-	if (!(s.img = (int*)mlx_get_data_addr(s.mlx.img, &(s.info.n), &(s.info.l) , &(s.info.e))))
+	if (!(s->img = (int*)mlx_get_data_addr(s->mlx.img, &(s->info.n), &(s->info.l) , &(s->info.e))))
 		return (-1);
-	fill_img(s.img, s.info, s.p, s.i);
-	mlx_put_image_to_window(s.mlx.ptr, s.mlx.win, s.mlx.img, 0, 0);
-	mlx_hook(s.mlx.win, 2, 1L<<0, &swap_cam, &s);
-	mlx_hook(s.mlx.win, 3, 1L<<1, &chng_ocam, &s);
-	mlx_hook(s.mlx.win, 4, 1L<<2, &get_pos, &s);
-	mlx_hook(s.mlx.win, 5, 1L<<3, &stretch, &s);
-	mlx_hook(s.mlx.win, 17, 1L<<17, &quit, &s);
-	mlx_loop(s.mlx.ptr);
+	fill_img(s->img, s->info, s->p, s->i);
+	mlx_put_image_to_window(s->mlx.ptr, s->mlx.win, s->mlx.img, 0, 0);
 	return (0);
 }
 
@@ -203,24 +194,30 @@ int check_n(char *buf)
 int		main(int argc, char *argv[])
 {
 	t_mlx	mlx;
-	t_swap swap;
+	t_swap s;
 
-	swap.i = 0;
+	s.i = 0;
 	mlx.ptr = mlx_init();
-	swap.name = NULL;
+	s.name = NULL;
 	if (argc == 3 && !ft_strncmp(argv[2], "-save", 5))
-		swap.name = argv[1];
-	if ((argc > 2 && !swap.name) || argc < 2)
+		s.name = argv[1];
+	if ((argc > 2 && !s.name) || argc < 2)
 		exit (error(NULL, "manque ou surplus d'args ou \"-save\" mal ecrit\n"));
-	if ((swap.save = check_n(argv[1])) == -1)
+	if ((s.save = check_n(argv[1])) == -1)
 		exit (error(NULL, "file bad named\n"));
-	if (get_p(&(swap.p), argv[1]) == -1)
+	if (get_p(&(s.p), argv[1]) == -1)
 		return (-1);
-	if ((mlx.win = mlx_new_window(mlx.ptr, swap.p.vp.res_x, swap.p.vp.res_y, "RT")))
+	if ((mlx.win = mlx_new_window(mlx.ptr, s.p.vp.res_x, s.p.vp.res_y, "RT")))
 	{
-		swap.mlx = mlx;
-		if (img_to_win(swap) == -1)
+		s.mlx = mlx;
+		if (img_to_win(&s) == -1)
 			return (-1);
+		mlx_hook(s.mlx.win, 2, 1L<<0, &swap_cam, &s);
+		mlx_hook(s.mlx.win, 3, 1L<<1, &chng_ocam, &s);
+		mlx_hook(s.mlx.win, 4, 1L<<2, &get_pos, &s);
+		mlx_hook(s.mlx.win, 5, 1L<<3, &stretch, &s);
+		mlx_hook(s.mlx.win, 17, 1L<<17, &quit, &s);
+		mlx_loop(s.mlx.ptr);
 	}
 	return (0);
 }
