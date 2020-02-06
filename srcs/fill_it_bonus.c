@@ -6,12 +6,19 @@
 /*   By: mbrunel <mbrunel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/01 19:33:33 by yvanat            #+#    #+#             */
-/*   Updated: 2020/02/06 03:38:10 by mbrunel          ###   ########.fr       */
+/*   Updated: 2020/02/06 06:02:27 by mbrunel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../incs/h_minirt.h"
-# include <pthread.h>
+#include <pthread.h>
+
+static void	init_thd(t_data *dt, t_ray *ray, int *i, int *res_y)
+{
+	(*ray).o = dt->p.cam[dt->i_img].o;
+	*res_y = dt->i == 7 ? dt->p.vp.res_y : dt->p.vp.res_y / 8 * (dt->i + 1);
+	*i = dt->p.vp.res_y / 8 * dt->i - 1;
+}
 
 static void	*fill_img_threading(void *data)
 {
@@ -22,73 +29,80 @@ static void	*fill_img_threading(void *data)
 	t_ray	ray;
 
 	dt = *(t_data*)data;
-	ray.o = dt.p.cam[dt.i_img].o;
-	res_y = dt.i == 7 ? dt.p.vp.res_y : dt.p.vp.res_y / 8 * (dt.i + 1);
-	i = dt.p.vp.res_y / 8 * dt.i - 1;
+	init_thd(&dt, &ray, &i, &res_y);
 	while (++i < res_y)
 	{
 		j = -1;
 		while (++j < dt.p.vp.res_x)
 		{
-			ray.dir = cam_rot(c_to_vp((double)i, (double)j, dt.p.vp, dt.p.cam[dt.i_img].dist), dt.p.cam[dt.i_img].vec_dir, dt.ang);
-			dt.img[i * dt.len + j] = find_pix_color(ray, dt.p, dt.p.bonus.recurse_reflect);
+			ray.dir = cam_rot(c_to_vp((double)i, (double)j, dt.p.vp,
+				dt.p.cam[dt.i_img].dist), dt.p.cam[dt.i_img].vec_dir, dt.ang);
+			dt.img[i * dt.len + j] = find_pix_color(ray, &(dt.p),
+				dt.p.bonus.recurse_reflect);
 			if (dt.p.bonus.filter_type)
-				filter(dt.p.bonus.filter_type, dt.p.bonus.filter_strength, dt.img, i * dt.len + j);
+				filter(dt.p.bonus.filter_type, dt.p.bonus.filter_strength,
+					dt.img, i * dt.len + j);
 		}
 	}
 	free(data);
 	return (NULL);
 }
 
-static void	*create_data(t_p p, t_vec ang, int len, int i, int i_img, int *img)
+static void	*create_data(t_p p, t_thread th, int i_img, int *img)
 {
 	t_data	*data;
+
 	if (!(data = malloc(sizeof(t_data))))
 	{
-		ft_fprintf(2, "Error in allocation of thread %d\n", i);
+		ft_fprintf(2, "Error in allocation of thread %d\n", th.i);
 		return (NULL);
 	}
 	data->p = p;
-	data->ang = ang;
-	data->len = len;
-	data->i = i;
+	data->ang = th.ang;
+	data->len = th.len;
+	data->i = th.i;
 	data->i_img = i_img;
 	data->img = img;
 	return (data);
 }
 
+static void	init_th(t_thread *th, t_info info, t_p p, int i_img)
+{
+	th->len = info.l / 4;
+	th->i = -1;
+	th->ang.x = acos(p.cam[i_img].vec_dir.z / sqrt(p.cam[i_img].vec_dir.y *
+		p.cam[i_img].vec_dir.y + p.cam[i_img].vec_dir.z *
+		p.cam[i_img].vec_dir.z));
+	th->ang.y = acos(p.cam[i_img].vec_dir.z / sqrt(p.cam[i_img].vec_dir.x *
+		p.cam[i_img].vec_dir.x + p.cam[i_img].vec_dir.z *
+		p.cam[i_img].vec_dir.z));
+}
+
 void		fill_img(int *img, t_info info, t_p p, int i_img)
 {
-	int			i;
-	int			len;
-	t_vec		ang;
+	t_thread	th;
 	pthread_t	threads[8];
-	int			ret;
 	t_data		*data;
 
-	len = info.l / 4;
-	i = -1;
-	ang.x = acos(p.cam[i_img].vec_dir.z / sqrt(p.cam[i_img].vec_dir.y * p.cam[i_img].vec_dir.y + p.cam[i_img].vec_dir.z * p.cam[i_img].vec_dir.z));
-	ang.y = acos(p.cam[i_img].vec_dir.z / sqrt(p.cam[i_img].vec_dir.x * p.cam[i_img].vec_dir.x + p.cam[i_img].vec_dir.z * p.cam[i_img].vec_dir.z));
-	while (++i < 8)
+	init_th(&th, info, p, i_img);
+	while (++th.i < 8)
 	{
-		data = create_data(p, ang, len, i, i_img, img);
+		data = create_data(p, th, i_img, img);
 		if (data)
-			ret = pthread_create(threads + i, NULL, &fill_img_threading, data);
-		if (ret || !data)
+			th.ret = pthread_create(threads + th.i, NULL,
+				&fill_img_threading, data);
+		if (th.ret || !data)
 		{
 			if (data)
-				ft_fprintf(2, "Error in creation of thread %d\n", i);
-			while (i-- > 0)
-			{
-				pthread_join(threads[i], NULL);
-				return ;
-			}
+				ft_fprintf(2, "Error in creation of thread %d\n", th.i);
+			while (th.i-- > 0)
+				pthread_join(threads[th.i], NULL);
+			return ;
 		}
 	}
-	i = -1;
-	while (++i < 8)
+	th.i = -1;
+	while (++th.i < 8)
 	{
-		pthread_join(threads[i], NULL);
+		pthread_join(threads[th.i], NULL);
 	}
 }

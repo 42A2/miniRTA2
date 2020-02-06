@@ -6,7 +6,7 @@
 /*   By: mbrunel <mbrunel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/02 12:51:50 by mbrunel           #+#    #+#             */
-/*   Updated: 2020/02/06 05:16:54 by mbrunel          ###   ########.fr       */
+/*   Updated: 2020/02/06 06:02:09 by mbrunel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -307,6 +307,14 @@ typedef struct		s_trvar
 	int				boo;
 }					t_trvar;
 
+typedef struct		s_thread
+{
+	int				i;
+	int				len;
+	int				ret;
+	t_vec			ang;
+}					t_thread;
+
 typedef struct		s_cyvar
 {
 	t_vec			L;
@@ -327,6 +335,16 @@ typedef struct		s_cyvar
 	int				boo;
 }					t_cyvar;
 
+typedef struct		s_lightvar
+{
+	t_vec			i;
+	double			coeff;
+	double			p_scal;
+	t_vec			l;
+	t_inter			closest;
+	t_ray			shadow;
+	double			max;
+}					t_lightvar;
 
 typedef struct		s_var2
 {
