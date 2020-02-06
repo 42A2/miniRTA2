@@ -6,7 +6,7 @@
 /*   By: yvanat <yvanat@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/02 12:51:50 by mbrunel           #+#    #+#             */
-/*   Updated: 2020/02/06 04:28:25 by yvanat           ###   ########.fr       */
+/*   Updated: 2020/02/06 04:53:48 by yvanat           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -306,6 +306,14 @@ typedef struct		s_trvar
 	t_vec			c;
 	int				boo;
 }					t_trvar;
+
+typedef struct		s_thread
+{
+	int				i;
+	int				len;
+	int				ret;
+	t_vec			ang;
+}					t_thread;
 
 typedef struct		s_trvar2
 {

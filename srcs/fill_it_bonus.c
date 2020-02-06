@@ -3,15 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   fill_it_bonus.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mbrunel <mbrunel@student.42.fr>            +#+  +:+       +#+        */
+/*   By: yvanat <yvanat@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/01 19:33:33 by yvanat            #+#    #+#             */
-/*   Updated: 2020/02/06 03:38:10 by mbrunel          ###   ########.fr       */
+/*   Updated: 2020/02/06 05:01:01 by yvanat           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../incs/h_minirt.h"
-# include <pthread.h>
+#include <pthread.h>
 
 static void	*fill_img_threading(void *data)
 {
@@ -40,55 +40,59 @@ static void	*fill_img_threading(void *data)
 	return (NULL);
 }
 
-static void	*create_data(t_p p, t_vec ang, int len, int i, int i_img, int *img)
+static void	*create_data(t_p p, t_thread th, int i_img, int *img)
 {
 	t_data	*data;
+
 	if (!(data = malloc(sizeof(t_data))))
 	{
-		ft_fprintf(2, "Error in allocation of thread %d\n", i);
+		ft_fprintf(2, "Error in allocation of thread %d\n", th.i);
 		return (NULL);
 	}
 	data->p = p;
-	data->ang = ang;
-	data->len = len;
-	data->i = i;
+	data->ang = th.ang;
+	data->len = th.len;
+	data->i = th.i;
 	data->i_img = i_img;
 	data->img = img;
 	return (data);
 }
 
+static void	init_th(t_thread *th, t_info info, t_p p, int i_img)
+{
+	th->len = info.l / 4;
+	th->i = -1;
+	th->ang.x = acos(p.cam[i_img].vec_dir.z / sqrt(p.cam[i_img].vec_dir.y *
+		p.cam[i_img].vec_dir.y + p.cam[i_img].vec_dir.z * p.cam[i_img].vec_dir.z));
+	th->ang.y = acos(p.cam[i_img].vec_dir.z / sqrt(p.cam[i_img].vec_dir.x *
+		p.cam[i_img].vec_dir.x + p.cam[i_img].vec_dir.z * p.cam[i_img].vec_dir.z));
+}
+
 void		fill_img(int *img, t_info info, t_p p, int i_img)
 {
-	int			i;
-	int			len;
-	t_vec		ang;
+	t_thread	th;
 	pthread_t	threads[8];
-	int			ret;
 	t_data		*data;
 
-	len = info.l / 4;
-	i = -1;
-	ang.x = acos(p.cam[i_img].vec_dir.z / sqrt(p.cam[i_img].vec_dir.y * p.cam[i_img].vec_dir.y + p.cam[i_img].vec_dir.z * p.cam[i_img].vec_dir.z));
-	ang.y = acos(p.cam[i_img].vec_dir.z / sqrt(p.cam[i_img].vec_dir.x * p.cam[i_img].vec_dir.x + p.cam[i_img].vec_dir.z * p.cam[i_img].vec_dir.z));
-	while (++i < 8)
+	while (++th.i < 8)
 	{
-		data = create_data(p, ang, len, i, i_img, img);
+		data = create_data(p, th, i_img, img);
 		if (data)
-			ret = pthread_create(threads + i, NULL, &fill_img_threading, data);
-		if (ret || !data)
+			th.ret = pthread_create(threads + th.i, NULL, &fill_img_threading, data);
+		if (th.ret || !data)
 		{
 			if (data)
-				ft_fprintf(2, "Error in creation of thread %d\n", i);
-			while (i-- > 0)
+				ft_fprintf(2, "Error in creation of thread %d\n", th.i);
+			while (th.i-- > 0)
 			{
-				pthread_join(threads[i], NULL);
+				pthread_join(threads[th.i], NULL);
 				return ;
 			}
 		}
 	}
-	i = -1;
-	while (++i < 8)
+	th.i = -1;
+	while (++th.i < 8)
 	{
-		pthread_join(threads[i], NULL);
+		pthread_join(threads[th.i], NULL);
 	}
 }
