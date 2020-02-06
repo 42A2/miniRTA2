@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   raytracing1.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mbrunel <mbrunel@student.42.fr>            +#+  +:+       +#+        */
+/*   By: yvanat <yvanat@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/06 03:35:55 by mbrunel           #+#    #+#             */
-/*   Updated: 2020/02/06 03:44:11 by mbrunel          ###   ########.fr       */
+/*   Updated: 2020/02/06 04:17:51 by yvanat           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,153 +15,6 @@
 t_vec	retray(t_vec r, t_vec n)
 {
 	return (sub_vec(mult_vec_d(mult_vec_d(n, prod_scal(r, n)), 2), r));
-}
-
-t_inter	intercy(t_ray ray, void *ptr, double start, double max)
-{
-	t_vec	L;
-	t_cy	cy;
-	t_vec	w;
-	double	sqr_omega;
-	t_vec	wn;
-	double	R;
-	t_vec	E;
-	double	t;
-	t_inter	rt;
-	t_vec	F;
-	t_vec	Fn;
-	double	s;
-	t_vec	cp;
-	double	cq;
-	t_vec	qp;
-	int		boo;
-
-	cy = *(t_cy*)ptr;
-	boo = 0;
-	L = sub_vec(ray.o, cy.p);
-	w = cross_prod(ray.dir, cy.dir);
-	sqr_omega = prod_scal(w, w);
-	if (!sqr_omega)
-		rt.inter = 0;
-	else
-	{
-		wn = div_vec_d(w, sqrt(sqr_omega));
-		R = d_abs(prod_scal(L, wn));
-		if (R > cy.r)
-			rt.inter = 0;
-		else
-		{
-			E = cross_prod(L, cy.dir);
-			t = prod_scal(mult_vec_d(E, -1), wn) / sqrt(sqr_omega);
-			F = cross_prod(wn, cy.dir);
-			Fn = div_vec_d(F, norm_vec(F));
-			s = sqrt(cy.r * cy.r - R * R) / d_abs(prod_scal(ray.dir, Fn));
-			rt.inter = t - s;
-			if (norm_vec(add_vec(cy.dir, ray.dir)) < norm_vec(add_vec(mult_vec_d(cy.dir, -1), ray.dir)))
-				mult_vec_d(cy.dir, -1);
-			if (norm_vec(sub_vec(add_vec(ray.o, mult_vec_d(ray.dir, rt.inter)), cy.p)) > sqrt(cy.h / 2 * cy.h / 2 + cy.r * cy.r))
-			{
-				rt.inter = t + s;
-				boo = 1;
-				if (norm_vec(sub_vec(add_vec(ray.o, mult_vec_d(ray.dir, rt.inter)), cy.p)) > sqrt(cy.h / 2 * cy.h / 2 + cy.r * cy.r))
-					rt.inter = 0;
-			}
-			else if (rt.inter < 0)
-			{
-				rt.inter = t + s;
-				boo = 1;
-			}
-		}
-	}
-	if (rt.inter < start || rt.inter > max)
-		rt.inter = 0;
-	rt.ipoint = add_vec(ray.o, mult_vec_d(ray.dir, rt.inter));
-	rt.color = cy.color;
-	rt.reflect = cy.reflect;
-	rt.spec = cy.spec;
-	cp = sub_vec(rt.ipoint, cy.p);
-	cq = prod_scal(cp, cy.dir);
-	qp = sub_vec(cp, mult_vec_d(cy.dir, cq));
-	rt.normal = boo ? cy.dir : div_vec_d(qp, cy.r);
-	return (rt);
-}
-
-t_inter	interpl(t_ray ray, void *ptr, double start, double max)
-{
-	t_pl	pl;
-	t_inter	rt;
-	t_vec	l;
-	double	d;
-	double	m;
-
-	pl = *(t_pl*)ptr;
-	m = prod_scal(pl.dir, ray.dir);
-	if (d_abs(m) < start)
-	{
-		rt.inter = 0;
-		return (rt);
-	}
-	else
-	{
-		l = sub_vec(ray.o, pl.p);
-		d = prod_scal(pl.dir, l);
-		rt.inter = -d / m;
-	}
-	if (rt.inter > start && rt.inter < max)
-		rt.ipoint = add_vec(ray.o, mult_vec_d(ray.dir, rt.inter));
-	else
-	{
-		rt.inter = 0;
-		return (rt);
-	}
-	rt.reflect = pl.reflect;
-	rt.spec = pl.spec;
-	rt.color = pl.color;
-	rt.normal = prod_scal(sub_vec(pl.p, ray.o), pl.dir) < 0 ? pl.dir : mult_vec_d(pl.dir, -1);
-	return (rt);
-}
-
-t_inter	intersp(t_ray ray, void *ptr, double start, double max)
-{
-	double	t1;
-	double	t2;
-	double	a;
-	double	b;
-	double	c;
-	double	dis;
-	t_inter	rt;
-	t_sp	sp;
-	t_vec	oc;
-
-	sp = *(t_sp*)ptr;
-	oc = sub_vec(ray.o, sp.o);
-	a = prod_scal(ray.dir, ray.dir);
-	b = 2 * prod_scal(oc, ray.dir);
-	c = prod_scal(oc, oc) - sp.r * sp.r;
-	dis = b * b - 4 * a * c;
-	if (dis > 0)
-	{
-		t1 = (-b + sqrt(dis)) / (2 * a);
-		t2 = (-b - sqrt(dis)) / (2 * a);
-		if (t1 < 0)
-			rt.inter = t2;
-		else if (t2 < 0)
-			rt.inter = t1;
-		else
-			rt.inter = t1 < t2 ? t1 : t2;
-	}
-	else if (dis == 0)
-		rt.inter = -b / 2 * a;
-	else
-		rt.inter = 0;
-	rt.color = sp.color;
-	rt.spec = sp.spec;
-	rt.reflect = sp.reflect;
-	if (rt.inter < start || rt.inter > max)
-		rt.inter = 0;
-	rt.ipoint = add_vec(ray.o, mult_vec_d(ray.dir, rt.inter));
-	rt.normal = normalize(sub_vec(rt.ipoint, sp.o));
-	return (rt);
 }
 
 t_inter	min_inter(t_ray ray, t_p p, double start, double max)
