@@ -6,7 +6,7 @@
 #    By: mbrunel <mbrunel@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/11/06 03:24:21 by mbrunel           #+#    #+#              #
-#    Updated: 2020/02/06 02:23:51 by mbrunel          ###   ########.fr        #
+#    Updated: 2020/02/06 02:59:27 by mbrunel          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -31,7 +31,7 @@ SRCS = 		main.c \
 			parse_gets1.c \
 			parse_utils.c \
 			sq.c \
-			fill_it.c \
+			fill_it_bonus.c \
 			chng.c\
 			bmp.c \
 			parse_gets2.c\
