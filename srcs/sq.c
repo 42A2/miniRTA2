@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   sq.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mbrunel <mbrunel@student.42.fr>            +#+  +:+       +#+        */
+/*   By: yvanat <yvanat@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/23 21:22:50 by yvanat            #+#    #+#             */
-/*   Updated: 2020/02/02 22:38:12 by mbrunel          ###   ########.fr       */
+/*   Updated: 2020/02/06 03:27:15 by yvanat           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,110 +34,98 @@ static t_vec	inv_prod_scal(t_vec vec1)
 	return (normalize(vec2));
 }
 
+static void		init_sqvar(t_sq sq, t_ray ray, t_sqvar *var)
+{
+	var->sqr = sqrt(sq.h * sq.h / 2);
+	var->random_normal = inv_prod_scal(sq.dir);
+	var->normal_random_normal = cross_prod(var->random_normal, sq.dir);
+	var->p1 = add_vec(sq.p, mult_vec_d(var->random_normal, var->sqr));
+	var->p2 = sub_vec(sq.p, mult_vec_d(var->random_normal, var->sqr));
+	var->p3 = add_vec(sq.p, mult_vec_d(var->normal_random_normal, var->sqr));
+	var->p4 = sub_vec(sq.p, mult_vec_d(var->normal_random_normal, var->sqr));
+	var->boo = 0;
+	var->vec1 = sub_vec(var->p2, var->p1);
+	var->vec2 = sub_vec(var->p3, var->p1);
+	var->vec22 = sub_vec(var->p4, var->p1);
+	var->edge2 = sub_vec(var->p3, var->p2);
+	var->edge3 = sub_vec(var->p1, var->p3);
+	var->edge22 = sub_vec(var->p4, var->p2);
+	var->edge33 = sub_vec(var->p1, var->p4);
+	var->rt.normal = cross_prod(var->vec1, var->vec2);
+	var->m = prod_scal(var->rt.normal, ray.dir);
+}
+
 t_inter			intersq(t_ray ray, void *ptr, double start, double max)
 {
-	t_sq sq;
-	t_inter rt;
-	t_vec l;
-	t_vec random_normal;
-	t_vec normal_random_normal;
-	t_vec p1;
-	t_vec p2;
-	t_vec p3;
-	t_vec p4;
-	t_vec vec1;
-	t_vec vec2;
-	t_vec vec22;
-	t_vec edge2;
-	t_vec edge3;
-	t_vec edge22;
-	t_vec edge33;
-	t_vec vp;
-	t_vec c;
-	double d;
-	double m;
-	double boo;
+	t_sq	sq;
+	t_sqvar	var;
 
 	sq = *(t_sq*)ptr;
-	random_normal = inv_prod_scal(sq.dir);
-	normal_random_normal = cross_prod(random_normal, sq.dir);
-	p1 = add_vec(sq.p, mult_vec_d(random_normal, sqrt(sq.h * sq.h / 2)));
-	p2 = sub_vec(sq.p, mult_vec_d(random_normal, sqrt(sq.h * sq.h / 2)));
-	p3 = add_vec(sq.p, mult_vec_d(normal_random_normal, sqrt(sq.h * sq.h / 2)));
-	p4 = sub_vec(sq.p, mult_vec_d(normal_random_normal, sqrt(sq.h * sq.h / 2)));
-	boo = 0;
-	vec1 = sub_vec(p2, p1);
-	vec2 = sub_vec(p3, p1);
-	vec22 = sub_vec(p4, p1);
-	edge2 = sub_vec(p3, p2);
-	edge3 = sub_vec(p1, p3);
-	edge22 = sub_vec(p4, p2);
-	edge33 = sub_vec(p1, p4);
-	rt.normal = cross_prod(vec1, vec2);
-	m = prod_scal(rt.normal,ray.dir);
-	if (d_abs(m) < start)
+	init_sqvar(sq, ray, &var);
+	if (d_abs(var.m) < start)
 	{
-		rt.inter = 0;
-		return (rt);
+		var.rt.inter = 0;
+		return (var.rt);
 	}
 	else
 	{
-		l = sub_vec(ray.o, p1);
-		d = prod_scal(rt.normal, l);
-		rt.inter = -d / m;
+		var.l = sub_vec(ray.o, var.p1);
+		var.d = prod_scal(var.rt.normal, var.l);
+		var.rt.inter = -var.d / var.m;
 	}
-	if (rt.inter < start || rt.inter > max)
-		rt.inter = 0;
-	rt.ipoint = add_vec(ray.o, mult_vec_d(ray.dir, rt.inter));
-	vp = sub_vec(rt.ipoint, p1);
-	c = cross_prod(vec1, vp);
-	if (prod_scal(rt.normal, c) < 0)
-		boo++;
-	vp = sub_vec(rt.ipoint, p2);
-	c = cross_prod(edge2, vp);
-	if (prod_scal(rt.normal, c) < 0)
-		boo++;
-	vp = sub_vec(rt.ipoint, p3);
-	c = cross_prod(edge3, vp);
-	if (prod_scal(rt.normal, c) < 0)
-		boo++;
-	if (boo != 0)
+	if (var.rt.inter < start || var.rt.inter > max)
+		var.rt.inter = 0;
+	var.rt.ipoint = add_vec(ray.o, mult_vec_d(ray.dir, var.rt.inter));
+	var.vp = sub_vec(var.rt.ipoint, var.p1);
+	var.c = cross_prod(var.vec1, var.vp);
+	if (prod_scal(var.rt.normal, var.c) < 0)
+		var.boo++;
+	var.vp = sub_vec(var.rt.ipoint, var.p2);
+	var.c = cross_prod(var.edge2, var.vp);
+	if (prod_scal(var.rt.normal, var.c) < 0)
+		var.boo++;
+	var.vp = sub_vec(var.rt.ipoint, var.p3);
+	var.c = cross_prod(var.edge3, var.vp);
+	if (prod_scal(var.rt.normal, var.c) < 0)
+		var.boo++;
+	if (var.boo != 0)
 	{
-		boo = 0;
-		rt.normal = cross_prod(vec1, vec22);
-		m = prod_scal(rt.normal,ray.dir);
-		if (d_abs(m) < start)
+		var.boo = 0;
+		var.rt.normal = cross_prod(var.vec1, var.vec22);
+		var.m = prod_scal(var.rt.normal, ray.dir);
+		if (d_abs(var.m) < start)
 		{
-			rt.inter = 0;
-			return (rt);
+			var.rt.inter = 0;
+			return (var.rt);
 		}
 		else
 		{
-			l = sub_vec(ray.o, p1);
-			d = prod_scal(rt.normal, l);
-			rt.inter = -d / m;
+			var.l = sub_vec(ray.o, var.p1);
+			var.d = prod_scal(var.rt.normal, var.l);
+			var.rt.inter = -var.d / var.m;
 		}
-		if (rt.inter < start || rt.inter > max)
-			rt.inter = 0;
-		rt.ipoint = add_vec(ray.o, mult_vec_d(ray.dir, rt.inter));
-		vp = sub_vec(rt.ipoint, p1);
-		c = cross_prod(vec1, vp);
-		if (prod_scal(rt.normal, c) < 0)
-			boo++;
-		vp = sub_vec(rt.ipoint, p2);
-		c = cross_prod(edge22, vp);
-		if (prod_scal(rt.normal, c) < 0)
-			boo++;
-		vp = sub_vec(rt.ipoint, p4);
-		c = cross_prod(edge33, vp);
-		if (prod_scal(rt.normal, c) < 0)
-			boo++;
-		if (boo != 0)
-			rt.inter = 0;
+		if (var.rt.inter < start || var.rt.inter > max)
+			var.rt.inter = 0;
+		var.rt.ipoint = add_vec(ray.o, mult_vec_d(ray.dir, var.rt.inter));
+		var.vp = sub_vec(var.rt.ipoint, var.p1);
+		var.c = cross_prod(var.vec1, var.vp);
+		if (prod_scal(var.rt.normal, var.c) < 0)
+			var.boo++;
+		var.vp = sub_vec(var.rt.ipoint, var.p2);
+		var.c = cross_prod(var.edge22, var.vp);
+		if (prod_scal(var.rt.normal, var.c) < 0)
+			var.boo++;
+		var.vp = sub_vec(var.rt.ipoint, var.p4);
+		var.c = cross_prod(var.edge33, var.vp);
+		if (prod_scal(var.rt.normal, var.c) < 0)
+			var.boo++;
+		if (var.boo != 0)
+			var.rt.inter = 0;
 	}
-	rt.normal = prod_scal(sub_vec(p1, ray.o), rt.normal) < 0 ? rt.normal : mult_vec_d(rt.normal, -1);
-	rt.reflect = sq.reflect;
-	rt.spec = sq.spec;
-	rt.color = sq.color;
-	return (rt);
+	var.rt.normal = prod_scal(sub_vec(var.p1, ray.o), var.rt.normal) < 0 ?
+		var.rt.normal : mult_vec_d(var.rt.normal, -1);
+	var.rt.reflect = sq.reflect;
+	var.rt.spec = sq.spec;
+	var.rt.color = sq.color;
+	return (var.rt);
 }

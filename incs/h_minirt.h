@@ -6,7 +6,7 @@
 /*   By: yvanat <yvanat@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/02 12:51:50 by mbrunel           #+#    #+#             */
-/*   Updated: 2020/02/06 02:32:12 by yvanat           ###   ########.fr       */
+/*   Updated: 2020/02/06 03:17:24 by yvanat           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -257,6 +257,31 @@ typedef struct		s_data
 	int				i_img;
 	int				*img;
 }					t_data;
+
+typedef struct		s_sqvar
+{
+	t_inter			rt;
+	t_vec			l;
+	t_vec			random_normal;
+	t_vec			normal_random_normal;
+	t_vec			p1;
+	t_vec			p2;
+	t_vec			p3;
+	t_vec			p4;
+	t_vec			vec1;
+	t_vec			vec2;
+	t_vec			vec22;
+	t_vec			edge2;
+	t_vec			edge3;
+	t_vec			edge22;
+	t_vec			edge33;
+	t_vec			vp;
+	t_vec			c;
+	double			d;
+	double			m;
+	double			boo;
+	double			sqr;
+}					t_sqvar;
 
 int					get_p(t_p *p, char *path);
 double				recupdbl(char *line, int *i, char type, char format);
