@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   h_minirt.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mbrunel <mbrunel@student.42.fr>            +#+  +:+       +#+        */
+/*   By: yvanat <yvanat@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/02 12:51:50 by mbrunel           #+#    #+#             */
-/*   Updated: 2020/02/05 09:04:28 by mbrunel          ###   ########.fr       */
+/*   Updated: 2020/02/06 02:32:12 by yvanat           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,7 @@
 # include "libft.h"
 # include <math.h>
 # include <sys/timeb.h>
+# include <pthread.h>
 
 typedef struct		s_mlx
 {
@@ -246,6 +247,16 @@ typedef struct		s_swap
 	int				size_line;
 	int				s_s;
 }					t_swap;
+
+typedef struct		s_data
+{
+	t_p				p;
+	t_vec			ang;
+	int				len;
+	int				i;
+	int				i_img;
+	int				*img;
+}					t_data;
 
 int					get_p(t_p *p, char *path);
 double				recupdbl(char *line, int *i, char type, char format);
