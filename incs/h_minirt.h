@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   h_minirt.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mbrunel <mbrunel@student.42.fr>            +#+  +:+       +#+        */
+/*   By: yvanat <yvanat@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/02 12:51:50 by mbrunel           #+#    #+#             */
-/*   Updated: 2020/02/06 04:10:55 by mbrunel          ###   ########.fr       */
+/*   Updated: 2020/02/06 04:28:25 by yvanat           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -280,6 +280,18 @@ typedef struct		s_sqvar
 	double			boo;
 	double			sqr;
 }					t_sqvar;
+
+typedef struct		s_spvar
+{
+	double			t1;
+	double			t2;
+	double			a;
+	double			b;
+	double			c;
+	double			dis;
+	t_inter			rt;
+	t_vec			oc;
+}					t_spvar;
 
 typedef struct		s_trvar
 {

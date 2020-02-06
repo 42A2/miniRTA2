@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: mbrunel <mbrunel@student.42.fr>            +#+  +:+       +#+         #
+#    By: yvanat <yvanat@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/11/06 03:24:21 by mbrunel           #+#    #+#              #
-#    Updated: 2020/02/06 03:49:38 by mbrunel          ###   ########.fr        #
+#    Updated: 2020/02/06 04:40:54 by yvanat           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -30,7 +30,11 @@ SRCS = 		main.c \
 			parser.c \
 			parse_gets1.c \
 			parse_utils.c \
-			sq.c \
+			intersq.c \
+			intertr.c \
+			interpl.c \
+			intersp.c \
+			intercy.c \
 			fill_it.c \
 			chng.c\
 			bmp.c \
@@ -40,8 +44,7 @@ SRCS = 		main.c \
 			stereo.c\
 			binds1.c\
 			binds2.c\
-			raytracing1.c\
-			tr.c
+			raytracing1.c
 
 OBJS =		$(patsubst %.c, $(OBJ_DIR)/%.o, $(SRCS))
 MLX_DIR = mlx
@@ -80,7 +83,11 @@ SRCS_BONUS =main.c \
 			parser.c \
 			parse_gets1.c \
 			parse_utils.c \
-			sq.c \
+			intersq.c \
+			intertr.c \
+			interpl.c \
+			intersp.c \
+			intercy.c \
 			fill_it_bonus.c \
 			chng.c\
 			bmp.c \
@@ -90,8 +97,7 @@ SRCS_BONUS =main.c \
 			stereo.c\
 			binds1.c\
 			binds2.c\
-			raytracing1.c\
-			tr.c
+			raytracing1.c
 
 OBJS_BONUS =$(patsubst %.c, $(OBJ_DIR)/%.o, $(SRCS_BONUS))
 
