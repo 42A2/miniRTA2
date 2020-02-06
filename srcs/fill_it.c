@@ -6,13 +6,13 @@
 /*   By: mbrunel <mbrunel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/01 19:33:33 by yvanat            #+#    #+#             */
-/*   Updated: 2020/02/06 06:02:20 by mbrunel          ###   ########.fr       */
+/*   Updated: 2020/02/06 07:07:31 by mbrunel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../incs/h_minirt.h"
 
-static void	find_ang(t_vec *ang, t_p p, int i_img)
+void		find_ang(t_vec *ang, t_p p, int i_img)
 {
 	ang->x = acos(p.cam[i_img].vec_dir.z / sqrt(p.cam[i_img].vec_dir.y\
 	* p.cam[i_img].vec_dir.y + p.cam[i_img].vec_dir.z\
@@ -48,5 +48,5 @@ void		fill_img(int *img, t_info info, t_p p, int i_img)
 		}
 	}
 	if (p.bonus.coeff_aliasing)
-		aliasing(img, len, p, i_img, ang);
+		aliasing(img, len, p, i_img);
 }
