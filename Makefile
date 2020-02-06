@@ -6,7 +6,7 @@
 #    By: mbrunel <mbrunel@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/11/06 03:24:21 by mbrunel           #+#    #+#              #
-#    Updated: 2020/02/06 03:24:38 by mbrunel          ###   ########.fr        #
+#    Updated: 2020/02/06 03:49:38 by mbrunel          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -40,6 +40,8 @@ SRCS = 		main.c \
 			stereo.c\
 			binds1.c\
 			binds2.c\
+			raytracing1.c\
+			tr.c
 
 OBJS =		$(patsubst %.c, $(OBJ_DIR)/%.o, $(SRCS))
 MLX_DIR = mlx
@@ -88,6 +90,8 @@ SRCS_BONUS =main.c \
 			stereo.c\
 			binds1.c\
 			binds2.c\
+			raytracing1.c\
+			tr.c
 
 OBJS_BONUS =$(patsubst %.c, $(OBJ_DIR)/%.o, $(SRCS_BONUS))
 

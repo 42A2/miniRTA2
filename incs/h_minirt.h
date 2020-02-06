@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   h_minirt.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yvanat <yvanat@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mbrunel <mbrunel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/02 12:51:50 by mbrunel           #+#    #+#             */
-/*   Updated: 2020/02/06 03:30:57 by yvanat           ###   ########.fr       */
+/*   Updated: 2020/02/06 03:56:44 by mbrunel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -281,6 +281,28 @@ typedef struct		s_sqvar
 	double			sqr;
 }					t_sqvar;
 
+typedef struct		s_trvar
+{
+	t_vec			vec1;
+	t_vec			vec2;
+	t_vec			edge2;
+	t_vec			edge3;
+	double			d;
+	double			m;
+	t_vec			l;
+	t_vec			vp;
+	t_vec			c;
+	int				boo;
+}					t_trvar;
+
+typedef struct		s_trvar2
+{
+	double			start;
+	double			max;
+	t_ray			ray;
+}					t_trvar2;
+
+
 int					get_p(t_p *p, char *path);
 double				recupdbl(char *line, int *i, char type, char format);
 int					f_chr(const char *str, char c);
@@ -337,6 +359,8 @@ t_inter				intertr(t_ray ray, void *ptr, double start, double max);
 t_inter				intersq(t_ray ray, void *ptr, double start, double max);
 t_vec				c_to_vp(double i, double j, t_vp vp, double dist);
 t_inter				min_inter(t_ray ray, t_p p, double start, double max);
+int					find_pix_color(t_ray ray, t_p p, int depth);
+void				aliasing(int *img, int len, t_p p, int i_img, t_vec ang);
 
 void				chng_sp(void *ptr, t_ray new);
 void				chng_pl(void *ptr, t_ray new);
