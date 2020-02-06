@@ -6,7 +6,7 @@
 /*   By: mbrunel <mbrunel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/02 12:51:50 by mbrunel           #+#    #+#             */
-/*   Updated: 2020/02/06 04:57:07 by mbrunel          ###   ########.fr       */
+/*   Updated: 2020/02/06 05:16:54 by mbrunel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -393,8 +393,9 @@ t_inter				intercy(t_ray ray, void *ptr, double start, double max);
 t_inter				intertr(t_ray ray, void *ptr, double start, double max);
 t_inter				intersq(t_ray ray, void *ptr, double start, double max);
 t_vec				c_to_vp(double i, double j, t_vp vp, double dist);
-t_inter				min_inter(t_ray ray, t_p p, double start, double max);
-int					find_pix_color(t_ray ray, t_p p, int depth);
+t_inter				min_inter(t_ray ray, t_p *p, double start, double max);
+int					find_pix_color(t_ray ray, t_p *p, int depth);
+t_vec				retray(t_vec r, t_vec n);
 void				aliasing(int *img, int len, t_p p, int i_img, t_vec ang);
 
 void				chng_sp(void *ptr, t_ray new);
