@@ -3,14 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   fill_it_bonus.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yvanat <yvanat@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mbrunel <mbrunel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/01 19:33:33 by yvanat            #+#    #+#             */
-/*   Updated: 2020/02/06 02:47:48 by yvanat           ###   ########.fr       */
+/*   Updated: 2020/02/06 03:20:26 by mbrunel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../incs/h_minirt.h"
+# include <pthread.h>
 
 t_vec	retray(t_vec r, t_vec n)
 {
