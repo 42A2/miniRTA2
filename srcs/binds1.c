@@ -6,7 +6,7 @@
 /*   By: mbrunel <mbrunel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/06 01:43:48 by mbrunel           #+#    #+#             */
-/*   Updated: 2020/02/06 06:02:40 by mbrunel          ###   ########.fr       */
+/*   Updated: 2020/02/06 09:58:57 by mbrunel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,6 @@ int				chng_ocam(int i, void *swap)
 	s->p.cam[s->i].o = add_vec(s->p.cam[s->i].o\
 	, rot(chng, s->p.cam[s->i].vec_dir, ang));
 	s->p.cam[s->i].time = 0;
-	mlx_destroy_image(s->mlx.ptr, s->mlx.img);
 	return (img_to_win(s));
 }
 

@@ -6,7 +6,7 @@
 /*   By: mbrunel <mbrunel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/06 02:23:59 by mbrunel           #+#    #+#             */
-/*   Updated: 2020/02/06 02:48:16 by mbrunel          ###   ########.fr       */
+/*   Updated: 2020/02/06 09:59:01 by mbrunel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,6 @@ int			stretch(int i, int x, int y, void *swap)
 		g_chng_stretch[type](s->p.objs[s->c1.i_obj].o, ray);
 	else
 		return (0);
-	mlx_destroy_image(s->mlx.ptr, s->mlx.img);
 	return (img_to_win(s));
 }
 
@@ -104,6 +103,5 @@ int			swap_cam(int i, void *swap)
 			ft_fprintf(1, "no such camera\n");
 		return (0);
 	}
-	mlx_destroy_image(s->mlx.ptr, s->mlx.img);
 	return (img_to_win(s));
 }
