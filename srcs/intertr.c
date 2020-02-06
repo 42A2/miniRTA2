@@ -1,28 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   tr.c                                               :+:      :+:    :+:   */
+/*   intertr.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mbrunel <mbrunel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/06 03:44:02 by mbrunel           #+#    #+#             */
-/*   Updated: 2020/02/06 04:09:26 by mbrunel          ###   ########.fr       */
+/*   Updated: 2020/02/06 04:44:26 by mbrunel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../incs/h_minirt.h"
 
-static t_trvar2	create_v2(double start, double max, t_ray ray)
-{
-	t_trvar2 v2;
-
-	v2.start = start;
-	v2.max = max;
-	v2.ray = ray;
-	return (v2);
-}
-
-static void		tr1(t_trvar *v, t_inter *rt, t_tr tr, t_trvar2 v2)
+static void		tr1(t_trvar *v, t_inter *rt, t_tr tr, t_var2 v2)
 {
 	v->boo = 0;
 	v->vec1 = sub_vec(tr.ang2, tr.ang1);

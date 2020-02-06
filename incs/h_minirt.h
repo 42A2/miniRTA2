@@ -6,7 +6,7 @@
 /*   By: mbrunel <mbrunel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/02 12:51:50 by mbrunel           #+#    #+#             */
-/*   Updated: 2020/02/06 04:10:55 by mbrunel          ###   ########.fr       */
+/*   Updated: 2020/02/06 04:36:11 by mbrunel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -295,12 +295,33 @@ typedef struct		s_trvar
 	int				boo;
 }					t_trvar;
 
-typedef struct		s_trvar2
+typedef struct		s_cyvar
+{
+	t_vec			L;
+	t_cy			cy;
+	t_vec			w;
+	double			sqr_omega;
+	t_vec			wn;
+	double			R;
+	t_vec			E;
+	double			t;
+	t_inter			rt;
+	t_vec			F;
+	t_vec			Fn;
+	double			s;
+	t_vec			cp;
+	double			cq;
+	t_vec			qp;
+	int				boo;
+}					t_cyvar;
+
+
+typedef struct		s_var2
 {
 	double			start;
 	double			max;
 	t_ray			ray;
-}					t_trvar2;
+}					t_var2;
 
 
 int					get_p(t_p *p, char *path);
@@ -351,6 +372,7 @@ void				filter(int type, double strength, int *img, int i);
 void				fill_img(int *img, t_info info, t_p p, int i_img);
 int					img_to_win(t_swap *s);
 
+t_var2				create_v2(double start, double max, t_ray ray);
 t_vec				cam_rot(t_vec dir, t_vec cam, t_vec ang);
 t_vec				rot(t_vec dir, t_vec cam, t_vec ang);
 t_inter				intersp(t_ray ray, void *ptr, double start, double max);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   vec_utils4.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yvanat <yvanat@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mbrunel <mbrunel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/03 05:59:18 by yvanat            #+#    #+#             */
-/*   Updated: 2020/02/06 03:57:20 by yvanat           ###   ########.fr       */
+/*   Updated: 2020/02/06 04:36:19 by mbrunel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,4 +51,14 @@ t_vec	inv_prod_scal(t_vec vec1)
 		vec2.x = -1 * (vec1.y * vec2.y + vec1.z * vec2.z) / vec1.x;
 	}
 	return (normalize(vec2));
+}
+
+t_var2	create_v2(double start, double max, t_ray ray)
+{
+	t_var2 v2;
+
+	v2.start = start;
+	v2.max = max;
+	v2.ray = ray;
+	return (v2);
 }
