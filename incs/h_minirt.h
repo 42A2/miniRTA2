@@ -6,7 +6,7 @@
 /*   By: yvanat <yvanat@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/02 12:51:50 by mbrunel           #+#    #+#             */
-/*   Updated: 2020/02/06 03:30:57 by yvanat           ###   ########.fr       */
+/*   Updated: 2020/02/06 03:57:35 by yvanat           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -313,6 +313,7 @@ double				prod_scal(t_vec vec1, t_vec vec2);
 t_vec				normalize(t_vec vec);
 t_vec				cross_prod(t_vec vec1, t_vec vec2);
 t_vec				i_prod_scal(t_vec vec);
+t_vec				inv_prod_scal(t_vec vec1);
 
 int					prod_color_float(int objcol, double i);
 int					add_color_to_color(int col1, int col2);
