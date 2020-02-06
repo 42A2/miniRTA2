@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: yvanat <yvanat@student.42.fr>              +#+  +:+       +#+         #
+#    By: mbrunel <mbrunel@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/11/06 03:24:21 by mbrunel           #+#    #+#              #
-#    Updated: 2020/02/06 04:40:54 by yvanat           ###   ########.fr        #
+#    Updated: 2020/02/06 04:59:34 by mbrunel          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -44,7 +44,7 @@ SRCS = 		main.c \
 			stereo.c\
 			binds1.c\
 			binds2.c\
-			raytracing1.c
+			raytracing1.c\
 
 OBJS =		$(patsubst %.c, $(OBJ_DIR)/%.o, $(SRCS))
 MLX_DIR = mlx
@@ -97,11 +97,12 @@ SRCS_BONUS =main.c \
 			stereo.c\
 			binds1.c\
 			binds2.c\
-			raytracing1.c
+			raytracing1.c\
 
 OBJS_BONUS =$(patsubst %.c, $(OBJ_DIR)/%.o, $(SRCS_BONUS))
 
 bonus :		$(OBJS_BONUS)
+			rm -rf $(OBJ_DIR)/fill_it.o
 			$(MAKE) -C $(LIB_DIR)/$(MLX_DIR)
 			$(MAKE) -C $(LIB_DIR)/$(LIBFT_DIR)
 			cp $(LIB_DIR)/$(MLX_DIR)/$(MLX)  .
