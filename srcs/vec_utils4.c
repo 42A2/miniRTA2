@@ -6,7 +6,7 @@
 /*   By: yvanat <yvanat@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/03 05:59:18 by yvanat            #+#    #+#             */
-/*   Updated: 2020/02/03 05:59:30 by yvanat           ###   ########.fr       */
+/*   Updated: 2020/02/06 03:57:20 by yvanat           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,4 +29,26 @@ t_vec	i_prod_scal(t_vec vec)
 	rt.x = 0;
 	(void)vec;
 	return (rt);
+}
+
+t_vec	inv_prod_scal(t_vec vec1)
+{
+	t_vec vec2;
+
+	vec2.x = 1;
+	vec2.y = 2;
+	vec2.z = 3;
+	if (vec1.x == 0 && vec1.y == 0)
+		vec2.z = 0;
+	else if (vec1.x == 0 && vec1.z == 0)
+		vec2.y = 0;
+	else if (vec1.y == 0 && vec1.z == 0)
+		vec2.x = 0;
+	else if (vec1.x == 0)
+		vec2.y = -1 * (vec1.x * vec2.x + vec1.z * vec2.z) / vec1.y;
+	else
+	{
+		vec2.x = -1 * (vec1.y * vec2.y + vec1.z * vec2.z) / vec1.x;
+	}
+	return (normalize(vec2));
 }
