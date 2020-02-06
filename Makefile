@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: mbrunel <mbrunel@student.42.fr>            +#+  +:+       +#+         #
+#    By: yvanat <yvanat@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/11/06 03:24:21 by mbrunel           #+#    #+#              #
-#    Updated: 2020/02/06 04:59:34 by mbrunel          ###   ########.fr        #
+#    Updated: 2020/02/06 05:41:31 by yvanat           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -89,6 +89,7 @@ SRCS_BONUS =main.c \
 			intersp.c \
 			intercy.c \
 			fill_it_bonus.c \
+			aliasing_threading_bonus.c \
 			chng.c\
 			bmp.c \
 			parse_gets2.c\

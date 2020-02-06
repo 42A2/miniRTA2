@@ -6,7 +6,7 @@
 /*   By: yvanat <yvanat@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/02 12:51:50 by mbrunel           #+#    #+#             */
-/*   Updated: 2020/02/06 05:02:45 by yvanat           ###   ########.fr       */
+/*   Updated: 2020/02/06 07:24:51 by yvanat           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,7 @@
 # include "mlx.h"
 # include "libft.h"
 # include <math.h>
+# include <pthread.h>
 
 typedef struct		s_mlx
 {
@@ -254,6 +255,9 @@ typedef struct		s_data
 	int				i;
 	int				i_img;
 	int				*img;
+	int				*count;
+	pthread_mutex_t	*mut;
+	pthread_cond_t	*cond;
 }					t_data;
 
 typedef struct		s_sqvar
@@ -312,7 +316,10 @@ typedef struct		s_thread
 	int				i;
 	int				len;
 	int				ret;
+	int				count;
 	t_vec			ang;
+	pthread_mutex_t	*mut;
+	pthread_cond_t	*cond;
 }					t_thread;
 
 typedef struct		s_cyvar
@@ -404,6 +411,7 @@ t_vec				c_to_vp(double i, double j, t_vp vp, double dist);
 t_inter				min_inter(t_ray ray, t_p p, double start, double max);
 int					find_pix_color(t_ray ray, t_p p, int depth);
 void				aliasing(int *img, int len, t_p p, int i_img, t_vec ang);
+void				aliasing_bonus(t_data *dt);
 
 void				chng_sp(void *ptr, t_ray new);
 void				chng_pl(void *ptr, t_ray new);

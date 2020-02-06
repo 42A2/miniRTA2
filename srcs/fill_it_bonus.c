@@ -6,7 +6,7 @@
 /*   By: yvanat <yvanat@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/01 19:33:33 by yvanat            #+#    #+#             */
-/*   Updated: 2020/02/06 05:14:05 by yvanat           ###   ########.fr       */
+/*   Updated: 2020/02/06 07:42:29 by yvanat           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,7 @@ static void	*fill_img_threading(void *data)
 					dt.img, i * dt.len + j);
 		}
 	}
+	aliasing_bonus(&dt);
 	free(data);
 	return (NULL);
 }
@@ -63,11 +64,15 @@ static void	*create_data(t_p p, t_thread th, int i_img, int *img)
 	data->i = th.i;
 	data->i_img = i_img;
 	data->img = img;
+	data->count = &(th.count);
+	data->cond = th.cond;
+	data->mut = th.mut;
 	return (data);
 }
 
 static void	init_th(t_thread *th, t_info info, t_p p, int i_img)
 {
+	th->count = 0;
 	th->len = info.l / 4;
 	th->i = -1;
 	th->ang.x = acos(p.cam[i_img].vec_dir.z / sqrt(p.cam[i_img].vec_dir.y *
@@ -80,10 +85,14 @@ static void	init_th(t_thread *th, t_info info, t_p p, int i_img)
 
 void		fill_img(int *img, t_info info, t_p p, int i_img)
 {
-	t_thread	th;
-	pthread_t	threads[8];
-	t_data		*data;
+	t_thread				th;
+	pthread_t				threads[8];
+	t_data					*data;
+	static pthread_cond_t	cond = PTHREAD_COND_INITIALIZER;
+	static pthread_mutex_t	mut = PTHREAD_MUTEX_INITIALIZER;
 
+	th.cond = &cond;
+	th.mut = &mut;
 	init_th(&th, info, p, i_img);
 	while (++th.i < 8)
 	{
