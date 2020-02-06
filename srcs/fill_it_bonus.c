@@ -6,12 +6,11 @@
 /*   By: yvanat <yvanat@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/01 19:33:33 by yvanat            #+#    #+#             */
-/*   Updated: 2020/02/06 07:50:59 by yvanat           ###   ########.fr       */
+/*   Updated: 2020/02/06 08:24:35 by yvanat           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../incs/h_minirt.h"
-#include <pthread.h>
 
 static void	init_thd(t_data *dt, t_ray *ray, int *i, int *res_y)
 {
@@ -109,9 +108,5 @@ void		fill_img(int *img, t_info info, t_p p, int i_img)
 			return ;
 		}
 	}
-	th.i = -1;
-	while (++th.i < 8)
-	{
-		pthread_join(threads[th.i], NULL);
-	}
+	joining(threads, th);
 }

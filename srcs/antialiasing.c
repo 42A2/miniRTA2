@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   antialiasing.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mbrunel <mbrunel@student.42.fr>            +#+  +:+       +#+        */
+/*   By: yvanat <yvanat@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/06 06:12:33 by mbrunel           #+#    #+#             */
-/*   Updated: 2020/02/06 07:06:21 by mbrunel          ###   ########.fr       */
+/*   Updated: 2020/02/06 08:36:50 by yvanat           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../incs/h_minirt.h"
 
-static int		check_diff(t_coor v, int *tab, int len, double delta)
+static int		check_di(t_coor v, int *tab, int len, double delta)
 {
 	int	k;
 	int	m;
@@ -88,7 +88,7 @@ void			aliasing(int *img, int len, t_p p, int i_img)
 		while (++v.j < p.vp.res_x - 1)
 		{
 			v.actualpix = img[v.i * len + v.j];
-			if (check_diff(v, img, len, p.bonus.delta_aliasing) == -1)
+			if (check_di(v, img, len, p.bonus.delta_aliasing) == -1)
 				img[v.i * len + v.j] = recalc_img(v, &p, i_img, ang);
 		}
 	}

@@ -6,7 +6,7 @@
 /*   By: yvanat <yvanat@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/02 12:51:50 by mbrunel           #+#    #+#             */
-/*   Updated: 2020/02/06 07:49:59 by yvanat           ###   ########.fr       */
+/*   Updated: 2020/02/06 08:35:14 by yvanat           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -331,17 +331,17 @@ typedef struct		s_thread
 
 typedef struct		s_cyvar
 {
-	t_vec			L;
+	t_vec			lx;
 	t_cy			cy;
 	t_vec			w;
 	double			sqr_omega;
 	t_vec			wn;
-	double			R;
-	t_vec			E;
+	double			rx;
+	t_vec			ex;
 	double			t;
 	t_inter			rt;
-	t_vec			F;
-	t_vec			Fn;
+	t_vec			fx;
+	t_vec			fxn;
 	double			s;
 	t_vec			cp;
 	double			cq;
@@ -377,7 +377,6 @@ typedef struct		s_var2
 	double			max;
 	t_ray			ray;
 }					t_var2;
-
 
 int					get_p(t_p *p, char *path);
 double				recupdbl(char *line, int *i, char type, char format);
@@ -441,7 +440,9 @@ int					find_pix_color(t_ray ray, t_p *p, int depth);
 t_vec				retray(t_vec r, t_vec n);
 void				aliasing(int *img, int len, t_p p, int i_img);
 void				find_ang(t_vec *ang, t_p p, int i_img);
+int					check_diff(t_coor v, int *tab, int len, double delta);
 void				aliasing_bonus(t_data *dt);
+void				joining(pthread_t *threads, t_thread th);
 
 void				chng_sp(void *ptr, t_ray new);
 void				chng_pl(void *ptr, t_ray new);

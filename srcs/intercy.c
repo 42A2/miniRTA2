@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   intercy.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mbrunel <mbrunel@student.42.fr>            +#+  +:+       +#+        */
+/*   By: yvanat <yvanat@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/06 04:26:20 by mbrunel           #+#    #+#             */
-/*   Updated: 2020/02/06 04:53:23 by mbrunel          ###   ########.fr       */
+/*   Updated: 2020/02/06 08:35:37 by yvanat           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,12 @@
 
 void		cy2(t_cyvar *v, t_cy cy, t_inter *rt, t_var2 v2)
 {
-	v->E = cross_prod(v->L, cy.dir);
-	v->t = prod_scal(mult_vec_d(v->E, -1), v->wn) / sqrt(v->sqr_omega);
-	v->F = cross_prod(v->wn, cy.dir);
-	v->Fn = div_vec_d(v->F, norm_vec(v->F));
+	v->ex = cross_prod(v->lx, cy.dir);
+	v->t = prod_scal(mult_vec_d(v->ex, -1), v->wn) / sqrt(v->sqr_omega);
+	v->fx = cross_prod(v->wn, cy.dir);
+	v->fxn = div_vec_d(v->fx, norm_vec(v->fx));
 	v->s = sqrt(cy.r\
-	* cy.r - v->R * v->R) / d_abs(prod_scal(v2.ray.dir, v->Fn));
+	* cy.r - v->rx * v->rx) / d_abs(prod_scal(v2.ray.dir, v->fxn));
 	rt->inter = v->t - v->s;
 	if (norm_vec(add_vec(cy.dir\
 	, v2.ray.dir)) < norm_vec(add_vec(mult_vec_d(cy.dir, -1), v2.ray.dir)))
@@ -63,7 +63,7 @@ t_inter		intercy(t_ray ray, void *ptr, double start, double max)
 	cy = *(t_cy*)ptr;
 	v2 = create_v2(start, max, ray);
 	v.boo = 0;
-	v.L = sub_vec(ray.o, cy.p);
+	v.lx = sub_vec(ray.o, cy.p);
 	v.w = cross_prod(ray.dir, cy.dir);
 	v.sqr_omega = prod_scal(v.w, v.w);
 	if (!v.sqr_omega)
@@ -71,8 +71,8 @@ t_inter		intercy(t_ray ray, void *ptr, double start, double max)
 	else
 	{
 		v.wn = div_vec_d(v.w, sqrt(v.sqr_omega));
-		v.R = d_abs(prod_scal(v.L, v.wn));
-		if (v.R > cy.r)
+		v.rx = d_abs(prod_scal(v.lx, v.wn));
+		if (v.rx > cy.r)
 			rt.inter = 0;
 		else
 			cy2(&v, cy, &rt, v2);

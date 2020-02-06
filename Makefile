@@ -6,7 +6,7 @@
 #    By: yvanat <yvanat@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/11/06 03:24:21 by mbrunel           #+#    #+#              #
-#    Updated: 2020/02/06 07:48:35 by yvanat           ###   ########.fr        #
+#    Updated: 2020/02/06 08:18:54 by yvanat           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -102,6 +102,7 @@ SRCS_BONUS =main.c \
 			binds2.c\
 			core_funcs.c\
 			raytracing_utils.c\
+			utils_bonus.c
 
 OBJS_BONUS =$(patsubst %.c, $(OBJ_DIR)/%.o, $(SRCS_BONUS))
 
