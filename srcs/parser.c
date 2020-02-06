@@ -6,7 +6,7 @@
 /*   By: mbrunel <mbrunel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/14 05:14:16 by mbrunel           #+#    #+#             */
-/*   Updated: 2020/02/05 11:05:04 by mbrunel          ###   ########.fr       */
+/*   Updated: 2020/02/06 03:11:41 by mbrunel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,8 +51,11 @@ static int	p3(t_p *p, int *incs)
 	return (0);
 }
 
-static void	p4(t_parse2 n, int *incs, char *buf)
+static void	p4(t_parse2 n, int *incs, char *buf, t_p *p)
 {
+	if (n.type < NB_FORM)
+		p->objs[incs[NB_FORM]].type = n.type;
+	incs[n.type]++;
 	if (n.type < NB_FORM)
 		incs[NB_FORM]++;
 	free(buf);
@@ -81,10 +84,7 @@ int			get_p(t_p *p, char *path)
 		}
 		else if (p2(&(n.type), incs, buf, p) == -1)
 			return (-1);
-		if (n.type < NB_FORM)
-			p->objs[incs[NB_FORM]].type = n.type;
-		incs[n.type]++;
-		p4(n, incs, buf);
+		p4(n, incs, buf, p);
 	}
 	return (p3(p, incs));
 }

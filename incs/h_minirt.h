@@ -6,7 +6,7 @@
 /*   By: yvanat <yvanat@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/02 12:51:50 by mbrunel           #+#    #+#             */
-/*   Updated: 2020/02/06 03:17:24 by yvanat           ###   ########.fr       */
+/*   Updated: 2020/02/06 03:30:57 by yvanat           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,8 +59,6 @@
 # include "mlx.h"
 # include "libft.h"
 # include <math.h>
-# include <sys/timeb.h>
-# include <pthread.h>
 
 typedef struct		s_mlx
 {
@@ -331,6 +329,7 @@ void				fill_img(int *img, t_info info, t_p p, int i_img);
 int					img_to_win(t_swap *s);
 
 t_vec				cam_rot(t_vec dir, t_vec cam, t_vec ang);
+t_vec				rot(t_vec dir, t_vec cam, t_vec ang);
 t_inter				intersp(t_ray ray, void *ptr, double start, double max);
 t_inter				interpl(t_ray ray, void *ptr, double start, double max);
 t_inter				intercy(t_ray ray, void *ptr, double start, double max);
@@ -350,6 +349,14 @@ void				stretch_pl(void *ptr, t_ray new);
 void				stretch_cy(void *ptr, t_ray new);
 void				stretch_tr(void *ptr, t_ray new);
 void				stretch_sq(void *ptr, t_ray new);
+
+int					chng_ocam(int i, void *swap);
+int					get_pos(int i, int x, int y, void *swap);
+int					quit(int rt, void *swap);
+int					stereo(t_swap *s);
+int					stretch(int i, int x, int y, void *swap);
+int					swap_cam(int i, void *swap);
+
 void				fill_bmp(char **data, t_swap *s);
 void				header_bmp(char **data, t_swap *s);
 void				export_bmp(char *filename, t_swap *s);
