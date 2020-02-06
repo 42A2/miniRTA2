@@ -6,7 +6,7 @@
 /*   By: mbrunel <mbrunel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/06 01:43:48 by mbrunel           #+#    #+#             */
-/*   Updated: 2020/02/06 02:08:15 by mbrunel          ###   ########.fr       */
+/*   Updated: 2020/02/06 06:02:40 by mbrunel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,7 +90,7 @@ int				get_pos(int i, int x, int y, void *swap)
 	ray.o = s.p.cam[s.i].o;
 	ray.dir = cam_rot(c_to_vp((double)y, (double)x\
 	, s.p.vp, s.p.cam[s.i].dist), s.p.cam[s.i].vec_dir, ang);
-	((t_swap*)swap)->c1 = min_inter(ray, s.p, MIN_D, __DBL_MAX__);
+	((t_swap*)swap)->c1 = min_inter(ray, &(s.p), MIN_D, __DBL_MAX__);
 	return (0);
 }
 

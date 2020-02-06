@@ -6,7 +6,7 @@
 /*   By: yvanat <yvanat@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/01 19:33:33 by yvanat            #+#    #+#             */
-/*   Updated: 2020/02/06 07:42:29 by yvanat           ###   ########.fr       */
+/*   Updated: 2020/02/06 07:50:59 by yvanat           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ static void	*fill_img_threading(void *data)
 		{
 			ray.dir = cam_rot(c_to_vp((double)i, (double)j, dt.p.vp,
 				dt.p.cam[dt.i_img].dist), dt.p.cam[dt.i_img].vec_dir, dt.ang);
-			dt.img[i * dt.len + j] = find_pix_color(ray, dt.p,
+			dt.img[i * dt.len + j] = find_pix_color(ray, &(dt.p),
 				dt.p.bonus.recurse_reflect);
 			if (dt.p.bonus.filter_type)
 				filter(dt.p.bonus.filter_type, dt.p.bonus.filter_strength,

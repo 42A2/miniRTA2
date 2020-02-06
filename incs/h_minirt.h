@@ -6,7 +6,7 @@
 /*   By: yvanat <yvanat@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/02 12:51:50 by mbrunel           #+#    #+#             */
-/*   Updated: 2020/02/06 07:24:51 by yvanat           ###   ########.fr       */
+/*   Updated: 2020/02/06 07:49:59 by yvanat           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -231,6 +231,13 @@ typedef struct		s_inter
 	int				i_obj;
 }					t_inter;
 
+typedef struct		s_coor
+{
+	int				i;
+	int				j;
+	int				actualpix;
+}					t_coor;
+
 typedef struct		s_swap
 {
 	t_mlx			mlx;
@@ -342,6 +349,27 @@ typedef struct		s_cyvar
 	int				boo;
 }					t_cyvar;
 
+typedef struct		s_as
+{
+	int		nb;
+	int		k;
+	int		m;
+	int		n;
+	int		i_img;
+	int		*color;
+	t_ray	ray;
+}					t_as;
+
+typedef struct		s_lightvar
+{
+	t_vec			i;
+	double			coeff;
+	double			p_scal;
+	t_vec			l;
+	t_inter			closest;
+	t_ray			shadow;
+	double			max;
+}					t_lightvar;
 
 typedef struct		s_var2
 {
@@ -408,9 +436,11 @@ t_inter				intercy(t_ray ray, void *ptr, double start, double max);
 t_inter				intertr(t_ray ray, void *ptr, double start, double max);
 t_inter				intersq(t_ray ray, void *ptr, double start, double max);
 t_vec				c_to_vp(double i, double j, t_vp vp, double dist);
-t_inter				min_inter(t_ray ray, t_p p, double start, double max);
-int					find_pix_color(t_ray ray, t_p p, int depth);
-void				aliasing(int *img, int len, t_p p, int i_img, t_vec ang);
+t_inter				min_inter(t_ray ray, t_p *p, double start, double max);
+int					find_pix_color(t_ray ray, t_p *p, int depth);
+t_vec				retray(t_vec r, t_vec n);
+void				aliasing(int *img, int len, t_p p, int i_img);
+void				find_ang(t_vec *ang, t_p p, int i_img);
 void				aliasing_bonus(t_data *dt);
 
 void				chng_sp(void *ptr, t_ray new);
