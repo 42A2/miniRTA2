@@ -8,4 +8,4 @@
 
 Warning : this project can compile and be runned only on Mac OS an Linux
 
-### powered by mbrunel/NOT_MLX
+### powered by [mbrunel/NOT_MLX](https://github.com/mbrunel/NOT_MLX)
