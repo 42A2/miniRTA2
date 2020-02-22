@@ -1,6 +1,6 @@
 CC =		gcc
 
-CFLAGS =	-Wall -Werror -Wextra -I.
+CFLAGS =	-Wall -Wextra -I.
 
 NAME =		libc.a
 

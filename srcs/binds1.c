@@ -6,7 +6,7 @@
 /*   By: mbrunel <mbrunel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/06 01:43:48 by mbrunel           #+#    #+#             */
-/*   Updated: 2020/02/06 09:58:57 by mbrunel          ###   ########.fr       */
+/*   Updated: 2020/02/13 15:20:17 by mbrunel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,27 +69,27 @@ int				chng_ocam(int i, void *swap)
 	s->p.cam[s->i].o = add_vec(s->p.cam[s->i].o\
 	, rot(chng, s->p.cam[s->i].vec_dir, ang));
 	s->p.cam[s->i].time = 0;
-	return (img_to_win(s));
+	return (0);
 }
 
 int				get_pos(int i, int x, int y, void *swap)
 {
-	t_swap		s;
+	t_swap		*s;
 	t_vec		ang;
 	t_ray		ray;
 
 	(void)i;
-	s = *(t_swap*)swap;
-	ang.x = acos(s.p.cam[s.i].vec_dir.z / sqrt(s.p.cam[s.i].vec_dir.y\
-	* s.p.cam[s.i].vec_dir.y + s.p.cam[s.i].vec_dir.z\
-	* s.p.cam[s.i].vec_dir.z));
-	ang.y = acos(s.p.cam[s.i].vec_dir.z / sqrt(s.p.cam[s.i].vec_dir.x\
-	* s.p.cam[s.i].vec_dir.x + s.p.cam[s.i].vec_dir.z\
-	* s.p.cam[s.i].vec_dir.z));
-	ray.o = s.p.cam[s.i].o;
+	s = (t_swap*)swap;
+	ang.x = acos(s->p.cam[s->i].vec_dir.z / sqrt(s->p.cam[s->i].vec_dir.y\
+	* s->p.cam[s->i].vec_dir.y + s->p.cam[s->i].vec_dir.z\
+	* s->p.cam[s->i].vec_dir.z));
+	ang.y = acos(s->p.cam[s->i].vec_dir.z / sqrt(s->p.cam[s->i].vec_dir.x\
+	* s->p.cam[s->i].vec_dir.x + s->p.cam[s->i].vec_dir.z\
+	* s->p.cam[s->i].vec_dir.z));
+	ray.o = s->p.cam[s->i].o;
 	ray.dir = cam_rot(c_to_vp((double)y, (double)x\
-	, s.p.vp, s.p.cam[s.i].dist), s.p.cam[s.i].vec_dir, ang);
-	((t_swap*)swap)->c1 = min_inter(ray, &(s.p), MIN_D, __DBL_MAX__);
+	, s->p.vp, s->p.cam[s->i].dist), s->p.cam[s->i].vec_dir, ang);
+	s->c1 = min_inter(ray, &(s->p), MIN_D, __DBL_MAX__);
 	return (0);
 }
 
@@ -100,7 +100,10 @@ int				quit(int rt, void *swap)
 
 	i = -1;
 	s = (t_swap*)swap;
+	nmlx_loop_stop(s->mlx.ptr);
+	return (0);
+	/*
 	while (++i < s->p.nb_objs)
 		free(s->p.objs[i].o);
-	exit(rt != -1 ? 0 : -1);
+	exit(rt != -1 ? 0 : -1);*/
 }

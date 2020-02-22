@@ -6,7 +6,7 @@
 /*   By: mbrunel <mbrunel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/16 01:16:49 by yvanat            #+#    #+#             */
-/*   Updated: 2020/02/06 09:59:09 by mbrunel          ###   ########.fr       */
+/*   Updated: 2020/02/13 15:21:40 by mbrunel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,12 +29,6 @@ int		img_to_win(t_swap *s)
 	}
 	if (mlx_put_image_to_window(s->mlx.ptr, s->mlx.win, s->mlx.img, 0, 0) == -1)
 		return (-1);
-	mlx_hook(s->mlx.win, 2, 1L << 0, &swap_cam, s);
-	mlx_hook(s->mlx.win, 3, 1L << 1, &chng_ocam, s);
-	mlx_hook(s->mlx.win, 4, 1L << 2, &get_pos, s);
-	mlx_hook(s->mlx.win, 5, 1L << 3, &stretch, s);
-	mlx_hook(s->mlx.win, 17, 1L << 17, &quit, s);
-	mlx_loop(s->mlx.ptr);
 	return (0);
 }
 
@@ -54,6 +48,7 @@ int		main(int argc, char *argv[])
 {
 	t_mlx	mlx;
 	t_swap	s;
+	int		i;
 
 	s.i = 0;
 	mlx.ptr = mlx_init();
@@ -74,5 +69,19 @@ int		main(int argc, char *argv[])
 	s.img = NULL;
 	if (img_to_win(&s) == -1)
 		quit(error(NULL, "mlx error\n"), &s);
+	mlx_hook(s.mlx.win, 2, 1L << 0, &swap_cam, &s);
+	mlx_hook(s.mlx.win, 3, 1L << 1, &chng_ocam, &s);
+	mlx_hook(s.mlx.win, 4, 1L << 2, &get_pos, &s);
+	mlx_hook(s.mlx.win, 5, 1L << 3, &stretch, &s);
+	mlx_hook(s.mlx.win, 17, 1L << 17, &quit, &s);
+	mlx_loop_hook(s.mlx.ptr, &img_to_win, &s);
+	nmlx_smart_hook_on(s.mlx.ptr);
+	mlx_loop(s.mlx.ptr);
+	i = -1;
+	while (++i < s.p.nb_objs)
+		free(s.p.objs[i].o);
+	mlx_destroy_image(s.mlx.ptr, s.mlx.img);
+	mlx_destroy_window(s.mlx.ptr, s.mlx.win);
+	nmlx_quit(s.mlx.ptr);
 	return (0);
 }

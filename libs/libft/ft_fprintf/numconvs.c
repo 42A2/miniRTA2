@@ -6,7 +6,7 @@
 /*   By: mbrunel <mbrunel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/24 10:46:55 by mbrunel           #+#    #+#             */
-/*   Updated: 2019/10/31 17:22:51 by mbrunel          ###   ########.fr       */
+/*   Updated: 2020/02/11 18:30:19 by mbrunel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ char		*uconv(va_list ap)
 	size_t				new;
 
 	nb = va_arg(ap, unsigned int);
-	new = nb >= 0 ? nb : (UINT32_MAX + nb + 1);
+	new = nb >= 0 ? nb : (__INT32_MAX__ + nb + 1);
 	deathcurse(new, 0, str);
 	return ((rt = revdup(str)) ? rt : NULL);
 }

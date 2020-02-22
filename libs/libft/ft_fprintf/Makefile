@@ -1,6 +1,6 @@
 CC =		gcc
 
-CFLAGS =	-Wall -Werror -Wextra -I./libftprintf.h -I../libft/libft.h
+CFLAGS =	-Wall -Wextra -I./libftprintf.h -I../libft/libft.h
 
 NAME =		ft_printf.a
 

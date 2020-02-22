@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: yvanat <yvanat@student.42.fr>              +#+  +:+       +#+         #
+#    By: mbrunel <mbrunel@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/11/06 03:24:21 by mbrunel           #+#    #+#              #
-#    Updated: 2020/02/06 08:18:54 by yvanat           ###   ########.fr        #
+#    Updated: 2020/02/13 17:08:20 by mbrunel          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,7 +16,7 @@ SRC_DIR = srcs
 OBJ_DIR = objs
 
 CC =		gcc
-CFLAGS =	-Wall -Werror -Wextra
+CFLAGS =	-Wall -Wextra
 OFLAGS =	$(LIB_DIR)/$(LIBFT_DIR)/$(LIBFT) $(MLX)
 NAME =		miniRT
 
@@ -112,4 +112,20 @@ bonus :		$(OBJS_BONUS)
 			$(MAKE) -C $(LIB_DIR)/$(LIBFT_DIR)
 			cp $(LIB_DIR)/$(MLX_DIR)/$(MLX)  .
 			$(CC) $(OFLAGS) $(OBJS_BONUS) -o $(NAME)
+
+LIB_NOT_MLX_NAME = libnmlx.a
+NOT_MLX_DIR = NOT_MLX
+LIB_NOT_MLX = $(NOT_MLX_DIR)/$(LIB_NOT_MLX_NAME)
+SDL_DIR = $(NOT_MLX_DIR)/$(LIB_DIR)/SDL2-2.0.10
+SDL2_FLAGS = `$(SDL_DIR)/sdl2-config --cflags --libs`
+LINUX_FLAGS = $(LIB_DIR)/$(LIBFT_DIR)/$(LIBFT) $(LIB_NOT_MLX) -lm $(SDL2_FLAGS)
+
+portable :	$(OBJS)
+			rm -rf $(OBJ_DIR)/fill_it_bonus.o
+			$(MAKE) -C $(NOT_MLX_DIR)
+			$(MAKE) -C $(LIB_DIR)/$(LIBFT_DIR)
+			$(CC) $(OBJS) $(LINUX_FLAGS) -o $(NAME)
+
+fullfclean : fclean
+			$(MAKE) -C $(NOT_MLX_DIR) fullfclean
 
