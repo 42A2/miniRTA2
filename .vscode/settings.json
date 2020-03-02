@@ -16,7 +16,7 @@
         "string_view": "c",
         "tuple": "c",
 		"vector": "c"
-	}
+	},
 
 	"editor.tabSize": 4,
 	"editor.insertSpaces": false,
