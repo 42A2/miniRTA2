@@ -6,7 +6,7 @@
 #    By: mbrunel <mbrunel@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/11/06 03:24:21 by mbrunel           #+#    #+#              #
-#    Updated: 2020/02/13 17:08:20 by mbrunel          ###   ########.fr        #
+#    Updated: 2020/03/02 01:17:32 by mbrunel          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,9 +16,11 @@ SRC_DIR = srcs
 OBJ_DIR = objs
 
 CC =		gcc
-CFLAGS =	-Wall -Wextra
+CFLAGS =	-Wall -Wextra -I$(NOT_MLX_DIR)/incs -I/
 OFLAGS =	$(LIB_DIR)/$(LIBFT_DIR)/$(LIBFT) $(MLX)
 NAME =		miniRT
+
+GIT=$(NOT_MLX)/.git
 
 SRCS = 		main.c \
 			vec_utils1.c \
@@ -54,6 +56,8 @@ LIBFT_DIR = libft
 MLX = libmlx.dylib
 LIBFT = libft.a
 
+all :	${NAME} $(GIT)
+
 $(NAME):	$(OBJS)
 			$(MAKE) -C $(LIB_DIR)/$(MLX_DIR)
 			$(MAKE) -C $(LIB_DIR)/$(LIBFT_DIR)
@@ -64,8 +68,9 @@ $(OBJ_DIR)/%.o : $(SRC_DIR)/%.c $(INC_DIR)/* Makefile
 			mkdir -p $(OBJ_DIR)/
 			$(CC) $(CFLAGS) -c $< -o $@
 
-
-all :	${NAME}
+$(GIT) :
+	git submodule init
+	git submodule update --remote
 
 clean :
 			rm -rf $(OBJS) $(LIB_DIR)/$(LIBFT_DIR)/*/*.o $(LIB_DIR)/$(MLX_DIR)/*.o $(OBJS_BONUS)
@@ -106,7 +111,7 @@ SRCS_BONUS =main.c \
 
 OBJS_BONUS =$(patsubst %.c, $(OBJ_DIR)/%.o, $(SRCS_BONUS))
 
-bonus :		$(OBJS_BONUS)
+bonus :		$(OBJS_BONUS) $(GIT)
 			rm -rf $(OBJ_DIR)/fill_it.o
 			$(MAKE) -C $(LIB_DIR)/$(MLX_DIR)
 			$(MAKE) -C $(LIB_DIR)/$(LIBFT_DIR)
@@ -118,13 +123,13 @@ NOT_MLX_DIR = NOT_MLX
 LIB_NOT_MLX = $(NOT_MLX_DIR)/$(LIB_NOT_MLX_NAME)
 SDL_DIR = $(NOT_MLX_DIR)/$(LIB_DIR)/SDL2-2.0.10
 SDL2_FLAGS = `$(SDL_DIR)/sdl2-config --cflags --libs`
-LINUX_FLAGS = $(LIB_DIR)/$(LIBFT_DIR)/$(LIBFT) $(LIB_NOT_MLX) -lm $(SDL2_FLAGS)
+LINUX_FLAGS = $(LIB_DIR)/$(LIBFT_DIR)/$(LIBFT) $(LIB_NOT_MLX) -lm $(SDL2_FLAGS) -lpthread
 
-portable :	$(OBJS)
-			rm -rf $(OBJ_DIR)/fill_it_bonus.o
+portable :	$(OBJS_BONUS) $(GIT)
+			rm -rf $(OBJ_DIR)/fill_it.o
 			$(MAKE) -C $(NOT_MLX_DIR)
 			$(MAKE) -C $(LIB_DIR)/$(LIBFT_DIR)
-			$(CC) $(OBJS) $(LINUX_FLAGS) -o $(NAME)
+			$(CC) $(OBJS_BONUS) $(LINUX_FLAGS) -o $(NAME)
 
 fullfclean : fclean
 			$(MAKE) -C $(NOT_MLX_DIR) fullfclean

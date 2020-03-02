@@ -1,0 +1,3 @@
+[submodule "NOT_MLX"]
+	path = NOT_MLX
+	url = https://github.com/mbrunel/NOT_MLX

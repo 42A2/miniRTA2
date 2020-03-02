@@ -6,7 +6,7 @@
 /*   By: mbrunel <mbrunel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/14 05:14:16 by mbrunel           #+#    #+#             */
-/*   Updated: 2020/02/06 03:11:41 by mbrunel          ###   ########.fr       */
+/*   Updated: 2020/03/02 01:08:07 by mbrunel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,19 +72,22 @@ int			get_p(t_p *p, char *path)
 	if ((n.fd = open(path, O_RDWR)) == -1)
 		return (error(NULL, "open_eror\n"));
 	ft_memset(incs, 0, sizeof(int) * 20);
-	while ((n.status = get_next_line(n.fd, &buf)) > 0 && \
-	++incs[LINES_OF_FILE] < MAX_LENGTHG_FILE)
+	while ((n.status = get_next_line(n.fd, &buf)) > 0 &&
+		++incs[LINES_OF_FILE] < MAX_LENGTHG_FILE)
 	{
 		if ((n.type = (f_chr(shrs, buf[0]))) == -1)
 			return (error(buf, "object not found in database\n"));
 		else if (shrs[n.type] == '#' || buf[0] == '\0')
 		{
 			free(buf);
+			buf = NULL;
 			continue ;
 		}
 		else if (p2(&(n.type), incs, buf, p) == -1)
 			return (-1);
 		p4(n, incs, buf, p);
 	}
+	if (buf)
+		free(buf);
 	return (p3(p, incs));
 }

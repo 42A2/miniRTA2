@@ -6,7 +6,7 @@
 /*   By: mbrunel <mbrunel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/16 01:16:49 by yvanat            #+#    #+#             */
-/*   Updated: 2020/02/13 15:21:40 by mbrunel          ###   ########.fr       */
+/*   Updated: 2020/03/02 01:07:50 by mbrunel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,13 +14,13 @@
 
 int		img_to_win(t_swap *s)
 {
-	if (s->img)
+	/*if (s->img)
 		mlx_destroy_image(s->mlx.ptr, s->mlx.img);
 	if (!(s->mlx.img = mlx_new_image(s->mlx.ptr, s->p.vp.res_x, s->p.vp.res_y)))
 		return (-1);
 	if (!(s->img = (int*)mlx_get_data_addr(s->mlx.img\
 	, &(s->info.n), &(s->info.l), &(s->info.e))))
-		return (-1);
+		return (-1);*/
 	fill_img(s->img, s->info, s->p, s->i);
 	if (s->s_s)
 	{
@@ -67,6 +67,11 @@ int		main(int argc, char *argv[])
 		quit(error(NULL, "mlx error\n"), &s);
 	s.mlx = mlx;
 	s.img = NULL;
+	if (!(s.mlx.img = mlx_new_image(s.mlx.ptr, s.p.vp.res_x, s.p.vp.res_y)))
+		return (-1);
+	if (!(s.img = (int*)mlx_get_data_addr(s.mlx.img\
+	, &(s.info.n), &(s.info.l), &(s.info.e))))
+		return (-1);
 	if (img_to_win(&s) == -1)
 		quit(error(NULL, "mlx error\n"), &s);
 	mlx_hook(s.mlx.win, 2, 1L << 0, &swap_cam, &s);
