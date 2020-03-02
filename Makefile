@@ -6,7 +6,7 @@
 #    By: mbrunel <mbrunel@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/11/06 03:24:21 by mbrunel           #+#    #+#              #
-#    Updated: 2020/03/02 01:17:32 by mbrunel          ###   ########.fr        #
+#    Updated: 2020/03/02 01:36:20 by mbrunel          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,7 +16,7 @@ SRC_DIR = srcs
 OBJ_DIR = objs
 
 CC =		gcc
-CFLAGS =	-Wall -Wextra -I$(NOT_MLX_DIR)/incs -I/
+CFLAGS =	-Wall -Wextra -I$(NOT_MLX_DIR)/incs -I$(INC_DIR)
 OFLAGS =	$(LIB_DIR)/$(LIBFT_DIR)/$(LIBFT) $(MLX)
 NAME =		miniRT
 
@@ -56,9 +56,9 @@ LIBFT_DIR = libft
 MLX = libmlx.dylib
 LIBFT = libft.a
 
-all :	${NAME} $(GIT)
+all :	${NAME}
 
-$(NAME):	$(OBJS)
+mlx_nobonus :	$(OBJS)
 			$(MAKE) -C $(LIB_DIR)/$(MLX_DIR)
 			$(MAKE) -C $(LIB_DIR)/$(LIBFT_DIR)
 			cp $(LIB_DIR)/$(MLX_DIR)/$(MLX)  .
@@ -111,7 +111,7 @@ SRCS_BONUS =main.c \
 
 OBJS_BONUS =$(patsubst %.c, $(OBJ_DIR)/%.o, $(SRCS_BONUS))
 
-bonus :		$(OBJS_BONUS) $(GIT)
+mlx_bonus :		$(OBJS_BONUS)
 			rm -rf $(OBJ_DIR)/fill_it.o
 			$(MAKE) -C $(LIB_DIR)/$(MLX_DIR)
 			$(MAKE) -C $(LIB_DIR)/$(LIBFT_DIR)
@@ -125,7 +125,7 @@ SDL_DIR = $(NOT_MLX_DIR)/$(LIB_DIR)/SDL2-2.0.10
 SDL2_FLAGS = `$(SDL_DIR)/sdl2-config --cflags --libs`
 LINUX_FLAGS = $(LIB_DIR)/$(LIBFT_DIR)/$(LIBFT) $(LIB_NOT_MLX) -lm $(SDL2_FLAGS) -lpthread
 
-portable :	$(OBJS_BONUS) $(GIT)
+$(NAME) :	$(GIT) $(OBJS_BONUS)
 			rm -rf $(OBJ_DIR)/fill_it.o
 			$(MAKE) -C $(NOT_MLX_DIR)
 			$(MAKE) -C $(LIB_DIR)/$(LIBFT_DIR)

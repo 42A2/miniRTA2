@@ -6,7 +6,7 @@
 /*   By: mbrunel <mbrunel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/02 12:51:50 by mbrunel           #+#    #+#             */
-/*   Updated: 2020/02/13 11:52:59 by mbrunel          ###   ########.fr       */
+/*   Updated: 2020/03/02 01:35:18 by mbrunel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@
 # include "libft.h"
 # include <math.h>
 # include <pthread.h>
-# include "../NOT_MLX/incs/unofficial.h"
+# include "unofficial.h"
 
 typedef struct		s_mlx
 {
