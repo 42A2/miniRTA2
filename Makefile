@@ -6,7 +6,7 @@
 #    By: mbrunel <mbrunel@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/11/06 03:24:21 by mbrunel           #+#    #+#              #
-#    Updated: 2020/03/02 01:36:20 by mbrunel          ###   ########.fr        #
+#    Updated: 2020/03/08 12:16:09 by mbrunel          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -123,7 +123,7 @@ NOT_MLX_DIR = NOT_MLX
 LIB_NOT_MLX = $(NOT_MLX_DIR)/$(LIB_NOT_MLX_NAME)
 SDL_DIR = $(NOT_MLX_DIR)/$(LIB_DIR)/SDL2-2.0.10
 SDL2_FLAGS = `$(SDL_DIR)/sdl2-config --cflags --libs`
-LINUX_FLAGS = $(LIB_DIR)/$(LIBFT_DIR)/$(LIBFT) $(LIB_NOT_MLX) -lm $(SDL2_FLAGS) -lpthread
+LINUX_FLAGS = $(LIB_DIR)/$(LIBFT_DIR)/$(LIBFT) $(LIB_NOT_MLX) -lm -lpthread $(SDL2_FLAGS)
 
 $(NAME) :	$(GIT) $(OBJS_BONUS)
 			rm -rf $(OBJ_DIR)/fill_it.o
