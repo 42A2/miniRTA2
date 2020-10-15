@@ -29,14 +29,20 @@ LIBFT=$(D_LIBFT)/libft.a
 D_NOT_MLX=$(D_LIB)/NOT_MLX
 NOT_MLX=$(D_NOT_MLX)/libnmlx.a
 
-MK_LIB=$(NOT_MLX) $(LIBFT)
+GIT_SUBMDL=$(D_NOT_MLX)/.git $(D_LIBFT)/.git
 
 CC=clang
 CFLAGS=-Wall -Wextra -Ofast #-Werror
 DFLAGS=-MP -MMD -MF $(D_DEP)/$*.d -MT $@
 IFLAGS=-I$(D_INC) -I$(D_LIBFT) -I$(D_NOT_MLX)/$(D_INC) `sdl2-config --cflags`
 CPPFLAGS=$(CFLAGS) $(IFLAGS) $(DFLAGS)
-LDFLAGS= `sdl2-config --libs` $(LIBFT) $(NOT_MLX)
+
+OS = $(shell uname)
+ifeq ($(OS), Darwin)
+	LDFLAGS= `sdl2-config --libs` $(LIBFT) $(NOT_MLX)
+else ifeq ($(OS), Linux)
+	LDFLAGS= `sdl2-config --libs` -lpthread -lm -L$(D_LIBFT) -lft -L$(D_NOT_MLX) -lnmlx
+endif
 
 C_RED=\033[31m
 C_GREEN=\033[32m
@@ -80,11 +86,11 @@ SRC=aliasing_threading_bonus.c\
 OBJ:=$(patsubst %.c, $(D_OBJ)/%.o, $(SRC))
 DEP:=$(patsubst %.c, $(D_DEP)/%.d, $(SRC))
 
-all :
+all : $(GIT_SUBMDL)
 	@$(MAKE) -sj $(NAME)
 
-$(NAME) : $(MK_LIB) $(OBJ)
-	@$(CC) $(LDFLAGS) $(OBJ) -o $@
+$(NAME) : $(OBJ) $(LIBFT) $(NOT_MLX)
+	@$(CC) $(OBJ) $(LDFLAGS) -o $@
 	@printf "$(BUILD_MSG) %s\n" $@
 
 clean :
@@ -103,10 +109,14 @@ $(BUILD) :
 	@mkdir -p $@ $(DIRS)
 	@printf "$(BUILD_MSG) %s\n" $@
 
-$(MK_LIB) :
+$(GIT_SUBMDL) :
 	@git submodule init
 	@git submodule update --remote
+
+$(LIBFT) :
 	@$(MAKE) -C $(D_LIBFT)
+
+$(NOT_MLX) :
 	@$(MAKE) -C $(D_NOT_MLX)
 
 -include $(DEP)
