@@ -29,7 +29,7 @@ LIBFT=$(D_LIBFT)/libft.a
 D_NOT_MLX=$(D_LIB)/NOT_MLX
 NOT_MLX=$(D_NOT_MLX)/libnmlx.a
 
-GIT=$(D_NOT_MLX) $(D_LIBFT)
+MK_LIB=$(NOT_MLX) $(LIBFT)
 
 CC=clang
 CFLAGS=-Wall -Wextra -Ofast #-Werror
@@ -83,9 +83,7 @@ DEP:=$(patsubst %.c, $(D_DEP)/%.d, $(SRC))
 all :
 	@$(MAKE) -s $(NAME)
 
-$(NAME) : $(GIT) $(OBJ)
-	@$(MAKE) -C $(D_LIBFT)
-	@$(MAKE) -C $(D_NOT_MLX)
+$(NAME) : $(MK_LIB) $(OBJ)
 	@$(CC) $(LDFLAGS) $(OBJ) -o $@
 	@printf "$(BUILD_MSG) %s\n" $@
 
@@ -108,9 +106,11 @@ $(BUILD) :
 	@mkdir -p $@ $(DIRS)
 	@printf "$(BUILD_MSG) %s\n" $@
 
-$(GIT) :
+$(MK_LIB) :
 	@git submodule init
 	@git submodule update --remote
+	@$(MAKE) -C $(D_LIBFT)
+	@$(MAKE) -C $(D_NOT_MLX)
 
 -include $(DEP)
 

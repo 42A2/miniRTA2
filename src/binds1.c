@@ -6,7 +6,7 @@
 /*   By: mbrunel <mbrunel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/06 01:43:48 by mbrunel           #+#    #+#             */
-/*   Updated: 2020/10/15 20:53:19 by mbrunel          ###   ########.fr       */
+/*   Updated: 2020/10/15 21:53:27 by mbrunel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,6 +98,7 @@ int				quit(int rt, void *swap)
 	t_swap	*s;
 	int		i;
 
+	(void)rt;
 	i = -1;
 	s = (t_swap*)swap;
 	nmlx_loop_stop(s->mlx.ptr);
