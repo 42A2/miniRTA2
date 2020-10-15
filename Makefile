@@ -81,7 +81,7 @@ OBJ:=$(patsubst %.c, $(D_OBJ)/%.o, $(SRC))
 DEP:=$(patsubst %.c, $(D_DEP)/%.d, $(SRC))
 
 all :
-	@$(MAKE) -s $(NAME)
+	@$(MAKE) -sj $(NAME)
 
 $(NAME) : $(MK_LIB) $(OBJ)
 	@$(CC) $(LDFLAGS) $(OBJ) -o $@
@@ -97,10 +97,7 @@ fclean : clean
 	@$(MAKE) -C $(D_NOT_MLX) fclean
 	@printf "$(REMOVE_MSG) rm %s\n" $(NAME) $(LIBFT) $(NOT_MLX)
 
-re : fclean all test
-
-test : all
-	$(CC) $(CPPFLAGS) test.c $(LDFLAGS) -o test
+re : fclean all
 
 $(BUILD) :
 	@mkdir -p $@ $(DIRS)
