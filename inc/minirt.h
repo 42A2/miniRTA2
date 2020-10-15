@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/02 12:51:50 by mbrunel           #+#    #+#             */
-/*   Updated: 2020/10/16 01:15:28 by user42           ###   ########.fr       */
+/*   Updated: 2020/10/16 01:38:55 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,11 @@
 # define I_MAX __INT32_MAX__
 # define MIN_SHADOW 1e-5
 # define HEADER_SIZE 122
+
+/*
+**dest dir of .bmp file
+*/
+# define DEST_DIR "saved_picture"
 
 # include "nmlx.h"
 # include "libft.h"

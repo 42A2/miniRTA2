@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   bmp.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mbrunel <mbrunel@student.42.fr>            +#+  +:+       +#+        */
+/*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/02 23:37:51 by yvanat            #+#    #+#             */
-/*   Updated: 2020/10/15 20:53:19 by mbrunel          ###   ########.fr       */
+/*   Updated: 2020/10/16 01:46:31 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,15 +83,14 @@ void	export_bmp(char *filename, t_swap *s)
 
 char	*create_bmp_filename(char *file, int i)
 {
+	char		*tmp;
 	char		*filename;
-	int			n;
 
-	if (!(filename = malloc(sizeof(char) * (i + 5))))
-		exit(error(NULL, "stack error\n"));
-	n = -1;
-	while (++n <= i)
-		*(filename + n) = *(file + n);
-	*(unsigned int *)(filename + n) =
-	*(const unsigned int *)(unsigned long)"bmp\0";
+	while (i && file[i] != '/')
+		i--;
+	filename = ft_strjoin(DEST_DIR, file + i);
+	tmp = filename;
+	filename = ft_strjoin(filename, ".bmp");
+	free(tmp);
 	return (filename);
 }

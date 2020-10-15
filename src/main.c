@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mbrunel <mbrunel@student.42.fr>            +#+  +:+       +#+        */
+/*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/16 01:16:49 by yvanat            #+#    #+#             */
-/*   Updated: 2020/10/15 21:18:29 by mbrunel          ###   ########.fr       */
+/*   Updated: 2020/10/16 01:34:13 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,10 +23,7 @@ int		img_to_win(t_swap *s)
 		return (-1);*/
 	fill_img(s->img, s->info, s->p, s->i);
 	if (s->s_s)
-	{
 		export_bmp(create_bmp_filename(s->name, s->save), s);
-		quit(0, s);
-	}
 	if (mlx_put_image_to_window(s->mlx.ptr, s->mlx.win, s->mlx.img, 0, 0) == -1)
 		return (-1);
 	return (0);
@@ -55,14 +52,14 @@ int		main(int argc, char *argv[])
 	if (argc == 3 && !ft_strncmp(argv[2], "-save", 5))
 		s.s_s = 1;
 	s.name = argv[1];
-	if ((argc > 2 && !s.save) || argc < 2)
+	if ((argc > 2 && !s.s_s) || argc < 2)
 		exit(error(NULL, "manque ou surplus d'args ou \"-save\" mal ecrit\n"));
 	if ((s.save = check_n(argv[1])) == -1)
 		exit(error(NULL, "file bad named\n"));
 	if (get_p(&(s.p), argv[1]) == -1)
 		quit(-1, &s);
 	mlx.ptr = mlx_init();
-	if (!s.s_s && !(mlx.win = mlx_new_window(mlx.ptr\
+	if (!(mlx.win = mlx_new_window(mlx.ptr\
 	, s.p.vp.res_x, s.p.vp.res_y, "RT")))
 		quit(error(NULL, "mlx error\n"), &s);
 	s.mlx = mlx;
