@@ -1,6 +1,6 @@
 # raytracing project with some extra features;
 
----> run : make bonus && ./miniRT <yourfile>.rt
+---> run : make && scene/\<yourscene\>
   
 ---> change your scene with some more or less intuitive keybinds
   
