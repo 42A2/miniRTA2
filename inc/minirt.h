@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minirt.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mbrunel <mbrunel@student.42.fr>            +#+  +:+       +#+        */
+/*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/02 12:51:50 by mbrunel           #+#    #+#             */
-/*   Updated: 2020/10/15 21:17:28 by mbrunel          ###   ########.fr       */
+/*   Updated: 2020/10/16 01:15:28 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@
 # define MIN_SHADOW 1e-5
 # define HEADER_SIZE 122
 
-# include "not_mlx.h"
+# include "nmlx.h"
 # include "libft.h"
 # include <math.h>
 # include <pthread.h>
