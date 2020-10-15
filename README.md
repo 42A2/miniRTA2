@@ -1,6 +1,6 @@
 # raytracing project with some extra features;
 
----> run : make && scene/\<yourscene\>
+---> run : make && ./miniRTA2 scene/\<yourscene\>
   
 ---> change your scene with some more or less intuitive keybinds
   
