@@ -1,3 +1,4 @@
+
 # **************************************************************************** #
 #                                                                              #
 #                                                         :::      ::::::::    #
@@ -5,132 +6,116 @@
 #                                                     +:+ +:+         +:+      #
 #    By: mbrunel <mbrunel@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2019/11/06 03:24:21 by mbrunel           #+#    #+#              #
-#    Updated: 2020/03/08 12:16:09 by mbrunel          ###   ########.fr        #
+#    Created: 2020/02/15 01:02:41 by mbrunel           #+#    #+#              #
+#    Updated: 2020/10/15 20:29:51 by mbrunel          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-LIB_DIR = libs
-INC_DIR = incs
-SRC_DIR = srcs
-OBJ_DIR = objs
+NAME=miniRTA2
 
-CC =		gcc
-CFLAGS =	-Wall -Wextra -I$(NOT_MLX_DIR)/incs -I$(INC_DIR)
-OFLAGS =	$(LIB_DIR)/$(LIBFT_DIR)/$(LIBFT) $(MLX)
-NAME =		miniRT
+BUILD=.build
+D_SRC=src
+D_INC=inc
+D_LIB=lib
+D_OBJ=$(BUILD)/obj
+D_DEP=$(BUILD)/dep
+D_SUB=
+DIRS:=$(D_DEP) $(addprefix $(D_DEP)/, $(D_SUB))\
+	$(D_OBJ) $(addprefix $(D_OBJ)/, $(D_SUB))
 
-GIT=$(NOT_MLX)/.git
+D_LIBFT=$(D_LIB)/libft
+LIBFT=$(D_LIBFT)/libft.a
 
-SRCS = 		main.c \
-			vec_utils1.c \
-			vec_utils2.c \
-			vec_utils3.c \
-			vec_utils4.c \
-			colors_utils.c \
-			colors_utils2.c \
-			parser.c \
-			parse_gets1.c \
-			parse_utils.c \
-			intersq.c \
-			intertr.c \
-			interpl.c \
-			intersp.c \
-			intercy.c \
-			fill_it.c \
-			chng.c\
-			bmp.c \
-			parse_gets2.c\
-			stretch.c\
-			parse_gets3.c \
-			stereo.c\
-			binds1.c\
-			binds2.c\
-			core_funcs.c\
-			raytracing_utils.c\
-			antialiasing.c
+D_NOT_MLX=$(D_LIB)/NOT_MLX
+NOT_MLX=$(D_NOT_MLX)/libnmlx.a
 
-OBJS =		$(patsubst %.c, $(OBJ_DIR)/%.o, $(SRCS))
-MLX_DIR = mlx
-LIBFT_DIR = libft
-MLX = libmlx.dylib
-LIBFT = libft.a
+GIT=$(D_NOT_MLX) $(D_LIBFT)
 
-all :	${NAME}
+CC=clang
+CFLAGS=-Wall -Wextra -Ofast #-Werror
+DFLAGS=-MP -MMD -MF $(D_DEP)/$*.d -MT $@
+IFLAGS=-I$(D_INC) -I$(D_LIBFT) -I$(D_NOT_MLX)/$(D_INC) `sdl2-config --cflags`
+CPPFLAGS=$(CFLAGS) $(IFLAGS) $(DFLAGS)
+LDFLAGS= `sdl2-config --libs` $(LIBFT) $(NOT_MLX)
 
-mlx_nobonus :	$(OBJS)
-			$(MAKE) -C $(LIB_DIR)/$(MLX_DIR)
-			$(MAKE) -C $(LIB_DIR)/$(LIBFT_DIR)
-			cp $(LIB_DIR)/$(MLX_DIR)/$(MLX)  .
-			$(CC) $(OFLAGS) $(OBJS) -o $(NAME)
+C_RED=\033[31m
+C_GREEN=\033[32m
+C_CYAN=\033[36m
+C_NONE=\033[0m
+BUILD_MSG=$(C_GREEN)✔$(C_NONE)
+REMOVE_MSG=$(C_RED)𐄂$(C_NONE)
 
-$(OBJ_DIR)/%.o : $(SRC_DIR)/%.c $(INC_DIR)/* Makefile
-			mkdir -p $(OBJ_DIR)/
-			$(CC) $(CFLAGS) -c $< -o $@
+INC=$(D_INC)/minishell.h
 
-$(GIT) :
-	git submodule init
-	git submodule update --remote
+SRC=aliasing_threading_bonus.c\
+	antialiasing.c\
+	binds1.c\
+	binds2.c\
+	bmp.c\
+	chng.c\
+	colors_utils.c\
+	colors_utils2.c\
+	core_funcs.c\
+	fill_it_bonus.c\
+	intercy.c\
+	interpl.c\
+	intersp.c\
+	intersq.c\
+	intertr.c\
+	main.c\
+	parse_gets1.c\
+	parse_gets2.c\
+	parse_gets3.c\
+	parse_utils.c\
+	parser.c\
+	raytracing_utils.c\
+	stereo.c\
+	stretch.c\
+	utils_bonus.c\
+	vec_utils1.c\
+	vec_utils2.c\
+	vec_utils3.c\
+	vec_utils4.c
+
+OBJ:=$(patsubst %.c, $(D_OBJ)/%.o, $(SRC))
+DEP:=$(patsubst %.c, $(D_DEP)/%.d, $(SRC))
+
+all :
+	@$(MAKE) -s $(NAME)
+
+$(NAME) : $(GIT) $(OBJ)
+	@$(MAKE) -C $(D_LIBFT)
+	@$(MAKE) -C $(D_NOT_MLX)
+	@$(CC) $(LDFLAGS) $(OBJ) -o $@
+	@printf "$(BUILD_MSG) %s\n" $@
 
 clean :
-			rm -rf $(OBJS) $(LIB_DIR)/$(LIBFT_DIR)/*/*.o $(LIB_DIR)/$(MLX_DIR)/*.o $(OBJS_BONUS)
+	@rm -rf $(BUILD)
+	@printf "$(REMOVE_MSG) rm %s\n" $(BUILD)
 
 fclean : clean
-			rm -rf $(NAME) $(LIB_DIR)/$(MLX_DIR)/$(MLX) $(LIB_DIR)/$(LIBFT_DIR)/$(LIBFT) $(LIB_DIR)/$(LIBFT_DIR)/libc/libc.a $(MLX)
+	@rm -rf $(NAME)
+	@$(MAKE) -C $(D_LIBFT) fclean
+	@$(MAKE) -C $(D_NOT_MLX) fclean
+	@printf "$(REMOVE_MSG) rm %s\n" $(NAME) $(LIBFT) $(NOT_MLX)
 
-re :	fclean all
+re : fclean all test
 
-SRCS_BONUS =main.c \
-			vec_utils1.c \
-			vec_utils2.c \
-			vec_utils3.c \
-			vec_utils4.c \
-			colors_utils.c \
-			colors_utils2.c \
-			parser.c \
-			parse_gets1.c \
-			parse_utils.c \
-			intersq.c \
-			intertr.c \
-			interpl.c \
-			intersp.c \
-			intercy.c \
-			fill_it_bonus.c \
-			aliasing_threading_bonus.c \
-			chng.c\
-			bmp.c \
-			parse_gets2.c\
-			stretch.c\
-			parse_gets3.c \
-			stereo.c\
-			binds1.c\
-			binds2.c\
-			core_funcs.c\
-			raytracing_utils.c\
-			utils_bonus.c
+test : all
+	$(CC) $(CPPFLAGS) test.c $(LDFLAGS) -o test
 
-OBJS_BONUS =$(patsubst %.c, $(OBJ_DIR)/%.o, $(SRCS_BONUS))
+$(BUILD) :
+	@mkdir -p $@ $(DIRS)
+	@printf "$(BUILD_MSG) %s\n" $@
 
-mlx_bonus :		$(OBJS_BONUS)
-			rm -rf $(OBJ_DIR)/fill_it.o
-			$(MAKE) -C $(LIB_DIR)/$(MLX_DIR)
-			$(MAKE) -C $(LIB_DIR)/$(LIBFT_DIR)
-			cp $(LIB_DIR)/$(MLX_DIR)/$(MLX)  .
-			$(CC) $(OFLAGS) $(OBJS_BONUS) -o $(NAME)
+$(GIT) :
+	@git submodule init
+	@git submodule update --remote
 
-LIB_NOT_MLX_NAME = libnmlx.a
-NOT_MLX_DIR = NOT_MLX
-LIB_NOT_MLX = $(NOT_MLX_DIR)/$(LIB_NOT_MLX_NAME)
-SDL_DIR = $(NOT_MLX_DIR)/$(LIB_DIR)/SDL2-2.0.10
-SDL2_FLAGS = `$(SDL_DIR)/sdl2-config --cflags --libs`
-LINUX_FLAGS = $(LIB_DIR)/$(LIBFT_DIR)/$(LIBFT) $(LIB_NOT_MLX) -lm -lpthread $(SDL2_FLAGS)
+-include $(DEP)
 
-$(NAME) :	$(GIT) $(OBJS_BONUS)
-			rm -rf $(OBJ_DIR)/fill_it.o
-			$(MAKE) -C $(NOT_MLX_DIR)
-			$(MAKE) -C $(LIB_DIR)/$(LIBFT_DIR)
-			$(CC) $(OBJS_BONUS) $(LINUX_FLAGS) -o $(NAME)
+$(D_OBJ)/%.o : $(D_SRC)/%.c | $(BUILD)
+	@$(CC) $(CPPFLAGS) -c $< -o $@
+	@printf "$(BUILD_MSG) %s\n" $<
 
-fullfclean : fclean
-			$(MAKE) -C $(NOT_MLX_DIR) fullfclean
-
+.PHONY: all clean fclean re test
