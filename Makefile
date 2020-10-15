@@ -34,7 +34,7 @@ GIT_SUBMDL=$(D_NOT_MLX)/.git $(D_LIBFT)/.git
 CC=clang
 CFLAGS=-Wall -Wextra -Ofast #-Werror
 DFLAGS=-MP -MMD -MF $(D_DEP)/$*.d -MT $@
-IFLAGS=-I$(D_INC) -I$(D_LIBFT) -I$(D_NOT_MLX)/$(D_INC) `sdl2-config --cflags`
+IFLAGS=-I$(D_INC) -I$(D_LIBFT)/$(D_INC) -I$(D_NOT_MLX)/$(D_INC) `sdl2-config --cflags`
 CPPFLAGS=$(CFLAGS) $(IFLAGS) $(DFLAGS)
 
 OS = $(shell uname)
@@ -50,8 +50,6 @@ C_CYAN=\033[36m
 C_NONE=\033[0m
 BUILD_MSG=$(C_GREEN)✔$(C_NONE)
 REMOVE_MSG=$(C_RED)𐄂$(C_NONE)
-
-INC=$(D_INC)/minishell.h
 
 SRC=aliasing_threading_bonus.c\
 	antialiasing.c\
@@ -99,9 +97,9 @@ clean :
 
 fclean : clean
 	@rm -rf $(NAME)
-	@$(MAKE) -C $(D_LIBFT) fclean
-	@$(MAKE) -C $(D_NOT_MLX) fclean
-	@printf "$(REMOVE_MSG) rm %s\n" $(NAME) $(LIBFT) $(NOT_MLX)
+	@$(MAKE) -sC $(D_LIBFT) fclean
+	@$(MAKE) -sC $(D_NOT_MLX) fclean
+	@printf "$(REMOVE_MSG) rm %s\n" $(NAME)
 
 re : fclean all
 
@@ -114,15 +112,15 @@ $(GIT_SUBMDL) :
 	@git submodule update --remote
 
 $(LIBFT) :
-	@$(MAKE) -C $(D_LIBFT)
+	@$(MAKE) -sC $(D_LIBFT)
 
 $(NOT_MLX) :
-	@$(MAKE) -C $(D_NOT_MLX)
+	@$(MAKE) -sC $(D_NOT_MLX)
 
 -include $(DEP)
 
 $(D_OBJ)/%.o : $(D_SRC)/%.c | $(BUILD)
 	@$(CC) $(CPPFLAGS) -c $< -o $@
-	@printf "$(BUILD_MSG) %s\n" $<
+	@printf "$(BUILD_MSG) %s\n" $(<F)
 
-.PHONY: all clean fclean re test
+.PHONY: all clean fclean re
