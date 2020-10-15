@@ -1,3 +1,7 @@
 [submodule "NOT_MLX"]
-	path = NOT_MLX
+	path = lib/NOT_MLX
 	url = https://github.com/mbrunel/NOT_MLX
+
+[submodule "libft"]
+	path = lib/libft
+	url = https://github.com/mbrunel/libft
