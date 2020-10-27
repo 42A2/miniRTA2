@@ -12,9 +12,11 @@ raytracing project with some extra features
 
 - open the file explorer and unzip it
 
+- go to either x64/relase or win32/relase and find miniRTA2.exe
+
 - create a shortcut using right -> send towards -> desktop
 
-- go into the shortcut parameter and after miniRTA2.exe add scene/light.rt
+- go into the shortcut parameter, field target : add `" scene/light.rt"` at the end
 
 ### Usage
 
