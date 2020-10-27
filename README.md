@@ -16,7 +16,7 @@ raytracing project with some extra features
 
 - create a shortcut using right -> send towards -> desktop
 
-- go into the shortcut parameter, field target : add `" scene/light.rt"` at the end
+- go into the shortcut parameter, field target : add ` scene/light.rt` at the end
 
 ### Usage
 
