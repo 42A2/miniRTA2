@@ -3,4 +3,4 @@
 	url = https://github.com/mbrunel/NOT_MLX
 [submodule "lib/libft"]
 	path = lib/libft
-	url = https://github.com/mbrunel/libft
+	url = git@github.com:mbrunel/libft.git
